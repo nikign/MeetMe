@@ -20,7 +20,7 @@ class Interval (models.Model):
 	date = models.DateField()
 	start = models.TimeField()
 	finish = models.TimeField()
-	event = models.ForeignKey(Event)
+	event = models.ForeignKey(Event, related_name="options_list")
 
 
 class Reservation(models.Model):
@@ -43,7 +43,7 @@ class Meeting (Event):
 	conditions = models.CharField(max_length=2, 
 									choices = HOLDING_CONDITIONS,
 									default = WITH_MAX_AVAILABLE)
-	reservation = models.ForeignKey(Reservation, null=True, default=None)
+	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 
 
 class Vote (models.Model):

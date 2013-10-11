@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'MeetMe.views.home', name='home'),
+    url(r'^$', 'meet.views.home', name='home'),
     # url(r'^MeetMe/', include('MeetMe.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -14,4 +14,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^event/(?P<event_id>\d+)/view' , 'meet.views.view' , name='view'),
+
 )

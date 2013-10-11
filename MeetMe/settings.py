@@ -1,4 +1,5 @@
 # Django settings for MeetMe project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -89,7 +90,7 @@ SECRET_KEY = 't0s5jeu#egnni9_*)a=sc@vlz4h81l=^&*30o3l(2xxi77tllr'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
