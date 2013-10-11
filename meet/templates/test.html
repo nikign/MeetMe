@@ -1,8 +1,11 @@
 <form action="" method="post" class="create-ad-1st-step">
 	<table> 
-    	{{ title_form|form_as_table }}
+    	{{ title_form }}
+	</table>
+	<table> 
+    	{{ guests_form }}
 	</table>
 	<div class="form-actions">
-		<button type="submit" class="btn btn-primary">{% trans 'Next' %}&nbsp;<i class="icon-arrow-right icon-white"></i></button>
+		<button type="submit" class="btn btn-primary"> Next <i class="icon-arrow-right icon-white"></i></button>
 	</div>
 </form>

@@ -1,6 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from models import Event
-from forms import TitleDescriptionForm
+from forms import TitleDescriptionForm, GuestListForm
 
 def home (request):
 	return render_to_response('home.html')
@@ -15,5 +15,6 @@ def view (request, event_id):
 
 
 def test(request):
-	my_form = TitleDescriptionForm()
-	return render(request, 'advertisers/test.html', {'title_form': my_form, })
+	title_description_form = TitleDescriptionForm()
+	guests_form = GuestListForm()
+	return render(request, 'test.html', {'title_form': title_description_form, 'guests_form': guests_form, })
