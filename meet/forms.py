@@ -6,7 +6,14 @@ class TitleDescriptionForm(forms.ModelForm):
 		model = Event
 		fields = ('title', 'description', )
 
+
 class GuestListForm(forms.ModelForm):
 	class Meta:
 		model = Event
 		fields = ('guest_list', )
+
+
+class VoteOptionForm (forms.ModelForm):
+	class Meta:
+		model = Vote
+		fields = ('state', )

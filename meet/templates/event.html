@@ -4,9 +4,9 @@
 	</head>
 	<body>
 		{{event_id}}
-		{% for i in options %}
-			<div>{{i.date}} 
-			<div>from {{i.start}} to {{i.finish}}</div>
+		{% for v in votes %}
+			<div>{{v.0.date}} {{v.1.to_p}}
+			<div>from {{v.0.start}} to {{v.0.finish}}</div>
 			</div>
 		{% endfor %}
 	</body>

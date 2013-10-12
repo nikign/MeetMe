@@ -8,9 +8,11 @@ def home (request):
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
 	options = event.options_list.all()
+	user = User.objects.first()
+	votes = [(option , VoteOptionForm()) for option in options]
 	return render_to_response('event.html', {
 		'event_id' : event_id,
-		'options'  : options,
+		'votes'  : votes,
 	})
 
 
