@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^event/(?P<event_id>\d+)/view' , 'meet.views.view' , name='view'),
+    url(r'^event/vote' , 'meet.views.vote' , name='vote'),
     url(r'^title_form/', 'meet.views.test', name='test'),
 )

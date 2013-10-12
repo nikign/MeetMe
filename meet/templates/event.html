@@ -3,11 +3,19 @@
 		
 	</head>
 	<body>
-		{{event_id}}
-		{% for v in votes %}
-			<div>{{v.0.date}} {{v.1.to_p}}
-			<div>from {{v.0.start}} to {{v.0.finish}}</div>
+		<form method="post" action="/event/vote">
+			{% csrf_token %}
+			<input type= "hidden" name="event_id" value="{{event_id}}"/>
+			<div>
+			{% for ballet in votes %}
+				{{ballet.option.date}} -- from
+ 				{{ballet.option.start}} to 
+				{{ballet.option.finish}}<br/>
+				{{ballet.form}}
+			<br/>
+			{% endfor %}
 			</div>
-		{% endfor %}
+			<input type="submit" />
+		</form>
 	</body>
 </html>
