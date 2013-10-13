@@ -1,9 +1,11 @@
 from django.shortcuts import render_to_response, render
-from models import Event
+from models import Event, Interval
 from forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
+from django.contrib.formtools.wizard.views import SessionWizardView
+from django.forms.models import inlineformset_factory, modelformset_factory
 
 def home (request):
 	return render_to_response('home.html')
@@ -33,7 +35,39 @@ def vote (request):
 		'post' : request.POST
 	}, context_instance = RequestContext(request))	
 
-def test(request):
-	title_description_form = TitleDescriptionForm()
-	guests_form = GuestListForm()
-	return render(request, 'test.html', {'title_form': title_description_form, 'guests_form': guests_form, })
+def create(request):
+	# title_description_form = TitleDescriptionForm()
+	# types_form = EventTypeForm()
+	# IntervalFormSet = modelformset_factory(Interval, max_num=2, extra=3)
+	IntervalFormSet = inlineformset_factory(Event, Interval, can_delete=True, max_num=2, extra=3)
+	event_form = EventForm()
+	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
+
+
+def save_event(request):
+	print "inja save evente!"
+	form = EventForm(request.POST)
+	if form.is_valid():
+		form.save()
+	# 'options_list-1-'+i
+	IntervalFormSet = inlineformset_factory(Event, Interval, can_delete=True, max_num=2, extra=3)
+	interval_form = IntervalFormSet(request.POST)
+
+	intervals = interval_form.save(commit=False)
+	for interval in intervals:
+		interval.event_id
+	return render_to_response('vote.html', {
+		'post' : "success"
+	}, context_instance = RequestContext(request))	
+
+
+class CreateWizard(SessionWizardView):
+	def done(self, form_list, **kwargs):
+		return render_to_response('done.html', {
+			'form_data': [form.cleaned_data for form in form_list],
+		})
+
+	def get_template_names(self):
+		return 'test.html'
+
+create_wizard = CreateWizard.as_view([TitleDescriptionForm, EmptyForm, EventTypeForm,])

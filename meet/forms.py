@@ -22,3 +22,18 @@ class VoteForm (forms.ModelForm):
 	class Meta:
 		model = Vote
 		fields = ('state', 'interval', 'voter')
+
+
+class EmptyForm(forms.Form):
+	pass
+
+class EventTypeForm(forms.Form):
+    event_type = forms.ChoiceField(widget=forms.RadioSelect, choices=[])
+
+    def __init__(self, *args, **kwargs):
+        super(EventTypeForm, self).__init__(*args, **kwargs)
+        self.fields['event_type'].choices = [('1','Event'), ('2', 'Meeting'), ]
+
+class EventForm (forms.ModelForm):
+	class Meta:
+		model = Event

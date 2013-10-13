@@ -8,6 +8,7 @@ class Room (models.Model):
 
 
 class Event (models.Model):
+	#TODO register meeting in event
 	title = models.CharField(max_length = 30)
 	description = models.TextField()
 	creator = models.ForeignKey(User)
