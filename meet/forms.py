@@ -21,4 +21,10 @@ class VoteForm (forms.ModelForm):
 	voter = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
 	class Meta:
 		model = Vote
-		fields = ( 'state', 'interval', 'voter')
+		fields = ('state', 'interval', 'voter')
+
+
+class EventForm (forms.ModelForm):
+	class Meta:
+		model = Event
+		fields = ('title', 'description', 'guest_list', )

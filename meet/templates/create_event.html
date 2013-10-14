@@ -12,17 +12,7 @@
 
 	</head>
 	<script type="text/javascript">
-    <!--
- //   	$(function () {
-	//     $('.add-row').click(function() {
-	//         return addForm(this, '{{ formset.prefix }}');
-	//     });
-	//     $('.delete-row').click(function() {
-	//         return deleteForm(this, '{{ formset.prefix }}');
-	//     })
-	// })
-
-    //-->
+ 
 	    $(document).ready(function () {
 	    // Code adapted from http://djangosnippets.org/snippets/1389/  
 	    function updateElementIndex(el, prefix, ndx) {
@@ -51,7 +41,7 @@
 			            }
 			        } // End if
 			        else {
-			            alert("You have to enter at least one todo item!"+ formCount);
+			            alert("You have to enter at least one time interval!");
 			        }
 			        return false;
 	    }
@@ -99,10 +89,13 @@
 	});
     </script>
 	<body>
+		<div class="well">
+			
+		<h3>Create an Event: </h3>
 		<form action="/save_event/" method="POST">
 			{% csrf_token %}
-			{{event_form}}
-			<h2>Todo Items</h2>
+			{{event_form.as_p}}
+			<h4>Suggested time intervals for vote</h4>
 			{{ interval_form.management_form }}
 			{% for form in interval_form.forms %}
 			<div class="item" id="id_form-TOTAL_FORMS">
@@ -111,8 +104,9 @@
 			</div>
 			{% endfor %}
 			<p><a id="add" href="#">Add another item</a></p>
-			<input type="submit" value=" Submit " />
+			<input type="submit" value=" Create this Event " class="btn btn-info" />
 		</form>
+		</div>
 		<!-- <div class="well">
 			{% if wizard.steps.step1 == 1 %}
 			<div id="page1">

@@ -10,11 +10,12 @@ class IntervalInline(admin.TabularInline):
 
 
 class EventAdmin(admin.ModelAdmin):
-	fields= ['title', 'description', 'creator', 'guest_list']
+	fields = ['title', 'description', 'creator', 'guest_list']
+	list_display = ('title', )
 	inlines = [ IntervalInline ]
 
 class MeetingAdmin(admin.ModelAdmin):
-	fields= ['title', 'description', 'creator', 'guest_list', 'confirmed', 'conditions','reservation']
+	fields = ['title', 'description', 'creator', 'guest_list', 'confirmed', 'conditions','reservation']
 	inlines = [ IntervalInline ]
 
 

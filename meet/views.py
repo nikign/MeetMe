@@ -1,9 +1,11 @@
 from django.shortcuts import render_to_response, render
-from models import Event
+from models import Event, Interval
 from forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
+from django.contrib.formtools.wizard.views import SessionWizardView
+from django.forms.models import inlineformset_factory, modelformset_factory
 
 
 def home (request):
@@ -45,7 +47,44 @@ def vote (request):
 		'message' : message,
 	}, context_instance = RequestContext(request))	
 
-def test(request):
-	title_description_form = TitleDescriptionForm()
-	guests_form = GuestListForm()
-	return render(request, 'test.html', {'title_form': title_description_form, 'guests_form': guests_form, })
+def create(request):
+	IntervalFormSet = inlineformset_factory(Event, Interval, max_num=1, extra=3)
+	event_form = EventForm()
+	return render(request, 'create_event.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
+
+
+def save_event(request):
+	form = EventForm(request.POST)
+	if form.is_valid():
+		event = form.save(commit=False)
+		event.creator = request.user
+		event.save()
+
+		IntervalFormSet = inlineformset_factory(Event, Interval)
+		interval_form = IntervalFormSet(request.POST)
+		if interval_form.is_valid():
+			intervals = interval_form.save(commit=False)
+			for interval in intervals:
+				interval.event_id = event.id
+				interval.save()
+			return render_to_response('event_saved.html', {
+				'message' : "You event named "+ event.title +" was added successfully.",
+				"status" : "OK"
+
+			})	
+	return render_to_response('event_saved.html', {
+		'post' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
+		'status' : 'failure'
+	})	
+
+
+# class CreateWizard(SessionWizardView):
+# 	def done(self, form_list, **kwargs):
+# 		return render_to_response('done.html', {
+# 			'form_data': [form.cleaned_data for form in form_list],
+# 		})
+
+# 	def get_template_names(self):
+# 		return 'test.html'
+
+# create_wizard = CreateWizard.as_view([TitleDescriptionForm, EmptyForm, EventTypeForm,])

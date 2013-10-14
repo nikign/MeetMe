@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+# from meet.views import create_wizard
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -16,5 +17,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^event/(?P<event_id>\d+)/view' , 'meet.views.view' , name='view'),
     url(r'^event/vote' , 'meet.views.vote' , name='vote'),
-    url(r'^title_form/', 'meet.views.test', name='test'),
+    url(r'^create/', 'meet.views.create' , name='create'),
+    url(r'^save_event/', 'meet.views.save_event' , name='save_event'),
+    # url(r'^create/', create_wizard , name='create'),
 )
