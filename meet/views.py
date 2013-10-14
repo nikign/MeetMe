@@ -36,38 +36,43 @@ def vote (request):
 	}, context_instance = RequestContext(request))	
 
 def create(request):
-	# title_description_form = TitleDescriptionForm()
-	# types_form = EventTypeForm()
-	# IntervalFormSet = modelformset_factory(Interval, max_num=2, extra=3)
-	IntervalFormSet = inlineformset_factory(Event, Interval, can_delete=True, max_num=2, extra=3)
+	IntervalFormSet = inlineformset_factory(Event, Interval, max_num=1, extra=3)
 	event_form = EventForm()
-	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
+	return render(request, 'create_event.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
 
 
 def save_event(request):
-	print "inja save evente!"
 	form = EventForm(request.POST)
 	if form.is_valid():
-		form.save()
-	# 'options_list-1-'+i
-	IntervalFormSet = inlineformset_factory(Event, Interval, can_delete=True, max_num=2, extra=3)
-	interval_form = IntervalFormSet(request.POST)
+		event = form.save(commit=False)
+		event.creator = request.user
+		event.save()
 
-	intervals = interval_form.save(commit=False)
-	for interval in intervals:
-		interval.event_id
-	return render_to_response('vote.html', {
-		'post' : "success"
-	}, context_instance = RequestContext(request))	
+		IntervalFormSet = inlineformset_factory(Event, Interval)
+		interval_form = IntervalFormSet(request.POST)
+		if interval_form.is_valid():
+			intervals = interval_form.save(commit=False)
+			for interval in intervals:
+				interval.event_id = event.id
+				interval.save()
+			return render_to_response('event_saved.html', {
+				'message' : "You event named "+ event.title +" was added successfully.",
+				"status" : "OK"
+
+			})	
+	return render_to_response('event_saved.html', {
+		'post' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
+		'status' : 'failure'
+	})	
 
 
-class CreateWizard(SessionWizardView):
-	def done(self, form_list, **kwargs):
-		return render_to_response('done.html', {
-			'form_data': [form.cleaned_data for form in form_list],
-		})
+# class CreateWizard(SessionWizardView):
+# 	def done(self, form_list, **kwargs):
+# 		return render_to_response('done.html', {
+# 			'form_data': [form.cleaned_data for form in form_list],
+# 		})
 
-	def get_template_names(self):
-		return 'test.html'
+# 	def get_template_names(self):
+# 		return 'test.html'
 
-create_wizard = CreateWizard.as_view([TitleDescriptionForm, EmptyForm, EventTypeForm,])
+# create_wizard = CreateWizard.as_view([TitleDescriptionForm, EmptyForm, EventTypeForm,])
