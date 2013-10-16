@@ -1,16 +1,8 @@
+{% include "header.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
 
-		<title>Create Event</title>
-		<script src="{{ STATIC_URL }}jquery.js"></script>
-		<script src="{{ STATIC_URL }}bootstrap.min.js"></script>
-		<script src="{{ STATIC_URL }}dynamic-formset.js"></script>
-		<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap.min.css" type="text/css" />
-
-
-	</head>
+{% block content %}
+	
 	<script type="text/javascript">
  
 	    $(document).ready(function () {
@@ -166,4 +158,4 @@
 		</div> -->
 
 	</body>
-</html>
+{% endblock %}
