@@ -7,6 +7,7 @@ from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
 
+
 def home (request):
 	return render_to_response('home.html')
 
@@ -23,16 +24,27 @@ def view (request, event_id):
 	for i in xrange(len(options)):
 		initial_data['form-'+str(i)+'-voter']= user.id
 		initial_data['form-'+str(i)+'-interval']= options[i].id
-	votes = [ {'option': option, 'form': form} for option, form in zip(options, FormSet(initial_data))]
+	pfilled_form = FormSet(initial_data)
+	votes = [ {'option': option, 'form': form} for option, form in zip(options, pfilled_form)]
 	return render_to_response('event.html', {
 		'event_id' : event_id,
 		'votes'  : votes,
+		'management_form': pfilled_form.management_form,
 	}, context_instance = RequestContext(request))
 
 def vote (request):
 	event_id = request.POST['event_id']	
+	FormSet = formset_factory(VoteForm)
+	validation_data = FormSet(request.POST)
+	message = 'SUCCESS'
+	if validation_data.is_valid():
+		for form in validation_data.forms:
+			form.save()
+	else:
+		message = 'FAILURE'
 	return render_to_response('vote.html', {
-		'post' : request.POST
+		'post' : request.POST,
+		'message' : message,
 	}, context_instance = RequestContext(request))	
 
 def create(request):
