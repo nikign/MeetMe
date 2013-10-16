@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import dateformat
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -16,12 +17,18 @@ class Event (models.Model):
 											db_table="guest_lists",
 											 related_name="invitations")#TODO : doc.
 
+	def __unicode__(self):
+		return self.title
+
 
 class Interval (models.Model):
 	date = models.DateField()
 	start = models.TimeField()
 	finish = models.TimeField()
 	event = models.ForeignKey(Event, related_name="options_list")
+
+	def __unicode__(self):
+		return "On "+str(self.date)+" from "+dateformat.TimeFormat(self.start).P()+ " to "+dateformat.TimeFormat(self.finish).P()
 
 
 class Reservation(models.Model):
@@ -66,14 +73,19 @@ class Notification (models.Model):
 	INVITED = 'in'
 	BEING_HELD = 'bh'
 	CANCELLED = 'ca'
+	SOMEONE_VOTED = 'sv'
 	MESSAGE = (
 		(INVITED, 'Invited'),
 		(BEING_HELD, 'Being held'),
-		(CANCELLED, 'Cancelled')
+		(CANCELLED, 'Cancelled'),
+		(SOMEONE_VOTED, 'Someone voted'),
 	)
 	category = models.CharField(max_length=2, 
 							choices = MESSAGE)
-	owner = models.ForeignKey(User)
 	event = models.ForeignKey(Event)
+	
+	recepiant = models.ForeignKey(User)
+	vote = models.ForeignKey(Vote)
+
 
 
