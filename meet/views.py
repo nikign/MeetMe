@@ -6,10 +6,21 @@ from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import SessionWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
-
+from django.http import HttpRequest, HttpResponseRedirect
+import google
 
 def home (request):
-	return render_to_response('home.html')
+	if not request.session.has_key('_auth_user_id'):
+		return render_to_response('index.html',{
+
+		})
+	user_id = request.session['_auth_user_id']
+	user = User.objects.get(id=user_id)
+	return render_to_response('home.html',{
+		'post': request.POST,
+		'get' : user,
+
+		})
 
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
@@ -76,6 +87,7 @@ def save_event(request):
 		'post' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
 		'status' : 'failure'
 	})	
+
 
 
 # class CreateWizard(SessionWizardView):

@@ -20,4 +20,8 @@ urlpatterns = patterns('',
     url(r'^create/', 'meet.views.create' , name='create'),
     url(r'^save_event/', 'meet.views.save_event' , name='save_event'),
     # url(r'^create/', create_wizard , name='create'),
+    url(r'^google/login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
+    url(r'^google/login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
+
 )
