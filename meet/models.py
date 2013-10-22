@@ -16,6 +16,8 @@ class Event (models.Model):
 	guest_list = models.ManyToManyField(User, null=True, blank=True, 
 											db_table="guest_lists",
 											 related_name="invitations")#TODO : doc.
+	deadline = models.DateTimeField() #Time constrain
+
 
 	def __unicode__(self):
 		return self.title

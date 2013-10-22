@@ -9,10 +9,17 @@ from django.forms.models import inlineformset_factory, modelformset_factory
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 
-
 def home (request):
-	# print request.LANGUAGE_CODE
-	return render_to_response('home.html')
+	if not request.session.has_key('_auth_user_id'):
+		return render_to_response('index.html',{
+		})
+	user_id = request.session['_auth_user_id']
+	user = User.objects.get(id=user_id)
+	return render_to_response('home.html',{
+		'post': user.email,
+		'get' : user.password,
+	})
+
 
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
@@ -45,7 +52,7 @@ def vote (request):
 			form.save()
 	else:
 		message = 'FAILURE'
-	return render_to_response('vote.html', {
+	return render_to_response('vote.html', { 
 		'post' : request.POST,
 		'message' : message,
 	}, context_instance = RequestContext(request))	

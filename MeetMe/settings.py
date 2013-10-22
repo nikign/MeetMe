@@ -155,7 +155,20 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'meet',
+    # 'google',
+    'django_openid_auth'
 )
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'auth.GoogleBackend',
+)
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
+
 
 LANGUAGES = (
   ('fa', ugettext('Persian')),
