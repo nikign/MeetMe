@@ -71,11 +71,11 @@
 	    }
 	    // Register the click event handlers
 	    $("#add").click(function () {
-	        return addForm(this, "2");
+	        return addForm(this, "options_list");
 	    });
 
 	    $(".delete").click(function () {
-	        return deleteForm(this, "2");
+	        return deleteForm(this, "options_list");
 	    });
 	});
     </script>
@@ -83,12 +83,11 @@
 
 	<body>
 		<div class="well">
-		
-		{% if wizard.steps.step1 == 3 %}
+
+		<!-- {% if wizard.steps.step1 == 3 %}
 			<h4>Suggested time intervals for vote</h4>
 			<form action="" method="POST">
 				{% csrf_token %}
-				{{ wizard.management_form }}
 				{{ wizard.form.management_form }}
 				{% for form in wizard.form.forms %}
 				<div class="item" id="id_form-TOTAL_FORMS">
@@ -97,25 +96,22 @@
 				</div>
 				{% endfor %}
 				<p><a id="add" href="#">Add another item</a></p>
-				<div class="form-actions center">
-	                <button type="submit" class="btn btn-primary">Next<i class="icon-arrow-right icon-white"></i></button>
-                </div>
 			</form>
 		
 		{% else %}
-			<form action="" method="post">
+			<form action="" method="post" class="create-ad-1st-step">
 				 		{{ wizard.management_form }}
 						{% csrf_token %}
 						<table> 
 					    	{{ wizard.form }}
 						</table>
 	                <div class="form-actions center">
-		                <button type="submit" class="btn btn-primary">Next<i class="icon-arrow-right icon-white"></i></button>
+		                <button type="submit" class="btn btn-primary">Save<i class="icon-arrow-right icon-white"></i></button>
 	                </div>
 			</form>
-		{% endif %}	
+		{% endif %}	 -->
 
-		<!-- <form action="/save_event/" method="POST">
+		<form action="/save_event/" method="POST">
 			{% csrf_token %}
 			{{event_form.as_p}}
 			<h4>Suggested time intervals for vote</h4>
@@ -129,7 +125,7 @@
 			<p><a id="add" href="#">Add another item</a></p>
 			<input type="submit" value=" Create this Event " class="btn btn-info" />
 		</form>
-		</div> -->
+		</div>
 		<!-- <div class="well">
 			{% if wizard.steps.step1 == 1 %}
 			<div id="page1">
