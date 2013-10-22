@@ -16,8 +16,8 @@ def home (request):
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
 	return render_to_response('home.html',{
-		'post': user.email,
-		'get' : user.password,
+		'email': user.email,
+		'username' : user.username,
 	})
 
 
