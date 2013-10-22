@@ -4,11 +4,14 @@ from forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
-from django.contrib.formtools.wizard.views import SessionWizardView
+from django.contrib.formtools.wizard.views import CookieWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
+from django.utils.translation import ugettext_lazy as _
+from MeetMe import settings
 
 
 def home (request):
+	# print request.LANGUAGE_CODE
 	return render_to_response('home.html')
 
 def view (request, event_id):
@@ -50,7 +53,7 @@ def vote (request):
 def create(request):
 	IntervalFormSet = inlineformset_factory(Event, Interval, max_num=1, extra=3)
 	event_form = EventForm()
-	return render(request, 'create_event.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
+	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
 
 
 def save_event(request):
@@ -73,18 +76,36 @@ def save_event(request):
 
 			})	
 	return render_to_response('event_saved.html', {
-		'post' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
+		'message' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
 		'status' : 'failure'
 	})	
 
 
-# class CreateWizard(SessionWizardView):
-# 	def done(self, form_list, **kwargs):
-# 		return render_to_response('done.html', {
-# 			'form_data': [form.cleaned_data for form in form_list],
-# 		})
+def event_saved(request):
 
-# 	def get_template_names(self):
-# 		return 'test.html'
+	return render_to_response('event_saved.html', {'message': ('hichi'), 'status': 'failure`'},  context_instance = RequestContext(request))
 
-# create_wizard = CreateWizard.as_view([TitleDescriptionForm, EmptyForm, EventTypeForm,])
+from django.contrib.auth.decorators import login_required
+class CreateWizard(CookieWizardView):
+	def done(self, form_list, **kwargs):
+		form1 = form_list[0]
+		event1 = form1.save(commit=False)
+		event1.creator = User.objects.all()[0]
+		# event1.creator = self.request.user
+		event1.save()
+		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
+		event1.guest_list = guest_list
+		forms2 = form_list[2]
+		intervals = forms2.save(commit=False)
+		for interval in intervals:
+			interval.event_id = event1.id
+			interval.save()
+		return render_to_response('event_saved.html', {
+			'message': [form.cleaned_data for form in form_list],
+		})
+
+	def get_template_names(self):
+		return 'create_event.html'
+
+create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, inlineformset_factory(Event, Interval, max_num=1, extra=3), ])
+	
