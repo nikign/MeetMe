@@ -89,19 +89,19 @@ from django.contrib.auth.decorators import login_required
 class CreateWizard(CookieWizardView):
 	def done(self, form_list, **kwargs):
 		form1 = form_list[0]
-		event1 = form1.save(commit=False)
-		event1.creator = User.objects.all()[0]
+		event = form1.save(commit=False)
+		event.creator = User.objects.all()[0]
 		# event1.creator = self.request.user
-		event1.save()
+		event.save()
 		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
-		event1.guest_list = guest_list
+		event.guest_list = guest_list
 		forms2 = form_list[2]
 		intervals = forms2.save(commit=False)
 		for interval in intervals:
-			interval.event_id = event1.id
+			interval.event_id = event.id
 			interval.save()
 		return render_to_response('event_saved.html', {
-			'message': [form.cleaned_data for form in form_list],
+			'message': "You event named "+ event.title +" was added successfully.",
 		})
 
 	def get_template_names(self):
