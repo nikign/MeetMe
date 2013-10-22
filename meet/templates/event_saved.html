@@ -1,12 +1,10 @@
+{% include "header.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Event Saved</title>
-	</head>
+{% load i18n %}
+{% block content %}
 	<body>
 		<div >
-			{{message}}
+			{{  message }}
 		</div>
 	</body>
-</html>
+{% endblock %}

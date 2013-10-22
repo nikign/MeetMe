@@ -1,8 +1,10 @@
 # Django settings for MeetMe project.
 import os
+ugettext = lambda s: s
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+PATH = (os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -34,9 +36,11 @@ TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa-IR'
+DEFAULT_LANGUAGE = 'fa'  # for locale middleware
+# TRANSMETA_DEFAULT_LANGUAGE = "en"  # for transmeta
 
-SITE_ID = 1
+
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -68,12 +72,25 @@ STATIC_ROOT = ''
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
+SITE_ID = 1
+
+ROOT_URLCONF = 'urls'
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
+USE_I18N = True
+
+# If you set this to False, Django will not format dates, numbers and
+# calendars according to the current locale
+USE_L10N = True
+
+LOCALE_PATHS = (PATH + "/locale",)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -93,12 +110,23 @@ TEMPLATE_LOADERS = (
     # 'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.i18n',
+    "django.core.context_processors.debug",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+
+    )
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.common.CommonMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -109,6 +137,7 @@ ROOT_URLCONF = 'MeetMe.urls'
 WSGI_APPLICATION = 'MeetMe.wsgi.application'
 
 TEMPLATE_DIRS = (
+    PATH + "/templates",
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -126,6 +155,11 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'meet',
+)
+
+LANGUAGES = (
+  ('fa', ugettext('Persian')),
+  ('en', ugettext('English')),
 )
 
 # A sample logging configuration. The only tangible logging
