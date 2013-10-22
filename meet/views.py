@@ -51,7 +51,7 @@ def vote (request):
 			form.save()
 	else:
 		message = 'FAILURE'
-	return render_to_response('vote.html', {
+	return render_to_response('vote.html', { 
 		'post' : request.POST,
 		'message' : message,
 	}, context_instance = RequestContext(request))	
