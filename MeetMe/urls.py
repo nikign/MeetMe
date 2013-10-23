@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    (r'^i18n/', include('django.conf.urls.i18n')),
+    # (r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^$', 'meet.views.home', name='home'),
     # url(r'^MeetMe/', include('MeetMe.foo.urls')),
 

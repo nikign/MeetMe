@@ -165,14 +165,14 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+# LOGIN_URL = '/login/'
+# LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 
 LANGUAGES = (
   ('fa', ugettext('Persian')),
-  ('en', ugettext('English')),
+  # ('en', ugettext('English')),
 )
 
 # A sample logging configuration. The only tangible logging
