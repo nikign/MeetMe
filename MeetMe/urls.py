@@ -26,4 +26,5 @@ urlpatterns = patterns('',
 
     url(r'^saved/', 'meet.views.event_saved' , name='event_saved'),
     url(r'^create/', create_wizard , name='create'),
+    url(r'^test/$', 'meet.views.send_test_mail', name ='test')
 )

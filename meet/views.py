@@ -92,6 +92,23 @@ def event_saved(request):
 
 	return render_to_response('event_saved.html', {'message': ('hichi'), 'status': 'failure`'},  context_instance = RequestContext(request))
 
+def send_test_mail(request):
+	from django.core.mail import EmailMultiAlternatives
+
+	email = EmailMultiAlternatives(subject='Test Mail', body="ma khe'li khafanim", 
+		from_email='info@meetme.ir', to=['niki.hp2007@gmail.com'], cc=['ashkan.dant3@gmail.com'], bcc=None,)
+	# email.attach_alternative(body_html, "text/html")
+	email.send()
+	print "hasan o jafar o abbas o ali"
+
+	return render_to_response('event_saved.html', {
+		'message' : "Mail zadam.",
+		'status' : 'khafan'
+	})	
+
+
+
+
 from django.contrib.auth.decorators import login_required
 class CreateWizard(CookieWizardView):
 	def done(self, form_list, **kwargs):
@@ -113,6 +130,8 @@ class CreateWizard(CookieWizardView):
 
 	def get_template_names(self):
 		return 'create_event.html'
+
+
 
 create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, inlineformset_factory(Event, Interval, max_num=1, extra=3), ])
 	
