@@ -18,7 +18,7 @@ class TitleDescriptionForm(forms.ModelForm):
 class GuestListForm(forms.ModelForm):
 	class Meta:
 		model = Event
-		fields = ('guest_list', )
+		fields = ('guest_list', 'deadline' )
 
 
 class VoteForm (forms.ModelForm):
@@ -36,3 +36,15 @@ class EventForm (forms.ModelForm):
 	class Meta:
 		model = Event
 		fields = ('title', 'description', 'guest_list', )
+
+
+class EventTypeForm(forms.Form):
+	Choices = [('1','Event'), ('2', 'Meeting'),]
+	event_type = forms.ChoiceField(choices=Choices, label="Event or Meeting", error_messages={'required': _('You should choose one type.')})
+	# event_type = fields.MultipleChoiceField(choices=Choices)
+
+
+class MeetingConditionsForm(forms.ModelForm):
+	class Meta:
+		model = Meeting
+		fields = ('conditions', )

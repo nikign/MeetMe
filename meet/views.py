@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import CookieWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
+# from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 
@@ -92,10 +93,13 @@ def event_saved(request):
 
 	return render_to_response('event_saved.html', {'message': ('hichi'), 'status': 'failure`'},  context_instance = RequestContext(request))
 
+
 def send_test_mail(request):
 	from django.core.mail import EmailMultiAlternatives
 
-	email = EmailMultiAlternatives(subject='Test Mail', body="ma khe'li khafanim", 
+	# email = EmailMultiAlternatives(subject='Test Mail', body="ma khe'li khafanim", 
+	# 	from_email='info@meetme.ir', to=['story_ngn@yahoo.com'], cc=[], bcc=None,)
+	email = EmailMultiAlternatives(subject='Test Mail', body="ma khafantarinim asan! :D :D :D", 
 		from_email='info@meetme.ir', to=['niki.hp2007@gmail.com'], cc=['ashkan.dant3@gmail.com'], bcc=None,)
 	# email.attach_alternative(body_html, "text/html")
 	email.send()
@@ -108,22 +112,35 @@ def send_test_mail(request):
 
 
 
-
-from django.contrib.auth.decorators import login_required
 class CreateWizard(CookieWizardView):
+
 	def done(self, form_list, **kwargs):
 		form1 = form_list[0]
 		event = form1.save(commit=False)
 		event.creator = User.objects.all()[0]
+		event_deadline =  self.get_cleaned_data_for_step('1')['deadline']
+		event.deadline =  event_deadline
 		# event1.creator = self.request.user
-		event.save()
 		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
+		event.save()
 		event.guest_list = guest_list
+		event.save()
 		forms2 = form_list[2]
 		intervals = forms2.save(commit=False)
 		for interval in intervals:
 			interval.event_id = event.id
 			interval.save()
+		if is_meeting(self):
+			meeting_cond = self.get_cleaned_data_for_step('4')['conditions']
+			meeting = Meeting(event_ptr_id=event.pk)
+			meeting.__dict__.update(event.__dict__)
+			meeting.conditions = meeting_cond
+			meeting.save()
+			return render_to_response('event_saved.html', {
+				'message': "You event named "+ event.title +" was added successfully.",
+			})
+
+		
 		return render_to_response('event_saved.html', {
 			'message': "You event named "+ event.title +" was added successfully.",
 		})
@@ -132,6 +149,15 @@ class CreateWizard(CookieWizardView):
 		return 'create_event.html'
 
 
+def is_meeting(wizard):
+	event_type_data = wizard.get_cleaned_data_for_step('3')['event_type'] if wizard.get_cleaned_data_for_step('3') else None
+	if event_type_data == '2':
+		return True
+	else:
+		return False
 
-create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, inlineformset_factory(Event, Interval, max_num=1, extra=3), ])
-	
+create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
+	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm],
+	condition_dict={'4': is_meeting}
+	)
+
