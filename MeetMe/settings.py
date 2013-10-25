@@ -34,10 +34,18 @@ ALLOWED_HOSTS = []
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'America/Chicago'
 
+
+LANGUAGES = (
+  # ('en', ugettext('English')),
+  ('fa', ugettext('Persian')),
+)
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'fa-IR'
 DEFAULT_LANGUAGE = 'fa'  # for locale middleware
+# SITE_DEFAULT_LANGUAGE = 'fa'  # for locale middleware
+
 # TRANSMETA_DEFAULT_LANGUAGE = "en"  # for transmeta
 
 
@@ -180,11 +188,6 @@ LOGIN_REDIRECT_URL = '/'
 # LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
-
-LANGUAGES = (
-  ('fa', ugettext('Persian')),
-  # ('en', ugettext('English')),
-)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
