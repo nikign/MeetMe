@@ -164,13 +164,24 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'meet',
     # 'google',
-    'django_openid_auth'
+    'django_openid_auth',
+    'django_jenkins',
+
 )
 
+# PROJECT_APPS = (
+#     'meet',
+# )
+
 AUTHENTICATION_BACKENDS = (
+    'django_jenkins.tasks.with_coverage',
     'django.contrib.auth.backends.ModelBackend',
     'auth.GoogleBackend',
 )
+JENKINS_TASKS = (
+    'django_jenkins.tasks.with_coverage',
+)
+COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 
 LOGIN_REDIRECT_URL = '/'
 # LOGIN_URL = '/login/'
