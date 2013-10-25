@@ -10,6 +10,8 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+ADMIN_MAILS = ['ashkan.dant3@gmail.com' ,'niki.hp2007@gmail.com', ]
+
 MANAGERS = ADMINS
 
 DATABASES = {
