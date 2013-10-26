@@ -9,7 +9,8 @@ class Room (models.Model):
 	address = models.TextField()
 
 	def is_suitable_for_interval(self, interval):
-		reserves = Reservation.objects.filter(interval__date=interval.date, room=self)
+		# reserves = Reservation.objects.filter(interval__date=interval.date, room=self)
+		reserves = self.resevation_list().filter(interval__date=interval.date);
 		for reserve in reserves:
 			if(reserve.has_interference(interval)):
 				return False
@@ -17,7 +18,8 @@ class Room (models.Model):
 
 
 class RoomManager(models.Model):
-	@staticmethod
+	
+	@classmethod
 	def find_best_room_for_interval_and_capacity(interval, capacity):
 		fitting_rooms = Room.objects.filter(capacity__gte=capacity)
 		fitting_rooms = sorted(fitting_rooms, key = lambda room : room.capacity)
@@ -56,13 +58,36 @@ class Interval (models.Model):
 			(self.finish>other.start and self.finish<other.finish)
 		)
 		
+	def how_many_votes(self):
+		return self.votes_list().count()
+		
+	def how_many_will_come(self):
+		return self.votes_list().filter(state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()
+
+
+
 class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
-	room  = models.ForeignKey(Room)
+	room  = models.ForeignKey(Room, related_name="reservation_list")
 
 	def __init__(self, intervl, room):
 		self.interval = interval
 		self.room = room
+
+	@classmethod
+	def reserve_room_for(meeting):
+		options = meeting.get_feasible_intervals_in_order()
+		guest_count = meeting.get_guest_count()
+		for option in options:
+			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
+			if room != None : 
+				reservation = Reservation(interval = option, room = room)
+				reservation.save()
+				return reservation
+		raise RoomNotAvailableException()
+
+		
+
 
 class Meeting (Event):
 	confirmed = models.BooleanField(default = False)
@@ -82,52 +107,76 @@ class Meeting (Event):
 
 	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 	
-	def find_and_reserve_best_fitting_time(self):
-		best_interval = None
-		coming_votes = Vote.objects.filter(interval__event__id=self.id, 
-			state__in=[Vote.COMING, Vote.IF_HAD_TO])
-		coming_intervals = {}
-		
-		for coming_vote in coming_votes:
-			if not coming_vote.interval in coming_intervals:
-				coming_intervals[coming_vote.interval] = {}
-				coming_intervals[coming_vote.interval][Vote.COMING] = []
-				coming_intervals[coming_vote.interval][Vote.IF_HAD_TO] = []
-			coming_intervals[coming_vote.interval][coming_vote.state].append(coming_vote.voter)
-		
-		suitable_times = []
-		if self.conditions == Meeting.EVERYONE:
-			suitable_times = [interval for interval in coming_intervals	
-			if (len(coming_intervals[interval][Vote.IF_HAD_TO])+
-				len(coming_intervals[interval][Vote.COMING]))==self.guest_list.count()]
+	def __guest_count__(self):
+		return self.guest_list().count()
 
-			suitable_times = sorted(suitable_times, key=lambda time: 
-				len(coming_intervals[time][Vote.COMING]), reverse=True)
+	def __how_many_voted__(self):
+		sample_interval = self.options_list()[0]
+		return sample_interval.how_many_votes()
 		
-		if self.conditions == Meeting.WITH_MAX_AVAILABLE:
-			suitable_times = [interval for interval in coming_intervals]
 		
-			suitable_times = sorted(suitable_times, key=lambda time: 
-				(len(coming_intervals[time][Vote.COMING])+len(coming_intervals[time][Vote.IF_HAD_TO]), 
-					len(coming_intervals[time][Vote.COMING])), reverse=True)
-		
-		if self.conditions == Meeting.HALF_AT_LEAST:
-			suitable_times = [interval for interval in coming_intervals
-			if (len(coming_intervals[interval][Vote.IF_HAD_TO])+
-				len(coming_intervals[interval][Vote.COMING]))>=self.guest_list.count()/2]
+	def get_feasible_intervals_in_order(self):
+		intervals = self.options_list()
+		guest_count = self.__guest_count__()
+		if self.conditions == EVERYONE:
+			return intervals.filter(how_many_will_come_gte = guest_count)
+		if self.conditions == HALF_AT_LEAST:
+			return intervals.filter(how_many_will_come_gte = guest_count/2)
+		ans = intervals.filter(how_many_will_come_gt = 0).all()
+		ans.sort(key = lambda x:x.how_many_will_come(), reverse=True)
+		return ans
 
-			suitable_times = sorted(suitable_times, key=lambda time: 
-				((len(coming_intervals[time][Vote.COMING])+len(coming_intervals[time][Vote.IF_HAD_TO])), 
-					len(coming_intervals[time][Vote.COMING])), reverse=True)
+	def is_it_time_to_close(self):
+		if time.now >= self.deadline:
+			return True
+		return self.__how_many_voted__() == self.__guest_count__()
+	
+	# def find_and_reserve_best_fitting_time(self):
+	# 	best_interval = None
+	# 	coming_votes = Vote.objects.filter(interval__event__id=self.id, 
+	# 		state__in=[Vote.COMING, Vote.IF_HAD_TO])
+	# 	coming_intervals = {}
+		
+	# 	for coming_vote in coming_votes:
+	# 		if not coming_vote.interval in coming_intervals:
+	# 			coming_intervals[coming_vote.interval] = {}
+	# 			coming_intervals[coming_vote.interval][Vote.COMING] = []
+	# 			coming_intervals[coming_vote.interval][Vote.IF_HAD_TO] = []
+	# 		coming_intervals[coming_vote.interval][coming_vote.state].append(coming_vote.voter)
+		
+	# 	suitable_times = []
+	# 	if self.conditions == Meeting.EVERYONE:
+	# 		suitable_times = [interval for interval in coming_intervals	
+	# 		if (len(coming_intervals[interval][Vote.IF_HAD_TO])+
+	# 			len(coming_intervals[interval][Vote.COMING]))==self.guest_list.count()]
 
-		for time in suitable_times:
-			fitting_room = RoomManager.find_best_room_for_interval_and_capacity(time,len(coming_intervals[interval][Vote.IF_HAD_TO])+
-				len(coming_intervals[interval][Vote.COMING]))
-			if fitting_room:
-				reserve = Reservation(time, fitting_room)
-				reserve.save()
-				return reserve
-		raise RoomNotAvailableException()
+	# 		suitable_times = sorted(suitable_times, key=lambda time: 
+	# 			len(coming_intervals[time][Vote.COMING]), reverse=True)
+		
+	# 	if self.conditions == Meeting.WITH_MAX_AVAILABLE:
+	# 		suitable_times = [interval for interval in coming_intervals]
+		
+	# 		suitable_times = sorted(suitable_times, key=lambda time: 
+	# 			(len(coming_intervals[time][Vote.COMING])+len(coming_intervals[time][Vote.IF_HAD_TO]), 
+	# 				len(coming_intervals[time][Vote.COMING])), reverse=True)
+		
+	# 	if self.conditions == Meeting.HALF_AT_LEAST:
+	# 		suitable_times = [interval for interval in coming_intervals
+	# 		if (len(coming_intervals[interval][Vote.IF_HAD_TO])+
+	# 			len(coming_intervals[interval][Vote.COMING]))>=self.guest_list.count()/2]
+
+	# 		suitable_times = sorted(suitable_times, key=lambda time: 
+	# 			((len(coming_intervals[time][Vote.COMING])+len(coming_intervals[time][Vote.IF_HAD_TO])), 
+	# 				len(coming_intervals[time][Vote.COMING])), reverse=True)
+
+	# 	for time in suitable_times:
+	# 		fitting_room = RoomManager.find_best_room_for_interval_and_capacity(time,len(coming_intervals[interval][Vote.IF_HAD_TO])+
+	# 			len(coming_intervals[interval][Vote.COMING]))
+	# 		if fitting_room:
+	# 			reserve = Reservation(time, fitting_room)
+	# 			reserve.save()
+	# 			return reserve
+	# 	raise RoomNotAvailableException()
 
 
 class Vote (models.Model):
@@ -141,7 +190,7 @@ class Vote (models.Model):
 	)
 	state = models.CharField(max_length=2, 
 							choices = VOTE)
-	interval = models.ForeignKey(Interval)
+	interval = models.ForeignKey(Interval, related_name="votes_list")
 	voter = models.ForeignKey(User)
 
 
