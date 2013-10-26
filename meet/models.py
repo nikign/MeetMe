@@ -9,10 +9,11 @@ class Room (models.Model):
 	address = models.TextField()
 
 	def is_suitable_for_interval(self, interval):
-		reserves = self.resevation_list().filter(interval__date=interval.date);
+		reserves = self.reservation_list.filter(interval__date=interval.date);
 		for reserve in reserves:
-			if(reserve.has_interference(interval)):
+			if(reserve.interval.has_interference(interval)):
 				return False
+
 		return True
 
 
@@ -54,18 +55,18 @@ class Interval (models.Model):
 
 	def has_interference(self, other):
 		return self.date == other.date and (
-			(self.start > other.start and self.start < other.finish) or
-			(self.finish > other.start and self.finish < other.finish)
+			(self.start >= other.start and self.start < other.finish) or
+			(self.finish > other.start and self.finish <= other.finish)
 		)
 		
 	def how_many_votes(self):
-		return self.votes_list().count()
+		return self.votes_list.count()
 		
 	def how_many_will_come(self):
-		return self.votes_list().filter(state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()
+		return self.votes_list.filter(state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()
 
 	def how_many_happy_to_come(self):
-		return self.votes_list().filter(state_eq=Vote.COMING).count()
+		return self.votes_list.filter(state=Vote.COMING).count()
 
 
 class Reservation(models.Model):
