@@ -49,8 +49,7 @@ class Interval (models.Model):
 	event = models.ForeignKey(Event, related_name="options_list")
 
 	def __unicode__(self):
-		return "On " + str(self.date) + " from " + dateformat.TimeFormat(self.start).P() +
-		 " to " + dateformat.TimeFormat(self.finish).P()
+		return "On " + str(self.date) + " from " + dateformat.TimeFormat(self.start).P() + " to " + dateformat.TimeFormat(self.finish).P()
 
 	def has_interference(self, other):
 		return self.date == other.date and (
