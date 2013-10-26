@@ -116,14 +116,13 @@ class Meeting (Event):
 		
 		
 	def get_feasible_intervals_in_order(self):
-		intervals = self.options_list()
+		intervals = self.options_list().order_by('-how_many_will_come')
 		guest_count = self.__guest_count__()
 		if self.conditions == EVERYONE:
 			return intervals.filter(how_many_will_come_gte = guest_count)
 		if self.conditions == HALF_AT_LEAST:
 			return intervals.filter(how_many_will_come_gte = guest_count/2)
 		ans = intervals.filter(how_many_will_come_gt = 0).all()
-		ans.sort(key = lambda x:x.how_many_will_come(), reverse=True)
 		return ans
 
 	def is_it_time_to_close(self):
