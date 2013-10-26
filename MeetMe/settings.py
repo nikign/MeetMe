@@ -176,7 +176,6 @@ INSTALLED_APPS = (
 # )
 
 AUTHENTICATION_BACKENDS = (
-    'django_jenkins.tasks.with_coverage',
     'django.contrib.auth.backends.ModelBackend',
     'auth.GoogleBackend',
 )

@@ -72,10 +72,6 @@ class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
 	room  = models.ForeignKey(Room, related_name="reservation_list")
 
-	def __init__(self, intervl, room):
-		self.interval = interval
-		self.room = room
-
 	@classmethod
 	def reserve_room_for(meeting):
 		options = meeting.get_feasible_intervals_in_order()
@@ -83,7 +79,9 @@ class Reservation(models.Model):
 		for option in options:
 			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
 			if room != None : 
-				reservation = Reservation(interval=option, room=room)
+				reservation = Reservation()
+				reservation.interval=option
+				reservation.room=room
 				reservation.save()
 				return reservation
 		raise RoomNotAvailableException()
