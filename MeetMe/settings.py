@@ -182,6 +182,8 @@ AUTHENTICATION_BACKENDS = (
 )
 JENKINS_TASKS = (
     'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',   # select one django or
+    #'django_jenkins.tasks.dir_tests'      # directory tests discovery
 )
 COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 

@@ -7,7 +7,7 @@ def inform_admin_reservation(reservation):
 	notification.category = Notification.ASK_CONFIRMATION
 	notification.event = reservation.interval.event
 	notification.save()
-	mail_body = "Reservation made for event " + reservation.interval.event + reservation.interval +
+	mail_body = "Reservation made for event " + reservation.interval.event + reservation.interval +\
 	 " in room " + reservation.room
 	email = EmailMultiAlternatives(subject='reservation_made', body=mail_body, 
 		from_email='info@meetme.ir', to=ADMIN_MAILS, cc=None, bcc=None,)
