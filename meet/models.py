@@ -64,6 +64,8 @@ class Interval (models.Model):
 	def how_many_will_come(self):
 		return self.votes_list().filter(state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()
 
+	def how_many_happy_to_come(self):
+		return self.votes_list().filter(state_eq = Vote.COMING).count()
 
 
 class Reservation(models.Model):
@@ -116,7 +118,7 @@ class Meeting (Event):
 		
 		
 	def get_feasible_intervals_in_order(self):
-		intervals = self.options_list().order_by('-how_many_will_come')
+		intervals = self.options_list().order_by('-how_many_will_come', '-how_many_happy_to_come')
 		guest_count = self.__guest_count__()
 		if self.conditions == EVERYONE:
 			return intervals.filter(how_many_will_come_gte = guest_count)
