@@ -12,11 +12,11 @@ from MeetMe import settings
 
 def home (request):
 	if not request.session.has_key('_auth_user_id'):
-		return render_to_response('index.html',{
+		return render_to_response('index.html', {
 		})
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
-	return render_to_response('home.html',{
+	return render_to_response('home.html', {
 		'email': user.email,
 		'username' : user.username,
 	})
