@@ -1,0 +1,4 @@
+
+
+class RoomNotAvailableException(Exception):
+	pass

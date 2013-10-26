@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import dateformat
+from meet.exceptions import RoomNotAvailableException
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -8,7 +9,7 @@ class Room (models.Model):
 	address = models.TextField()
 
 	def is_suitable_for_interval(self, interval):
-		reserves = Reservation.objects.filter(interval__date=interval, room=self)
+		reserves = Reservation.objects.filter(interval__date=interval.date, room=self)
 		for reserve in reserves:
 			if(reserve.has_interference(interval)):
 				return False
@@ -18,7 +19,7 @@ class Room (models.Model):
 class RoomManager(models.Model):
 	@staticmethod
 	def find_best_room_for_interval_and_capacity(interval, capacity):
-		fitting_rooms = Room.objects.filter(capacity__gt=capacity)
+		fitting_rooms = Room.objects.filter(capacity__gte=capacity)
 		fitting_rooms = sorted(fitting_rooms, key = lambda room : room.capacity)
 		for room in fitting_rooms:
 			if room.is_suitable_for_interval(interval):
@@ -126,7 +127,7 @@ class Meeting (Event):
 				reserve = Reservation(time, fitting_room)
 				reserve.save()
 				return reserve
-		return None
+		raise RoomNotAvailableException()
 
 
 class Vote (models.Model):
