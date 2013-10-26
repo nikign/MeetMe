@@ -1,5 +1,5 @@
-from meet.models import Meeting
-from meet.mail_and_notification
+from meet.models import Meeting, Reservation
+from meet.mail_and_notification import *
 
 #run every 1 hour
 def reserve_room_for_meetings():
@@ -9,6 +9,5 @@ def reserve_room_for_meetings():
 			meeting_reserve = Reservation.reserve_room_for(meeting)
 			inform_admin_reservation(meeting_reserve)
 		except Exception, e:
-			pass
-			#inform the creator
+			inform_no_room_to_owner(meeting)
 
