@@ -11,10 +11,13 @@ class RoomTest(TestCase):
 		"""
 		meetings = Meeting.objects
 		# room available
+		reservation_before = Reservation.objects.all().count()
 		meeting_e_maryam_ina = meetings.get(pk=2)
 		room_e_maryam = Reservation.reserve_room_for(meeting_e_maryam_ina)
 		self.assertEqual(room_e_maryam.room.name, 'room403')
+		self.assertEqual(Reservation.objects.all().count(), reservation_before + 1)
 		# room not available
 		meeting_e_ma = meetings.get(pk=3)
 		with self.assertRaises(RoomNotAvailableException):
 			room_e_ma = Reservation.reserve_room_for(meeting_e_ma)
+		self.assertEqual(Reservation.objects.all().count(), reservation_before + 1)
