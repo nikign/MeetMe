@@ -93,6 +93,7 @@ class Reservation(models.Model):
 	def reserve_room_for(cl, meeting):
 		options = meeting.get_feasible_intervals_in_order()
 		guest_count = meeting.get_guest_count()
+		# print 'num guests: ', guest_count
 		for option in options:
 			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
 			if room != None : 
@@ -142,7 +143,7 @@ class Meeting (Event):
 			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
 		if self.conditions == Meeting.HALF_AT_LEAST:
 			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
-			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
+			return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
 		ans = intervals
 		return ans
 

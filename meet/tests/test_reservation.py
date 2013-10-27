@@ -6,12 +6,14 @@ from meet.exceptions import RoomNotAvailableException
 class RoomTest(TestCase):
 	fixtures = ['test_reservation.json', ]
 	# TODO: use Interval Mock
-	def test_suitable_room(self):
+	def test_reservation(self):
 		"""
 		Tests that checking if a room is suitable for an interval works correctly.
 		"""
 		meetings = Meeting.objects
 		meeting_e_maryam_ina = meetings.get(pk=2)
+		print meeting_e_maryam_ina.title
+		print meeting_e_maryam_ina.guest_list.count()
 		room_e_maryam = Reservation.reserve_room_for(meeting_e_maryam_ina)
 		self.assertEqual(room_e_maryam.room.name, 'room403')
 		meeting_e_ma = meetings.get(pk=3)
