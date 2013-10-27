@@ -90,7 +90,7 @@ class Reservation(models.Model):
 	room  = models.ForeignKey(Room, related_name="reservation_list")
 
 	@classmethod
-	def reserve_room_for(meeting):
+	def reserve_room_for(cl, meeting):
 		options = meeting.get_feasible_intervals_in_order()
 		guest_count = meeting.get_guest_count()
 		for option in options:
@@ -125,7 +125,7 @@ class Meeting (Event):
 	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 	
 	def __guest_count__(self):
-		return self.guest_list().count()
+		return self.guest_list.count()
 
 	def __how_many_voted__(self):
 		sample_interval = self.options_list()[0]
@@ -133,13 +133,13 @@ class Meeting (Event):
 		
 		
 	def get_feasible_intervals_in_order(self):
-		intervals = self.options_list().order_by('-how_many_will_come', '-how_many_happy_to_come')
+		intervals = self.options_list.order_by('-how_many_will_come', '-how_many_happy_to_come')
 		guest_count = self.__guest_count__()
-		if self.conditions == EVERYONE:
-			return intervals.filter(how_many_will_come_gte=guest_count)
-		if self.conditions == HALF_AT_LEAST:
-			return intervals.filter(how_many_will_come_gte=guest_count/2)
-		ans = intervals.filter(how_many_will_come_gt=0).all()
+		if self.conditions == Meeting.EVERYONE:
+			return intervals.filter(how_many_will_come__gte=guest_count)
+		if self.conditions == Meeting.HALF_AT_LEAST:
+			return intervals.filter(how_many_will_come__gte=guest_count/2)
+		ans = intervals.filter(how_many_will_come__gt=0).all()
 		return ans
 
 	def is_it_time_to_close(self):
