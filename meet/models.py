@@ -192,4 +192,4 @@ class Notification (models.Model):
 							choices=MESSAGE)
 	event = models.ForeignKey(Event)	
 	recepiant = models.ForeignKey(User)
-	vote = models.ForeignKey(Vote)
+	vote = models.ForeignKey(Vote, null = True, blank= True)
