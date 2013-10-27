@@ -44,7 +44,7 @@ class IntervalTest(TestCase):
 	
 	def test_how_many_will_come(self):
 		"""
-		Tests coming and if I have to vote count to be correct
+		Tests 'coming' and 'if I have to' vote count to be correct
 		"""
 		intervals = Interval.objects.all()
 		self.assertEqual(intervals[0].how_many_will_come(), 2)
@@ -55,7 +55,7 @@ class IntervalTest(TestCase):
 	
 	def test_how_many_happy_to_come(self):
 		"""
-		Tests coming vote count to be correct
+		Tests 'coming' vote count to be correct
 		"""
 		intervals = Interval.objects.all()
 		self.assertEqual(intervals[0].how_many_happy_to_come(), 1)
