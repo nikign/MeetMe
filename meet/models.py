@@ -8,6 +8,9 @@ class Room (models.Model):
 	capacity = models.IntegerField()
 	address = models.TextField()
 
+	def __unicode__(self):
+		return '['+str(self.capacity)+'] '+self.name
+
 	def is_suitable_for_interval(self, interval):
 		reserves = self.reservation_list.filter(interval__date=interval.date);
 		for reserve in reserves:
@@ -20,9 +23,9 @@ class Room (models.Model):
 class RoomManager(models.Model):
 	
 	@classmethod
-	def find_best_room_for_interval_and_capacity(interval, capacity):
-		fitting_rooms = Room.objects.filter(capacity__gte=capacity)
-		fitting_rooms = sorted(fitting_rooms, key=lambda room: room.capacity)
+	def find_best_room_for_interval_and_capacity(cls, interval, capacity):
+		fitting_rooms = Room.objects.filter(capacity__gte=capacity).order_by('capacity')
+		# fitting_rooms = sorted(fitting_rooms, key=lambda room: room.capacity)
 		for room in fitting_rooms:
 			if room.is_suitable_for_interval(interval):
 				return room
@@ -31,6 +34,15 @@ class RoomManager(models.Model):
 
 class Event (models.Model):
 	#TODO register meeting in event
+
+	OPEN = 'op'
+	CLOSED = 'cl'
+
+	STATUS = (
+		(OPEN, 'Open'),
+		(CLOSED, 'Closed'),
+	)
+
 	title = models.CharField(max_length=30)
 	description = models.TextField()
 	creator = models.ForeignKey(User)
@@ -38,6 +50,10 @@ class Event (models.Model):
 											db_table="guest_lists",
 											 related_name="invitations")#TODO : doc.
 	deadline = models.DateTimeField() #Time constrain
+	status = models.CharField(max_length=2, 
+									choices=STATUS,
+									default=OPEN,
+	)
 
 	def __unicode__(self):
 		return self.title
@@ -84,6 +100,7 @@ class Reservation(models.Model):
 				reservation.interval=option
 				reservation.room=room
 				reservation.save()
+				meeting.make_closed()
 				return reservation
 		raise RoomNotAvailableException()
 
@@ -99,6 +116,7 @@ class Meeting (Event):
 		(HALF_AT_LEAST, 'At least half should come'), 
 		(WITH_MAX_AVAILABLE, 'Choose the option with max people coming')
 	)
+
 
 	conditions = models.CharField(max_length=2, 
 									choices=HOLDING_CONDITIONS,
@@ -128,6 +146,10 @@ class Meeting (Event):
 		if time.now >= self.deadline:
 			return True
 		return self.__how_many_voted__() == self.__guest_count__()
+
+	def make_closed():
+		self.status = CLOSED
+		self.save()
 
 
 class Vote (models.Model):

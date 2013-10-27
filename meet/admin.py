@@ -11,13 +11,13 @@ class IntervalInline(admin.TabularInline):
 
 
 class EventAdmin(admin.ModelAdmin):
-	fields = ['title', 'description', 'creator', 'guest_list', 'deadline']
+	fields = ['title', 'description', 'creator', 'guest_list', 'deadline', 'status']
 	list_display = ('title', )
 	inlines = [ IntervalInline ]
 
 
 class MeetingAdmin(admin.ModelAdmin):
-	fields = ['title', 'description', 'creator', 'guest_list', 'deadline', 'confirmed', 'conditions','reservation']
+	fields = ['title', 'description', 'creator', 'guest_list', 'deadline', 'confirmed', 'conditions','reservation', 'status']
 	inlines = [ IntervalInline ]
 
 class VoteAdmin(admin.ModelAdmin):
@@ -26,6 +26,23 @@ class VoteAdmin(admin.ModelAdmin):
 class IntervalAdmin(admin.ModelAdmin):
 	list_display = ('date', 'start', 'finish', 'event')
 
+class ReservationAdmin(admin.ModelAdmin):
+	list_display = ('interval_date', 'interval_from', 'interval_to', 'room')
+
+	def interval_date(self, obj):
+		return obj.interval.date
+	interval_date.short_description = 'Date'
+
+	def interval_from(self, obj):
+		return obj.interval.start
+	interval_from.short_description = 'From'
+
+	def interval_to(self, obj):
+		return obj.interval.finish
+	interval_to.short_description = 'To'
+
+
+
 
 admin.site.register(Interval, IntervalAdmin)
 admin.site.register(Room, RoomAdmin)
@@ -33,4 +50,4 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Meeting, MeetingAdmin)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Notification)
-admin.site.register(Reservation)
+admin.site.register(Reservation, ReservationAdmin)
