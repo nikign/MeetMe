@@ -67,7 +67,7 @@ class Interval (models.Model):
 
 	def __unicode__(self):
 		return "On " + str(self.date) + " from " + dateformat.TimeFormat(self.start).P() +\
-		 " to " + dateformat.TimeFormat(self.finish).P()
+		 " to " + dateformat.TimeFormat(self.finish).P() + "for event" + self.event.title
 
 	def has_interference(self, other):
 		return self.date == other.date and (
