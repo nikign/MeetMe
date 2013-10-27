@@ -1,5 +1,6 @@
 from django.test import TestCase
 from meet.models import *
+from datetime import datetime
 
 class MeetingTest(TestCase):
 	fixtures = ['test_meeting.json', ]
@@ -24,11 +25,9 @@ class MeetingTest(TestCase):
 		"""
 		Tests
 		"""
-		# meetings = Meeting.objects
-		# meeting = meetings.get(pk= 2)
-		# self.assertTrue (meeting.is_it_time_to_close())
+		meetings = Meeting.objects
+		meeting = meetings.get(pk= 2)
+		self.assertTrue (meeting.is_it_time_to_close(datetime(2011, 5, 18, 21, 5, 53, 266396)))
 		# meeting = meetings.get(pk= 3)
 		# self.assertTrue (meeting.is_it_time_to_close())
 
-
-		

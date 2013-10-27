@@ -146,10 +146,8 @@ class Meeting (Event):
 		ans = intervals
 		return ans or []
 
-	def is_it_time_to_close(self):
-		print '---------------log : ',datetime.now() 
-		print '---------------log : ',self.deadline.replace(tzinfo=None) 
-		if datetime.now() >= self.deadline.replace(tzinfo=None):
+	def is_it_time_to_close(self, now_time):
+		if self.deadline.replace(tzinfo=None) >= now_time: #TODO : MAKE SURE
 			return True
 		return self.__how_many_voted__() == self.__guest_count__()
 
