@@ -147,6 +147,8 @@ class Meeting (Event):
 		return ans
 
 	def is_it_time_to_close(self):
+		print '---------------log : ',datetime.now() 
+		print '---------------log : ',self.deadline.replace(tzinfo=None) 
 		if datetime.now() >= self.deadline.replace(tzinfo=None):
 			return True
 		return self.__how_many_voted__() == self.__guest_count__()
