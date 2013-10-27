@@ -93,7 +93,6 @@ class Reservation(models.Model):
 	def reserve_room_for(cl, meeting):
 		options = meeting.get_feasible_intervals_in_order()
 		guest_count = meeting.get_guest_count()
-		# print 'num guests: ', guest_count
 		for option in options:
 			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
 			if room != None : 
@@ -140,14 +139,16 @@ class Meeting (Event):
 		guest_count = self.__guest_count__()
 		if self.conditions == Meeting.EVERYONE:
 			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
-			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
 		if self.conditions == Meeting.HALF_AT_LEAST:
 			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
-			return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
+			return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
 		ans = intervals
-		return ans
+		return ans or []
 
 	def is_it_time_to_close(self):
+		print '---------------log : ',datetime.now() 
+		print '---------------log : ',self.deadline.replace(tzinfo=None) 
 		if datetime.now() >= self.deadline.replace(tzinfo=None):
 			return True
 		return self.__how_many_voted__() == self.__guest_count__()
