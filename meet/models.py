@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import dateformat
 from meet.exceptions import RoomNotAvailableException
+from datetime import datetime
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -25,7 +26,6 @@ class RoomManager(models.Model):
 	@classmethod
 	def find_best_room_for_interval_and_capacity(cls, interval, capacity):
 		fitting_rooms = Room.objects.filter(capacity__gte=capacity).order_by('capacity')
-		# fitting_rooms = sorted(fitting_rooms, key=lambda room: room.capacity)
 		for room in fitting_rooms:
 			if room.is_suitable_for_interval(interval):
 				return room
@@ -127,28 +127,32 @@ class Meeting (Event):
 	def __guest_count__(self):
 		return self.guest_list.count()
 
+	def get_guest_count(self):
+		return self.__guest_count__()
+
 	def __how_many_voted__(self):
-		sample_interval = self.options_list()[0]
-		return sample_interval.how_many_votes()
-		
+		return Vote.objects.filter(interval__event=self).values('voter').distinct().count()
 		
 	def get_feasible_intervals_in_order(self):
-		intervals = self.options_list.order_by('-how_many_will_come', '-how_many_happy_to_come')
+		intervals = list(self.options_list.all())
+		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
 		guest_count = self.__guest_count__()
 		if self.conditions == Meeting.EVERYONE:
-			return intervals.filter(how_many_will_come__gte=guest_count)
+			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
 		if self.conditions == Meeting.HALF_AT_LEAST:
-			return intervals.filter(how_many_will_come__gte=guest_count/2)
-		ans = intervals.filter(how_many_will_come__gt=0).all()
+			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
+			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
+		ans = intervals
 		return ans
 
 	def is_it_time_to_close(self):
-		if time.now >= self.deadline:
+		if datetime.now() >= self.deadline.replace(tzinfo=None):
 			return True
 		return self.__how_many_voted__() == self.__guest_count__()
 
-	def make_closed():
-		self.status = CLOSED
+	def make_closed(self):
+		self.status = Meeting.CLOSED
 		self.save()
 
 
@@ -182,7 +186,7 @@ class Notification (models.Model):
 		(ASK_CONFIRMATION, 'Meeting is being held an waiting for your confirmation.'),
 		(NO_ROOM, 'No room is available in requested times, please ask for revote.'),
 	)
-	category = models.CharField(max_length=2, 
+	category = models.CharField(max_length=2,
 							choices=MESSAGE)
 	event = models.ForeignKey(Event)	
 	recepiant = models.ForeignKey(User)
