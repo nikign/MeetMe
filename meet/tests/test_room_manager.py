@@ -44,7 +44,7 @@ class IntervalTest(TestCase):
 		self.assertIsNone(room)
 	
 	def test_doesnt_find_room_because_rooms_are_small(self):
-		"There is no room suitable in that time"
+		"There is no room large enough"
 		interval = Interval.objects.get(pk= 4)
 		room = RoomManager.find_best_room_for_interval_and_capacity(interval, 50)
 		self.assertIsNone(room)	

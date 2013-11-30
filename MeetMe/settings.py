@@ -10,7 +10,7 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
-ADMIN_MAILS = ['ashkan.dant3@gmail.com' ,'niki.hp2007@gmail.com', ]
+# ADMIN_MAILS = ['ashkan.dant3@gmail.com' ,'niki.hp2007@gmail.com', ]
 
 MANAGERS = ADMINS
 
@@ -139,6 +139,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'meet.middlewares.TimezoneMiddleware',
 )
 
 ROOT_URLCONF = 'MeetMe.urls'
@@ -168,7 +169,6 @@ INSTALLED_APPS = (
     # 'google',
     'django_openid_auth',
     'django_jenkins',
-
 )
 
 # PROJECT_APPS = (
