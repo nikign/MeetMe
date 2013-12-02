@@ -1,5 +1,6 @@
 from meet.models import Meeting, Reservation
 from meet.mail_and_notification import *
+from datetime import datetime
 
 every_hour_list = []
 
@@ -12,8 +13,8 @@ def reserve_room_for_meetings():
 	meeting_list = Meeting.objects.filter(status = Meeting.OPEN, confirmed = False)
 	for meeting in meeting_list :
 		try:
-			if meeting.is_it_time_to_close(meeting.deadline.replace(tzinfo=None)):
-				meeting_reserve = Reservation.reserve_room_for(meeting)
+			if meeting.is_it_time_to_close(datetime.now.replace(tzinfo=None)):
+				meeting_reserve = RoomManager.reserve_room_for(meeting)
 				inform_admin_reservation(meeting_reserve)
 				print "meeting waiting for admin verification, id = ",meeting.id
 		except Exception, e:
