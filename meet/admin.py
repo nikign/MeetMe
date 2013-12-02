@@ -17,7 +17,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class MeetingAdmin(admin.ModelAdmin):
-	fields = ['title', 'description', 'creator', 'guest_list', 'deadline', 'confirmed', 'conditions','reservation', 'status']
+	fields = ['title', 'description', 'creator', 'guest_list', 'deadline', 'confirmed', 'reservation', 'status']
 	inlines = [ IntervalInline ]
 
 class VoteAdmin(admin.ModelAdmin):
@@ -51,3 +51,7 @@ admin.site.register(Meeting, MeetingAdmin)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Notification)
 admin.site.register(Reservation, ReservationAdmin)
+admin.site.register(ClosingCondition)
+for key in ClosingCondition.condition_keys:
+	admin.site.register(ClosingCondition.key_to_type_map[key])
+

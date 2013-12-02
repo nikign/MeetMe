@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import dateformat
 from meet.exceptions import RoomNotAvailableException
 from datetime import datetime
+from model_utils.managers import InheritanceManager
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -31,6 +32,24 @@ class RoomManager(models.Model):
 				return room
 		return None
 
+	@classmethod
+	def reserve_room_for(cl, meeting):
+		options = meeting.get_feasible_intervals_in_order()
+		guest_count = meeting.get_guest_count()
+		
+		for option in options:
+			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
+			if room != None :
+				print "none nashod"
+				reservation = Reservation()
+				reservation.interval=option
+				reservation.room=room
+				reservation.save()
+				meeting.make_closed()
+				return reservation
+			else:
+				print"none shod"
+		raise RoomNotAvailableException()
 
 class Event (models.Model):
 	#TODO register meeting in event
@@ -89,22 +108,6 @@ class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
 	room  = models.ForeignKey(Room, related_name="reservation_list")
 
-	@classmethod
-	def reserve_room_for(cl, meeting):
-		options = meeting.get_feasible_intervals_in_order()
-		guest_count = meeting.get_guest_count()
-		for option in options:
-			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
-			if room != None : 
-				reservation = Reservation()
-				reservation.interval=option
-				reservation.room=room
-				reservation.save()
-				meeting.make_closed()
-				return reservation
-		raise RoomNotAvailableException()
-
-
 class Meeting (Event):
 	confirmed = models.BooleanField(default=False)
 	
@@ -116,7 +119,6 @@ class Meeting (Event):
 		(HALF_AT_LEAST, 'At least half should come'), 
 		(WITH_MAX_AVAILABLE, 'Choose the option with max people coming')
 	)
-
 
 	conditions = models.CharField(max_length=2, 
 									choices=HOLDING_CONDITIONS,
@@ -134,17 +136,23 @@ class Meeting (Event):
 		return Vote.objects.filter(interval__event=self).values('voter').distinct().count()
 		
 	def get_feasible_intervals_in_order(self):
-		intervals = list(self.options_list.all())
-		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-		guest_count = self.__guest_count__()
-		if self.conditions == Meeting.EVERYONE:
-			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
-			return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
-		if self.conditions == Meeting.HALF_AT_LEAST:
-			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
-			return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
-		ans = intervals
-		return ans or []
+		closing_condition = ClosingCondition.objects.get_subclass(meeting=self)
+		closing_condition.get_feasible_intervals_in_order()
+		# self.closing_condition.get_feasible_intervals_in_order()
+
+	# def get_feasible_intervals_in_order(self):
+	# 	intervals = list(self.options_list.all())
+	# 	intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+	# 	guest_count = self.__guest_count__()
+	# 	if self.conditions == Meeting.EVERYONE:
+	# 		# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+	# 		return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
+	# 	if self.conditions == Meeting.HALF_AT_LEAST:
+	# 		# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
+	# 		return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
+	# 	ans = intervals
+	# 	return ans or []
+
 
 	def is_it_time_to_close(self, now_time):
 		if self.deadline.replace(tzinfo=None) >= now_time: #TODO : MAKE SURE
@@ -154,6 +162,86 @@ class Meeting (Event):
 	def make_closed(self):
 		self.status = Meeting.CLOSED
 		self.save()
+
+
+class ClosingCondition(models.Model):
+	# key = 'abs'
+	# description = "there shouldn't be any instance of this"
+	condition_keys = []
+	key_to_type_map = {}
+	key_to_description_map = {}
+
+	objects = InheritanceManager()
+
+	meeting = models.OneToOneField(Meeting, primary_key=True, related_name='closing_condition')
+			
+
+	def get_feasible_intervals_in_order(self):
+		print "injaaaaaaa"
+		raise NotImplementedError("error message")
+
+	# def __init__(self, options_list, guest_list):
+	# 	self.options_list = options_list
+	# 	self.guest_list = guest_list
+
+	# def __guest_count__(self):
+	# 	return self.guest_list.count()
+
+	@classmethod
+	def register(cls, subclass):
+		cls.condition_keys.append(subclass.key)
+		cls.key_to_type_map[subclass.key] = subclass
+		cls.key_to_description_map[subclass.key] = subclass.description
+		return subclass
+
+	def is_ev(self):
+		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+	
+	def is_hl(self):
+		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+	
+	def is_hl(self):
+		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+
+
+@ClosingCondition.register
+class EveryoneClosingCondition(ClosingCondition):
+	key = 'ev'
+	description = 'Everybody Should come'
+
+	def get_feasible_intervals_in_order(self):
+		guest_count = self.meeting.guest_list.count()
+		
+		intervals = list(self.meeting.options_list.all())
+		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+		return Votes.objects.filter(interval__event=self.meeting, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
+
+
+@ClosingCondition.register
+class HalfAtLeastClosingCondition(ClosingCondition):
+	key = 'hl'
+	description = 'At least half should come'
+
+	def get_feasible_intervals_in_order(self):
+		guest_count = self.meeting.guest_list.count()
+		intervals = list(self.meeting.options_list.all())
+		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
+			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+
+
+@ClosingCondition.register
+class MaxAvailableClosingCondition(ClosingCondition):
+	key = 'mx'
+	description = 'Choose the option with max people coming'
+
+	def get_feasible_intervals_in_order(self):
+		guest_count = self.meeting.guest_list.count()
+		
+		intervals = list(self.meeting.options_list.all())
+		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		return intervals or []
 
 
 class Vote (models.Model):

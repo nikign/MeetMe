@@ -8,3 +8,4 @@
 
  - django_openid_auth
 
+ - django-model-utils 

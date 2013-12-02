@@ -44,7 +44,11 @@ class EventTypeForm(forms.Form):
 	# event_type = fields.MultipleChoiceField(choices=Choices)
 
 
-class MeetingConditionsForm(forms.ModelForm):
-	class Meta:
-		model = Meeting
-		fields = ('conditions', )
+
+class MeetingConditionsForm(forms.Form):
+	conditions = forms.ChoiceField(choices=[], label="How should your meeting be closed?", error_messages={'required': _('You should choose one type.')})
+	
+	def __init__(self, *args, **kwargs):
+		super(MeetingConditionsForm, self).__init__(*args, **kwargs)
+		choices = [(key, ClosingCondition.key_to_description_map[key]) for key in ClosingCondition.condition_keys]
+		self.fields['conditions'].choices = choices

@@ -125,17 +125,21 @@ class CreateWizard(CookieWizardView):
 		event.save()
 		event.guest_list = guest_list
 		event.save()
-		forms2 = form_list[2]
-		intervals = forms2.save(commit=False)
+		interval_forms = form_list[2]
+		intervals = interval_forms.save(commit=False)
 		for interval in intervals:
 			interval.event_id = event.id
 			interval.save()
 		if is_meeting(self):
-			meeting_cond = self.get_cleaned_data_for_step('4')['conditions']
+			meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
 			meeting = Meeting(event_ptr_id=event.pk)
 			meeting.__dict__.update(event.__dict__)
-			meeting.conditions = meeting_cond
+			# meeting.conditions = meeting_cond
+			closing_condition = ClosingCondition.key_to_type_map[meeting_cond_key]()
 			meeting.save()
+			closing_condition.meeting = meeting
+			closing_condition.save()
+			print 'cond::::::::', meeting.closing_condition
 			return render_to_response('event_saved.html', {
 				'message': "You event named "+ event.title +" was added successfully.",
 			})
