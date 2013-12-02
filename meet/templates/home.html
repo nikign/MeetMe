@@ -1,4 +1,5 @@
 <html>
+{%load tz%}
 	<head>
 		<title>Home Page</title>
 	</head>
@@ -7,11 +8,17 @@
 			<a href="/event/1/view">Vote for a meeting/event</a>
 			<div>
 				<div>
+				{%localtime on%}
 					</br>=====================================================</br>
 					Welcome {{username}}
 					</br>=====================================================</br>
 					You are successfully authorized as {{email}}
 					</br>=====================================================</br>
+					Your timezone is set to {{timezone}}
+					</br>=====================================================</br>
+					Your local time: {{time}} 
+					</br>=====================================================</br>
+				{%endlocaltime%}
 				</div>
 			</div>
 	</body>

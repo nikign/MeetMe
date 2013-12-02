@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
 from models import Event, Interval
 from forms import *
 from django.contrib.auth.models import User
@@ -9,6 +9,8 @@ from django.forms.models import inlineformset_factory, modelformset_factory
 # from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
+from django.utils import timezone
+import pytz
 
 def home (request):
 	if not request.session.has_key('_auth_user_id'):
@@ -16,11 +18,20 @@ def home (request):
 		})
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
+	utctime = timezone.now()
 	return render_to_response('home.html', {
 		'email': user.email,
 		'username' : user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'time' : utctime,
 	})
 
+def set_timezone(request):
+	if request.method == 'POST':
+		request.session['django_timezone'] = request.POST['timezone']
+		return redirect('/')
+	else:
+		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
 
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
@@ -151,7 +162,6 @@ class CreateWizard(CookieWizardView):
 
 	def get_template_names(self):
 		return 'create_event.html'
-
 
 def is_meeting(wizard):
 	event_type_data = wizard.get_cleaned_data_for_step('3')['event_type'] if wizard.get_cleaned_data_for_step('3') else None
