@@ -1,0 +1,13 @@
+{% include "header.html" %}
+{% block content %}
+	{%for folan in events%}
+	<div>
+		{{folan.event.title}}</br>
+		{%if folan.is_vote_cast%}
+			Your vote for this event is cast.
+		{%else%}
+			Your vote for this event is not cast.
+		{%endif%}
+	</div>
+	{%endfor%}
+{% endblock %}

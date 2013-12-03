@@ -6,11 +6,14 @@ from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import CookieWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 from django.utils import timezone
 import pytz
+from django.core.exceptions import PermissionDenied
+
+from meet.exceptions import UserIsNotInvitedException
 
 def home (request):
 	if not request.session.has_key('_auth_user_id'):
@@ -33,10 +36,14 @@ def set_timezone(request):
 	else:
 		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
 
+@login_required
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
 	options = event.options_list.all()
-	user = User.objects.all()[0]
+	user = request.user
+	if not user.is_invited_to(event):
+		raise PermissionDenied
+	print user
 	# votes = [(option, VoteOptionForm(initial={'interval':option.id})) for option in options]
 	FormSet = formset_factory(VoteForm)
 	initial_data = {'form-TOTAL_FORMS': u''+str(len(options)),
@@ -54,14 +61,28 @@ def view (request, event_id):
 		'management_form': pfilled_form.management_form,
 	}, context_instance = RequestContext(request))
 
+@login_required
+def related_events(request):
+	user=request.user
+	events_to_show = user.related_events(0,10);
+	events = [ {'event':event, 'is_vote_cast':event.has_user_voted(user)} for event in events_to_show]
+	return render_to_response('related_events.html',{
+		'events' : events,
+
+	})
+
+@login_required
 def vote (request):
 	event_id = request.POST['event_id']	
-	FormSet = formset_factory(VoteForm)
-	validation_data = FormSet(request.POST)
+	filled_forms = formset_factory(VoteForm)
+	validation_data = filled_forms(request.POST)
 	message = 'SUCCESS'
 	if validation_data.is_valid():
-		for form in validation_data.forms:
-			form.save()
+		try:
+			for form in validation_data.forms:
+				form.save()
+		except UserIsNotInvitedException, e:
+			raise PermissionDenied
 	else:
 		message = 'FAILURE'
 	return render_to_response('vote.html', { 
@@ -69,40 +90,11 @@ def vote (request):
 		'message' : message,
 	}, context_instance = RequestContext(request))	
 
+@login_required
 def create(request):
 	IntervalFormSet = inlineformset_factory(Event, Interval, max_num=1, extra=3)
 	event_form = EventForm()
 	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
-
-
-def save_event(request):
-	form = EventForm(request.POST)
-	if form.is_valid():
-		event = form.save(commit=False)
-		event.creator = request.user
-		event.save()
-
-		IntervalFormSet = inlineformset_factory(Event, Interval)
-		interval_form = IntervalFormSet(request.POST)
-		if interval_form.is_valid():
-			intervals = interval_form.save(commit=False)
-			for interval in intervals:
-				interval.event_id = event.id
-				interval.save()
-			return render_to_response('event_saved.html', {
-				'message' : "You event named "+ event.title +" was added successfully.",
-				"status" : "OK"
-
-			})	
-	return render_to_response('event_saved.html', {
-		'message' : "Unfortunately we couldn't add your event. Perhaps your entered data wasn't valid.",
-		'status' : 'failure'
-	})	
-
-
-def event_saved(request):
-
-	return render_to_response('event_saved.html', {'message': ('hichi'), 'status': 'failure`'},  context_instance = RequestContext(request))
 
 
 def send_test_mail(request):

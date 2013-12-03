@@ -7,13 +7,13 @@ class MeetingTest(TestCase):
 
 	def test_how_many_voted(self):
 		"""
-		Tests that Interval inference is checked correctly.
+		Tests that nimber of votes are calculated correctly.
 		"""
-		# meetings = Meeting.objects
-		# meeting = meetings.get(pk= 2)
-		# self.assertEqual(meeting.__how_many_voted__(), 0)
-		# meeting = meetings.get(pk= 3)
-		# self.assertEqual(meeting.__how_many_voted__(), 2)
+		meetings = Meeting.objects
+		meeting = meetings.get(pk= 2)
+		self.assertEqual(meeting.__how_many_voted__(), 7)
+		meeting = meetings.get(pk= 3)
+		self.assertEqual(meeting.__how_many_voted__(), 3)
 
 	def test_get_feasible_intervals_in_order(self):
 		"""

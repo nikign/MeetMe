@@ -2,7 +2,7 @@ from models import *
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
-
+from meet.exceptions import UserIsNotInvitedException
 
 class ValidationException (Exception):
 	pass
@@ -27,6 +27,19 @@ class VoteForm (forms.ModelForm):
 	class Meta:
 		model = Vote
 		fields = ('state', 'interval', 'voter')
+
+	def clean(self):
+		cleaned_data = super(VoteForm,self).clean()
+		user = cleaned_data.get('voter')
+		interval = cleaned_data.get('interval')
+		state = cleaned_data.get('state')
+		if not user.is_invited_to(interval.event):
+			raise UserIsNotInvitedException
+
+		if not state in [option[0] for option in Vote.VOTE]:
+			self.add_error('state','Unacceptable state.')
+		
+		return cleaned_data
 
 
 class EventForm (forms.ModelForm):
