@@ -214,8 +214,8 @@ class EveryoneClosingCondition(ClosingCondition):
 		
 		intervals = list(self.meeting.options_list.all())
 		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
-		return Votes.objects.filter(interval__event=self.meeting, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
+		return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+		# return Votes.objects.filter(interval__event=self.meeting, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
 
 
 @ClosingCondition.register
@@ -227,8 +227,7 @@ class HalfAtLeastClosingCondition(ClosingCondition):
 		guest_count = self.meeting.guest_list.count()
 		intervals = list(self.meeting.options_list.all())
 		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-		return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
-			# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
+		return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
 
 
 @ClosingCondition.register
