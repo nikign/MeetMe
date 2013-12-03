@@ -78,6 +78,7 @@ class Event (models.Model):
 	def __unicode__(self):
 		return self.title
 
+
 	def has_user_voted(self,user):
 		return Vote.objects.filter(voter=user,interval__event=self).count()>0
 
@@ -107,6 +108,11 @@ class Interval (models.Model):
 	def how_many_happy_to_come(self):
 		return self.votes_list.filter(state=Vote.COMING).count()
 
+	def is_guest_coming(self, user):
+		return self.votes_list.filter(voter=user, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>0
+		
+	def get_coming_list(self):
+		return self.votes_list.filter( state__in=[Vote.COMING, Vote.IF_HAD_TO])
 
 class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
@@ -175,7 +181,7 @@ class ClosingCondition(models.Model):
 	objects = InheritanceManager()
 
 	meeting = models.OneToOneField(Meeting, primary_key=True, related_name='closing_condition')
-			
+
 
 	def get_feasible_intervals_in_order(self):
 		print "injaaaaaaa"
@@ -242,6 +248,27 @@ class MaxAvailableClosingCondition(ClosingCondition):
 		intervals = list(self.meeting.options_list.all())
 		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
 		return intervals or []
+
+
+@ClosingCondition.register
+class AdvancedClosingCondition(ClosingCondition):
+	key = 'ad'
+	description = 'Use advanced options'
+
+	must_come_list = models.ManyToManyField(User, null=True, blank=True, 
+											db_table="must_come_guest_list",
+											 related_name="must_go_events")
+
+	def get_feasible_intervals_in_order(self):
+		intervals = list(self.meeting.options_list.filter().all())
+		feasibles= []
+		for interval in intervals:
+			for guest in self.must_come_list:
+				if not interval.is_guest_coming(guest):
+					break
+			else:
+				feasibles.append(interval)
+		feasibles.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
 
 
 class Vote (models.Model):

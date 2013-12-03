@@ -162,8 +162,14 @@ def is_meeting(wizard):
 	else:
 		return False
 
+def is_advanced(wizard):
+	conditions = wizard.get_cleaned_data_for_step('4')['conditions'] if wizard.get_cleaned_data_for_step('4') else None
+	if conditions=='ad':
+		return True
+	return False
+
 create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
-	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm],
-	condition_dict={'4': is_meeting}
+	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
+	condition_dict={'4': is_meeting, '5': is_advanced}
 	)
 

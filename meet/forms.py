@@ -69,6 +69,7 @@ class EventTypeForm(forms.Form):
 
 
 
+
 class MeetingConditionsForm(forms.Form):
 	conditions = forms.ChoiceField(choices=[], label="How should your meeting be closed?", error_messages={'required': _('You should choose one type.')})
 	
@@ -76,3 +77,9 @@ class MeetingConditionsForm(forms.Form):
 		super(MeetingConditionsForm, self).__init__(*args, **kwargs)
 		choices = [(key, ClosingCondition.key_to_description_map[key]) for key in ClosingCondition.condition_keys]
 		self.fields['conditions'].choices = choices
+
+
+class AdvancedClosingConditionForm(forms.ModelForm):
+	class Meta:
+		model = AdvancedClosingCondition
+		fields = ('must_come_list',)
