@@ -142,7 +142,10 @@ class CreateWizard(CookieWizardView):
 			meeting.save()
 			closing_condition.meeting = meeting
 			closing_condition.save()
-			print 'cond::::::::', meeting.closing_condition
+			if is_advanced(self):
+				closing_condition.must_come_list = self.get_cleaned_data_for_step('5')['must_come_list']
+				closing_condition.save()
+
 			return render_to_response('event_saved.html', {
 				'message': "You event named "+ event.title +" was added successfully.",
 			})

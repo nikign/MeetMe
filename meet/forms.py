@@ -27,7 +27,7 @@ class GuestListForm(forms.ModelForm):
 		all_users = User.objects.all()
 		for guest in guests:
 			if not guest in all_users:
-				self.add_error('guests', 'guest ' + guest.email + ' is not registered in the system').
+				self.add_error('guests', 'guest ' + guest.email + ' is not registered in the system')
 		return cleaned_data
 
 
