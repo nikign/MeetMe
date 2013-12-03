@@ -18,16 +18,14 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^event/(?P<event_id>\d+)/view' , 'meet.views.view' , name='view'),
+    url(r'^meeting/(?P<meeting_id>\d+)/close' , 'meet.views.close' , name='close'),
     url(r'^user/events/$' , 'meet.views.related_events' , name='related_events'),
     url(r'^event/vote' , 'meet.views.vote' , name='vote'),
     url(r'^create2/', 'meet.views.create' , name='create'),
-    # url(r'^save_event/', 'meet.views.save_event' , name='save_event'),
     url(r'^google/login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
     url(r'^google/login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     url(r'^tzset/$', 'meet.views.set_timezone' , name='set_timezone'),
-
-    # url(r'^saved/', 'meet.views.event_saved' , name='event_saved'),
     url(r'^create/', create_wizard , name='create'),
     url(r'^test/$', 'meet.views.send_test_mail', name ='test'),
 )

@@ -1,0 +1,20 @@
+{% include "header.html" %}
+{% load static %}
+{% block content %}
+	<div>
+		{%if time_to_close%}
+		<h2>closing meeting {{meeting.name}}</h2>
+		{%if options%}
+		<div>options:</div>
+		{%for option in options%}
+			<div>{{option}} &nbsp; <a href="#">choose this time</a></div>
+		{%endfor%}
+		{%else%}
+		<div>There is no possible time for this meeting</div>
+		{%endif%}
+		<a href="#">Cancel meeting</a>
+		{%else%}
+		It's not time for this meeting to be closed!
+		{%endif%}
+	</div>
+{% endblock %}

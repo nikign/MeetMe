@@ -144,27 +144,13 @@ class Meeting (Event):
 		
 	def get_feasible_intervals_in_order(self):
 		closing_condition = ClosingCondition.objects.get_subclass(meeting=self)
-		closing_condition.get_feasible_intervals_in_order()
-		# self.closing_condition.get_feasible_intervals_in_order()
-
-	# def get_feasible_intervals_in_order(self):
-	# 	intervals = list(self.options_list.all())
-	# 	intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-	# 	guest_count = self.__guest_count__()
-	# 	if self.conditions == Meeting.EVERYONE:
-	# 		# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
-	# 		return Votes.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
-	# 	if self.conditions == Meeting.HALF_AT_LEAST:
-	# 		# return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2
-	# 		return Vote.objects.filter(interval=self, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count/2 or []
-	# 	ans = intervals
-	# 	return ans or []
+		return closing_condition.get_feasible_intervals_in_order()
 
 
 	def is_it_time_to_close(self, now_time):
-		if self.deadline.replace(tzinfo=None) >= now_time: #TODO : MAKE SURE
+		if self.deadline >= now_time: #TODO : MAKE SURE
 			return True
-		return self.__how_many_voted__() == self.__guest_count__()
+		return self.__how_many_voted__() == self.guest_count()
 
 	def make_closed(self):
 		self.status = Meeting.CLOSED
@@ -218,11 +204,10 @@ class EveryoneClosingCondition(ClosingCondition):
 
 	def get_feasible_intervals_in_order(self):
 		guest_count = self.meeting.guest_list.count()
-		
-		intervals = list(self.meeting.options_list.all())
-		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-		return intervals.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count
-		# return Votes.objects.filter(interval__event=self.meeting, state__in=[Vote.COMING, Vote.IF_HAD_TO]).count()>=guest_count or []
+		intervals = self.meeting.options_list.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO])
+		intervals_list = list(intervals.all())
+		intervals_list.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		return intervals_list or []
 
 
 @ClosingCondition.register
