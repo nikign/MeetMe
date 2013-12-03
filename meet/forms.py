@@ -16,9 +16,20 @@ class TitleDescriptionForm(forms.ModelForm):
 
 
 class GuestListForm(forms.ModelForm):
+	
 	class Meta:
 		model = Event
 		fields = ('guest_list', 'deadline' )
+
+	def clean(self):
+		cleaned_data = super(GuestListForm, self).clean()
+		guests = cleaned_data.get('guest_list')
+		all_users = User.objects.all()
+		for guest in guests:
+			if not guest in all_users:
+				self.add_error('guests', 'guest ' + guest.email + ' is not registered in the system').
+		return cleaned_data
+
 
 
 class VoteForm (forms.ModelForm):
