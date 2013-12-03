@@ -4,6 +4,7 @@ from django.utils import dateformat
 from meet.exceptions import RoomNotAvailableException
 from datetime import datetime
 from model_utils.managers import InheritanceManager
+from django.db.models import Q
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -77,6 +78,9 @@ class Event (models.Model):
 	def __unicode__(self):
 		return self.title
 
+	def has_user_voted(self,user):
+		return Vote.objects.filter(voter=user,interval__event=self).count()>0
+
 
 class Interval (models.Model):
 	date = models.DateField()
@@ -126,11 +130,8 @@ class Meeting (Event):
 
 	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 	
-	def __guest_count__(self):
+	def guest_count(self):
 		return self.guest_list.count()
-
-	def get_guest_count(self):
-		return self.__guest_count__()
 
 	def __how_many_voted__(self):
 		return Vote.objects.filter(interval__event=self).values('voter').distinct().count()
@@ -278,3 +279,14 @@ class Notification (models.Model):
 	event = models.ForeignKey(Event)	
 	recepiant = models.ForeignKey(User)
 	vote = models.ForeignKey(Vote, null = True, blank= True)
+
+
+#METHODS TO ADD TO USER
+def user_events(self, fr, to):
+	return Event.objects.filter(Q(creator=self)|Q(guest_list=self))[fr:to].all()
+
+def is_invited_to(self, event):
+	return event.creator==self or self in event.guest_list.all()
+
+User.add_to_class('related_events', user_events)
+User.add_to_class('is_invited_to', is_invited_to)

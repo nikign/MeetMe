@@ -185,9 +185,9 @@ JENKINS_TASKS = (
 )
 COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 
-LOGIN_REDIRECT_URL = '/'
-# LOGIN_URL = '/login/'
-# LOGOUT_URL = '/logout/'
+# LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/google/login/'
+LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 
