@@ -53,19 +53,27 @@ class VoteForm (forms.ModelForm):
 		return cleaned_data
 
 
-class EventForm (forms.ModelForm):
-	title = fields.CharField(widget=forms.TextInput(attrs={'placeholder': _("Enter the title of you event.")}), max_length = 30, label=_("Title"))
-	description = fields.CharField(widget=forms.Textarea(attrs={'placeholder': _("Enter the Description of you event.")}), label=_("Description"))
+# class EventForm (forms.ModelForm):
+# 	title = fields.CharField(widget=forms.TextInput(attrs={'placeholder': _("Enter the title of you event.")}), max_length = 30, label=_("Title"))
+# 	description = fields.CharField(widget=forms.Textarea(attrs={'placeholder': _("Enter the Description of you event.")}), label=_("Description"))
 
-	class Meta:
-		model = Event
-		fields = ('title', 'description', 'guest_list', )
+# 	class Meta:
+# 		model = Event
+# 		fields = ('title', 'description', 'guest_list', )
 
 
 class EventTypeForm(forms.Form):
 	Choices = [('1','Event'), ('2', 'Meeting'),]
 	event_type = forms.ChoiceField(choices=Choices, label="Event or Meeting", error_messages={'required': _('You should choose one type.')})
 	# event_type = fields.MultipleChoiceField(choices=Choices)
+
+	def clean(self):
+		cleaned_data = super(EventTypeForm, self).clean()
+		ev_type = cleaned_data.get('event_type')
+		available_choices = [ch[0] for ch in self.Choices]
+		if not ev_type in available_choices:
+			self.add_error('event_type', 'The event type you requested is not provided!')
+		return cleaned_data
 
 
 
@@ -78,8 +86,26 @@ class MeetingConditionsForm(forms.Form):
 		choices = [(key, ClosingCondition.key_to_description_map[key]) for key in ClosingCondition.condition_keys]
 		self.fields['conditions'].choices = choices
 
+	def clean(self):
+		cleaned_data = super(MeetingConditionsForm, self).clean()
+		cond = cleaned_data.get('conditions')
+		available_choices = [ch[0] for ch in self.fields['conditions'].choices]
+		if not cond in available_choices:
+			self.add_error('conditions', 'The condition type you requested for your event is not provided!')
+		return cleaned_data
+
 
 class AdvancedClosingConditionForm(forms.ModelForm):
 	class Meta:
 		model = AdvancedClosingCondition
 		fields = ('must_come_list',)
+
+	def clean(self):
+		#TODO: check that must come list is in guests of meeting
+		cleaned_data = super(AdvancedClosingConditionForm, self).clean()
+		imp_guests = cleaned_data.get('must_come_list')
+		all_users = User.objects.all()
+		for guest in imp_guests:
+			if not guest in all_users:
+				self.add_error('must_come_list', 'guest ' + guest.email + ' is not registered in the system')
+		return cleaned_data
