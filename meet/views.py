@@ -99,19 +99,10 @@ def create(request):
 
 
 @login_required
-<<<<<<< Updated upstream
-def close (request, meeting_id):
-	user = request.user
-	if not user.can_close_meetings():
-		raise PermissionDenied
-	meeting = Meeting.objects.get(pk=meeting_id)
-	options = meeting.get_feasible_intervals_in_order()
-=======
 @user_passes_test(can_close)
 def admin_review (request):
 	meetings = Meeting.get_waiting_for_admin_meetings()
 	print meetings
->>>>>>> Stashed changes
 	return render(request, 'close_meeting.html' ,
 		{'meetings':meetings,})
 
