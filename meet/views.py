@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import CookieWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 from django.utils import timezone
@@ -97,6 +97,12 @@ def create(request):
 	event_form = EventForm()
 	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
 
+
+def can_close(user):
+	if user.has_perm('admin'):
+		return True
+	else:
+		raise PermissionDenied
 
 @login_required
 @user_passes_test(can_close)

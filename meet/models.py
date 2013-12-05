@@ -332,4 +332,3 @@ def has_closing_authority(self):
 
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
-User.add_to_class('can_close_meetings', has_closing_authority)
