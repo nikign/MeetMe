@@ -2,11 +2,11 @@
 {% block content %}
 	{%for folan in events%}
 	<div>
-		{{folan.event.title}}</br>
+		{{folan.event.title}} &nbsp;&nbsp; <a href="/event/{{folan.event.id}}/view">View</a></br>
 		{%if folan.is_vote_cast%}
 			Your vote for this event is cast.
 		{%else%}
-			Your vote for this event is not cast.
+			Your vote for this event is <b>not</b> cast.
 		{%endif%}
 	</div>
 	{%endfor%}

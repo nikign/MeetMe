@@ -68,7 +68,6 @@ def related_events(request):
 	events = [ {'event':event, 'is_vote_cast':event.has_user_voted(user)} for event in events_to_show]
 	return render_to_response('related_events.html',{
 		'events' : events,
-
 	})
 
 @login_required

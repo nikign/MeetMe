@@ -1,8 +1,7 @@
-<html>
-	<head>
-		
-	</head>
-	<body>
+{% include "header.html" %}
+{% load static %}
+{% block content %}
+	<body style="direction:rtl;">
 		<form method="post" action="/event/vote">
 			{% csrf_token %}
 			{{management_form}}
@@ -19,4 +18,4 @@
 			<input type="submit" />
 		</form>
 	</body>
-</html>
+{%endblock%}

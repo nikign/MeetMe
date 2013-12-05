@@ -295,7 +295,7 @@ class Notification (models.Model):
 
 #METHODS TO ADD TO USER
 def user_events(self, fr, to):
-	return Event.objects.filter(Q(creator=self)|Q(guest_list=self))[fr:to].all()
+	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline')[fr:to].all()
 
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()
