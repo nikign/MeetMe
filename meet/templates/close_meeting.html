@@ -2,19 +2,19 @@
 {% load static %}
 {% block content %}
 	<div>
-		{%if time_to_close%}
-		<h2>closing meeting {{meeting.name}}</h2>
-		{%if options%}
-		<div>options:</div>
-		{%for option in options%}
-			<div>{{option}} &nbsp; <a href="#">choose this time</a></div>
-		{%endfor%}
-		{%else%}
-		<div>There is no possible time for this meeting</div>
-		{%endif%}
-		<a href="#">Cancel meeting</a>
-		{%else%}
-		It's not time for this meeting to be closed!
+		{%if meetings%}
+			<table class='table'>
+				{%for meeting in meetings%}
+					</tr>
+					
+				        <td>{{meeting.title}}</td>
+				        <td>{{meeting.reservation.interval}}</td>
+				        <td>In room {{meeting.reservation.room.name}}</td>
+				        <td><a href="/meeting/{{meeting.id}}/confirm">confirm</a></td>
+				        <td><a href="/meeting/{{meeting.id}}/cancel">cancel</a></td>
+					</tr>
+				{%endfor%}
+			</table>
 		{%endif%}
 	</div>
 {% endblock %}

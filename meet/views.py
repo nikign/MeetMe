@@ -99,32 +99,41 @@ def create(request):
 
 
 @login_required
+<<<<<<< Updated upstream
 def close (request, meeting_id):
 	user = request.user
 	if not user.can_close_meetings():
 		raise PermissionDenied
 	meeting = Meeting.objects.get(pk=meeting_id)
 	options = meeting.get_feasible_intervals_in_order()
+=======
+@user_passes_test(can_close)
+def admin_review (request):
+	meetings = Meeting.get_waiting_for_admin_meetings()
+	print meetings
+>>>>>>> Stashed changes
 	return render(request, 'close_meeting.html' ,
-		{'options':options, 'meeting':meeting, 'time_to_close':meeting.is_it_time_to_close(timezone.now())})
+		{'meetings':meetings,})
 
 
-def send_test_mail(request):
-	from django.core.mail import EmailMultiAlternatives
-
-	# email = EmailMultiAlternatives(subject='Test Mail', body="ma khe'li khafanim", 
-	# 	from_email='info@meetme.ir', to=['story_ngn@yahoo.com'], cc=[], bcc=None,)
-	email = EmailMultiAlternatives(subject='Test Mail', body="ma khafantarinim asan! :D :D :D", 
-		from_email='info@meetme.ir', to=['niki.hp2007@gmail.com'], cc=['ashkan.dant3@gmail.com'], bcc=None,)
-	# email.attach_alternative(body_html, "text/html")
-	email.send()
-	print "hasan o jafar o abbas o ali"
-
+@login_required
+@user_passes_test(can_close)
+def confirm_meeting(request, meeting_id):
+	meeting = Meeting.objects.get(id=meeting_id)
+	meeting.confirm()
 	return render_to_response('event_saved.html', {
-		'message' : "Mail zadam.",
-		'status' : 'khafan'
-	})	
+				'message': "The Meeting named "+ meeting.title +" was confirmed successfully.",
+			})
 
+
+@login_required
+@user_passes_test(can_close)
+def cancel_meeting(request, meeting_id):
+	meeting = Meeting.objects.get(id=meeting_id)
+	meeting.cancel()
+	return render_to_response('event_saved.html', {
+				'message': "The Meeting named "+ meeting.title +" was canceled successfully.",
+			})
 
 
 class CreateWizard(CookieWizardView):
@@ -190,6 +199,7 @@ create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm
 	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 	condition_dict={'4': is_meeting, '5': is_advanced}
 	)
+
 
 @login_required
 def create_wizard (request):

@@ -36,20 +36,16 @@ class RoomManager(models.Model):
 	@classmethod
 	def reserve_room_for(cl, meeting):
 		options = meeting.get_feasible_intervals_in_order()
-		guest_count = meeting.get_guest_count()
-		
+		guest_count = meeting.guest_count()
 		for option in options:
 			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
 			if room != None :
-				print "none nashod"
 				reservation = Reservation()
 				reservation.interval=option
 				reservation.room=room
 				reservation.save()
-				meeting.make_closed()
+				meeting.make_closed(reservation)
 				return reservation
-			else:
-				print"none shod"
 		raise RoomNotAvailableException()
 
 class Event (models.Model):
@@ -119,8 +115,22 @@ class Reservation(models.Model):
 	room  = models.ForeignKey(Room, related_name="reservation_list")
 
 class Meeting (Event):
-	confirmed = models.BooleanField(default=False)
-	
+
+	NOT_SEEN = 'ns'
+	CONFIRMED = 'cn'
+	CANCELLED = 'cc'
+
+	CONFIRMATION = (
+		(NOT_SEEN, 'Not seen yet'),
+		(CONFIRMED, 'Confirmed'),
+		(CANCELLED, 'Cancelled'),
+	)
+
+	# confirmed = models.BooleanField(default=False)
+	confirmed = models.CharField(max_length=2, 
+									choices=CONFIRMATION,
+									default=NOT_SEEN)
+
 	EVERYONE = 'ev'
 	HALF_AT_LEAST = 'hl'
 	WITH_MAX_AVAILABLE = 'mx'
@@ -152,9 +162,25 @@ class Meeting (Event):
 			return True
 		return self.__how_many_voted__() == self.guest_count()
 
-	def make_closed(self):
-		self.status = Meeting.CLOSED
+	def make_closed(self, reservation):
+		self.status = Event.CLOSED
+		self.confirmed = Meeting.NOT_SEEN
+		self.reservation = reservation
+		print "reserve shod: ", self.reservation
 		self.save()
+
+	def confirm(self):
+		self.confirmed = Meeting.CONFIRMED
+		self.save()
+
+	def cancel(self):
+		self.confirmed = Meeting.CANCELLED
+		self.save()
+
+	@classmethod
+	def get_waiting_for_admin_meetings(cls):
+		meetings = Meeting.objects.filter(status=Event.CLOSED, confirmed=Meeting.NOT_SEEN)
+		return meetings
 
 
 class ClosingCondition(models.Model):
@@ -187,14 +213,14 @@ class ClosingCondition(models.Model):
 		cls.key_to_description_map[subclass.key] = subclass.description
 		return subclass
 
-	def is_ev(self):
-		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+	# def is_ev(self):
+	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
 	
-	def is_hl(self):
-		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+	# def is_hl(self):
+	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
 	
-	def is_hl(self):
-		return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
+	# def is_hl(self):
+	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
 
 
 @ClosingCondition.register
@@ -248,12 +274,13 @@ class AdvancedClosingCondition(ClosingCondition):
 		intervals = list(self.meeting.options_list.filter().all())
 		feasibles= []
 		for interval in intervals:
-			for guest in self.must_come_list:
+			for guest in self.must_come_list.all():
 				if not interval.is_guest_coming(guest):
 					break
 			else:
 				feasibles.append(interval)
 		feasibles.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		return feasibles
 
 
 class Vote (models.Model):
