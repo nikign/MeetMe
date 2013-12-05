@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from meet.views import create_wizard
+# from meet.views import create_wizard
 
 admin.autodiscover()
 
@@ -26,6 +26,6 @@ urlpatterns = patterns('',
     url(r'^google/login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     url(r'^tzset/$', 'meet.views.set_timezone' , name='set_timezone'),
-    url(r'^create/', create_wizard , name='create'),
+    url(r'^create/', 'meet.views.create_wizard' , name='create'),
     url(r'^test/$', 'meet.views.send_test_mail', name ='test'),
 )

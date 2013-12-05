@@ -148,7 +148,7 @@ class Meeting (Event):
 
 
 	def is_it_time_to_close(self, now_time):
-		if self.deadline >= now_time: #TODO : MAKE SURE
+		if self.deadline >= now_time:
 			return True
 		return self.__how_many_voted__() == self.guest_count()
 
@@ -295,10 +295,14 @@ class Notification (models.Model):
 
 #METHODS TO ADD TO USER
 def user_events(self, fr, to):
-	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline')[fr:to].all()
+	return Event.objects.filter(guest_list=self).order_by('-deadline')[fr:to].all()
 
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()
 
+def has_closing_authority(self):
+	return self.has_perm('admin')
+
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
+User.add_to_class('can_close_meetings', has_closing_authority)

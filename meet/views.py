@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.formtools.wizard.views import CookieWizardView
 from django.forms.models import inlineformset_factory, modelformset_factory
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 from django.utils import timezone
@@ -35,6 +35,8 @@ def set_timezone(request):
 		return redirect('/')
 	else:
 		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
+
+
 
 @login_required
 def view (request, event_id):
@@ -95,18 +97,14 @@ def create(request):
 	event_form = EventForm()
 	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
 
-def can_close(user):
-	if user.has_perm('admin'):
-		return True
-	else:
-		raise PermissionDenied
 
 @login_required
-@user_passes_test(can_close)
 def close (request, meeting_id):
+	user = request.user
+	if not user.can_close_meetings():
+		raise PermissionDenied
 	meeting = Meeting.objects.get(pk=meeting_id)
 	options = meeting.get_feasible_intervals_in_order()
-	print options
 	return render(request, 'close_meeting.html' ,
 		{'options':options, 'meeting':meeting, 'time_to_close':meeting.is_it_time_to_close(timezone.now())})
 
@@ -134,11 +132,14 @@ class CreateWizard(CookieWizardView):
 	def done(self, form_list, **kwargs):
 		form1 = form_list[0]
 		event = form1.save(commit=False)
-		event.creator = User.objects.all()[0]
+		creator = self.request.user
+		event.creator = creator
 		event_deadline =  self.get_cleaned_data_for_step('1')['deadline']
 		event.deadline =  event_deadline
 		# event1.creator = self.request.user
 		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
+		if creator not in guest_list:
+			guest_list.append(creator)
 		event.save()
 		event.guest_list = guest_list
 		event.save()
@@ -185,8 +186,13 @@ def is_advanced(wizard):
 		return True
 	return False
 
-create_wizard = CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
+create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
 	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 	condition_dict={'4': is_meeting, '5': is_advanced}
 	)
+
+@login_required
+def create_wizard (request):
+	return create_wizard_as_view(request)
+
 
