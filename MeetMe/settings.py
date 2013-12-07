@@ -3,7 +3,7 @@ import os
 ugettext = lambda s: s
 
 DEBUG = True
-TEST_ENVIRONMENT = True
+TEST_ENVIRONMENT = False
 
 TEMPLATE_DEBUG = DEBUG
 PATH = (os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')))
@@ -195,10 +195,10 @@ JENKINS_TASKS = (
 COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 
 # LOGIN_REDIRECT_URL = '/'
-if TEST_ENVIRONMENT:
-    LOGIN_URL = '/fakelogin/'
-else:
-    LOGIN_URL = '/google/login/'
+# if TEST_ENVIRONMENT:
+    # LOGIN_URL = '/fakelogin/'
+# else:
+LOGIN_URL = '/google/login/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 

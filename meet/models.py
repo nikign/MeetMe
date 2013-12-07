@@ -110,6 +110,9 @@ class Interval (models.Model):
 	def get_coming_list(self):
 		return self.votes_list.filter( state__in=[Vote.COMING, Vote.IF_HAD_TO])
 
+	def get_vote(self, user):
+		return Vote.objects.filter(voter=user, interval=self)
+
 class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
 	room  = models.ForeignKey(Room, related_name="reservation_list")
@@ -297,6 +300,10 @@ class Vote (models.Model):
 	interval = models.ForeignKey(Interval, related_name="votes_list")
 	voter = models.ForeignKey(User)
 
+	def update_state(self, new_state):
+		self.state = new_state
+		self.save()
+
 
 class Notification (models.Model):
 	INVITED = 'in'
@@ -322,7 +329,7 @@ class Notification (models.Model):
 
 #METHODS TO ADD TO USER
 def user_events(self, fr, to):
-	return Event.objects.filter(guest_list=self).order_by('-deadline').distinct()[fr:to].all()
+	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline').distinct()[fr:to].all()
 
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()

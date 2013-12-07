@@ -32,5 +32,5 @@ urlpatterns = patterns('',
     url(r'^create/', 'meet.views.create_wizard' , name='create'),
     
 
-    url(r'^fakelogin/', 'meet.test_utils.views.fake_login' , name='fake_login'),
+    # url(r'^fakelogin/', 'meet.test_utils.views.fake_login' , name='fake_login'),
 )

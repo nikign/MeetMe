@@ -45,7 +45,6 @@ def view (request, event_id):
 	user = request.user
 	if not user.is_invited_to(event):
 		raise PermissionDenied
-	print user
 	# votes = [(option, VoteOptionForm(initial={'interval':option.id})) for option in options]
 	FormSet = formset_factory(VoteForm)
 	initial_data = {'form-TOTAL_FORMS': u''+str(len(options)),
@@ -75,13 +74,19 @@ def related_events(request):
 @login_required
 def vote (request):
 	event_id = request.POST['event_id']	
+	usr = request.user
 	filled_forms = formset_factory(VoteForm)
 	validation_data = filled_forms(request.POST)
 	message = 'SUCCESS'
 	if validation_data.is_valid():
 		try:
 			for form in validation_data.forms:
-				form.save()
+				interval = form.cleaned_data['interval']
+				current_vote = interval.get_vote(usr)[0] if interval.get_vote(usr) else None
+				if current_vote:
+					current_vote.update_state(form.cleaned_data['state'])
+				else:
+					form.save()
 		except UserIsNotInvitedException, e:
 			raise PermissionDenied
 	else:
