@@ -144,8 +144,6 @@ class CreateWizard(CookieWizardView):
 		event.deadline =  event_deadline
 		# event1.creator = self.request.user
 		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
-		if creator not in guest_list:
-			guest_list.append(creator)
 		event.save()
 		event.guest_list = guest_list
 		event.save()

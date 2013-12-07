@@ -3,6 +3,8 @@ import os
 ugettext = lambda s: s
 
 DEBUG = True
+TEST_ENVIRONMENT = True
+
 TEMPLATE_DEBUG = DEBUG
 PATH = (os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')))
 
@@ -130,9 +132,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
 
     )
-MIDDLEWARE_CLASSES = (
+
+middlewares = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    )
+if not TEST_ENVIRONMENT:
+    middlewares += (
     'django.middleware.csrf.CsrfViewMiddleware',
+        )
+MIDDLEWARE_CLASSES = middlewares+ (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -178,6 +186,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'auth.GoogleBackend',
 )
+
 JENKINS_TASKS = (
     'django_jenkins.tasks.with_coverage',
     'django_jenkins.tasks.django_tests',   # select one django or
@@ -186,7 +195,10 @@ JENKINS_TASKS = (
 COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 
 # LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/google/login/'
+if TEST_ENVIRONMENT:
+    LOGIN_URL = '/fakelogin/'
+else:
+    LOGIN_URL = '/google/login/'
 LOGOUT_URL = '/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 

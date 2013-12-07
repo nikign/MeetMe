@@ -1,5 +1,6 @@
 {% include "header.html" %}
 {% block content %}
+	Here are folan:
 	{%for folan in events%}
 	<div>
 		{{folan.event.title}} &nbsp;&nbsp; <a href="/event/{{folan.event.id}}/view">View</a></br>
