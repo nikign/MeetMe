@@ -3,18 +3,17 @@ from meet.models import *
 from datetime import datetime
 
 class MeetingTest(TestCase):
-	pass
-	# fixtures = ['test_meeting.json', ]
+	fixtures = ['test_meeting.json', ]
 
-	# def test_how_many_voted(self):
-	# 	"""
-	# 	Tests that nimber of votes are calculated correctly.
-	# 	"""
-	# 	meetings = Meeting.objects
-	# 	meeting = meetings.get(pk= 2)
-	# 	self.assertEqual(meeting.__how_many_voted__(), 7)
-	# 	meeting = meetings.get(pk= 3)
-	# 	self.assertEqual(meeting.__how_many_voted__(), 3)
+	def test_how_many_voted(self):
+		"""
+		Tests that nimber of votes are calculated correctly.
+		"""
+		meetings = Meeting.objects
+		meeting = meetings.get(pk= 1)
+		self.assertEqual(meeting.__how_many_voted__(), 3)
+		meeting = meetings.get(pk= 2)
+		self.assertEqual(meeting.__how_many_voted__(), 1)
 
 	# def test_get_feasible_intervals_in_order(self):
 	# 	"""
