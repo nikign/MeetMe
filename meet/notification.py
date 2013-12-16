@@ -19,21 +19,18 @@ class Notification(models.Model):
 
 
 class CustomNotification(Notification):
-	reservation = models.ForeignKey(Reservation)
+	msg_body = models.TextField()
+	mail_body =  models.TextField()
 
 	def get_mail_text(self):
-		mail_body = "Reservation made for event " + self.reservation.interval.event + self.reservation.interval +\
-		 " in room " + self.reservation.room + ", created by " + self.reservation.interval.event.creator
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation made for event " + self.reservation.interval.event + self.reservation.interval +\
-		 " in room " + self.reservation.room + ", created by " + self.reservation.interval.event.creator
 		return msg_body
 
-	def save(self, *args, **kwargs):
-        super(InformReservation, self).save(*args, **kwargs)
-        self.send_mail()
+	# def save(self, *args, **kwargs):
+ #        super(InformReservation, self).save(*args, **kwargs)
+ #        self.send_mail()
 
 
 class InformReservationNotification(Notification):
