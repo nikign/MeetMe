@@ -74,9 +74,15 @@ class Event (models.Model):
 	def __unicode__(self):
 		return self.title
 
-
 	def has_user_voted(self,user):
 		return Vote.objects.filter(voter=user,interval__event=self).count()>0
+
+	def get_guest_emails(self):
+		email_list = [user.e_mail for user in self.guest_list]
+		return email_list
+
+	def get_creator_email(self):
+		return self.creator.e_mail
 
 
 class Interval (models.Model):

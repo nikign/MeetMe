@@ -18,13 +18,13 @@ def reserve_room_for_meetings():
 				meeting_reserve = RoomManager.reserve_room_for(meeting)
 				admins = User.objects.filter(super_user = True).all() #TODO : FIX
 				for admin in admins:
-					notif = InformReservation()
+					notif = InformReservationNotification()
 					notif.reservation = meeting_reserve
 					notif.recipient = admin.e_mail
 					notif.save()
 				print "meeting waiting for admin verification, id = ",meeting.id
 		except Exception, e:
-			notif = InformNoRoom()
+			notif = InformNoRoomNotification()
 			notif.meeting = meeting
 			notif.save()
 			print "meeting cancelled due to lack of suitable rooms, id = ",meeting.id

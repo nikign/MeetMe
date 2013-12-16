@@ -121,6 +121,16 @@ def admin_review (request):
 def confirm_meeting(request, meeting_id):
 	meeting = Meeting.objects.get(id=meeting_id)
 	meeting.confirm()
+	guest_emails = meeting.get_guest_emails()
+	for email in guest_emails:
+		notif = InformConfirmToGuestsNotification()
+		notif.recipient = email
+		notif.meeting = meeting
+		notif.save()
+	notif = InformConfirmToCreatorNotification()
+	notif.recipient = meeting.get_creator_email()
+	notif.meeting = meeting
+	notif.save()
 	return render_to_response('event_saved.html', {
 				'message': "The Meeting named "+ meeting.title +" was confirmed successfully.",
 			})
@@ -131,6 +141,16 @@ def confirm_meeting(request, meeting_id):
 def cancel_meeting(request, meeting_id):
 	meeting = Meeting.objects.get(id=meeting_id)
 	meeting.cancel()
+	guest_emails = meeting.get_guest_emails()
+	for email in guest_emails:
+		notif = InformCancelToGuestsNtification()
+		notif.recipient = email
+		notif.meeting = meeting
+		notif.save()
+	notif = InformCancelToCreatorNotification()
+	notif.recipient = meeting.get_creator_email()
+	notif.meeting = meeting
+	notif.save()
 	return render_to_response('event_saved.html', {
 				'message': "The Meeting named "+ meeting.title +" was canceled successfully.",
 			})
