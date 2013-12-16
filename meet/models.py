@@ -165,7 +165,6 @@ class Meeting (Event):
 		closing_condition = ClosingCondition.objects.get_subclass(meeting=self)
 		return closing_condition.get_feasible_intervals_in_order()
 
-
 	def is_it_time_to_close(self, now_time):
 		if self.deadline >= now_time:
 			return True
