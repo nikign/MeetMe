@@ -334,8 +334,5 @@ def user_events(self, fr, to):
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()
 
-def has_closing_authority(self):
-	return self.has_perm('admin')
-
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
