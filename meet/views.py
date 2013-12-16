@@ -36,8 +36,6 @@ def set_timezone(request):
 	else:
 		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
 
-
-
 @login_required
 def view (request, event_id):
 	event = Event.objects.get(id=event_id)
@@ -200,9 +198,7 @@ create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm
 	condition_dict={'4': is_meeting, '5': is_advanced}
 	)
 
-
 @login_required
 def create_wizard (request):
 	return create_wizard_as_view(request)
-
 
