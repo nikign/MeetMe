@@ -194,7 +194,7 @@ JENKINS_TASKS = (
 )
 COVERAGE_REPORT_HTML_OUTPUT_DIR = 'reports/coverage_report_html/'
 
-# LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 # if TEST_ENVIRONMENT:
     # LOGIN_URL = '/fakelogin/'
 # else:
