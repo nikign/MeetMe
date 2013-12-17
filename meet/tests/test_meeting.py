@@ -82,6 +82,29 @@ class MeetingTest(TestCase):
 		meeting.cancel()
 		self.assertEqual (meeting.confirmed , Meeting.CANCELLED)
 
+	def test_make_closed_and_get_waiting_for_admin_meetings(self):
+		"""
+		A brief test on meeting::cancel 
+		"""
+		meetings = Meeting.objects
+		meeting = meetings.get(pk= 3)
+		room = Room()
+		room.name = "403"
+		room.capacity = 1
+		room.address = "folan"
+		room.save()
+		reserv = Reservation()
+		reserv.interval = Interval.objects.all()[0]
+		reserv.room = Room.objects.all()[0]
+		reserv.save()
+		meeting.make_closed(Reservation.objects.all()[0])
+		self.assertEqual (meeting.status , Event.CLOSED)
+		self.assertEqual (meeting.confirmed , Meeting.NOT_SEEN)
+		self.assertEqual (meeting.reservation , reserv)
+
+		res = Meeting.get_waiting_for_admin_meetings()
+		self.assertEqual(res.count(), 1)
+
 		
 
 
