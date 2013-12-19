@@ -1,5 +1,6 @@
 from django.test import TestCase
 from meet.models import *
+from django.core.exceptions import *
 
 class IntervalTest(TestCase):
 	fixtures = ['test_interval.json', ]
@@ -63,3 +64,50 @@ class IntervalTest(TestCase):
 		self.assertEqual(intervals[2].how_many_happy_to_come(), 0)
 		self.assertEqual(intervals[3].how_many_happy_to_come(), 0)
 		self.assertEqual(intervals[4].how_many_happy_to_come(), 0)
+
+	def test_is_guest_coming(self):
+		"""
+		Tests if a user voted "coming" or "if i had to" to a particular interval
+		"""
+		intervals = Interval.objects
+		users = User.objects
+		self.assertTrue(intervals.get(pk=2).is_guest_coming(users.get(pk=2)))
+		self.assertTrue(intervals.get(pk=2).is_guest_coming(users.get(pk=3)))
+		self.assertFalse(intervals.get(pk=2).is_guest_coming(users.get(pk=1)))
+		self.assertFalse(intervals.get(pk=3).is_guest_coming(users.get(pk=1)))
+
+	def test_get_vote(self):
+		"""
+		Tests if a user voted "coming" or "if i had to" to a particular interval
+		"""
+		intervals = Interval.objects
+		users = User.objects
+		vote = intervals.get(pk=2).get_vote(users.get(pk=2))
+		self.assertEqual (vote.state , Vote.COMING)
+		vote = intervals.get(pk=2).get_vote(users.get(pk=1))
+		self.assertEqual (vote.state , Vote.NOT_COMING)
+		vote = intervals.get(pk=2).get_vote(users.get(pk=3))
+		self.assertEqual (vote.state , Vote.IF_HAD_TO)
+		with self.assertRaises(ObjectDoesNotExist):
+			vote = intervals.get(pk=3).get_vote(users.get(pk=3))
+		
+
+
+	def test_get_coming_list(self):
+		"""
+		Test if an interval returns its coming list correct
+		"""
+		intervals = Interval.objects
+		cl = intervals.get(pk=2).get_coming_list()
+		users = User.objects
+		cl = [vote.voter for vote in cl]
+		self.assertEqual(len(cl), 2)
+		self.assertFalse (users.get(pk=1) in cl)
+		self.assertTrue (users.get(pk=2) in cl)
+		self.assertTrue (users.get(pk=3) in cl)
+		cl = intervals.get(pk=3).get_coming_list()
+		self.assertEqual(len(cl), 0)
+		cl = intervals.get(pk=5).get_coming_list()
+		self.assertEqual(len(cl), 0)
+		
+
