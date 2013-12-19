@@ -174,7 +174,6 @@ class Meeting (Event):
 		self.status = Event.CLOSED
 		self.confirmed = Meeting.NOT_SEEN
 		self.reservation = reservation
-		print "reserve shod: ", self.reservation
 		self.save()
 
 	def confirm(self):
