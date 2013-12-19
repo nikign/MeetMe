@@ -78,11 +78,12 @@ class Event (models.Model):
 		return Vote.objects.filter(voter=user,interval__event=self).count()>0
 
 	def get_guest_emails(self):
-		email_list = [user.e_mail for user in self.guest_list]
+		_list = list(self.guest_list.all())
+		email_list = [user.email for user in _list]
 		return email_list
 
 	def get_creator_email(self):
-		return self.creator.e_mail
+		return self.creator.email
 
 
 class Interval (models.Model):

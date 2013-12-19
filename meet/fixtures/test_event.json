@@ -1,0 +1,9 @@
+[
+{"pk": 2, "model": "meet.interval", "fields": {"date": "2013-10-27", "start": "10:00:00", "finish": "12:00:00", "event": 1}}, 
+{"pk": 1, "model": "auth.user", "fields": {"username": "niki", "first_name": "", "last_name": "", "is_active": true, "is_superuser": true, "is_staff": true, "last_login": "2013-10-26T20:10:58.971Z", "groups": [], "user_permissions": [], "password": "pbkdf2_sha256$10000$02WRaE68bHxU$GliV6Ut2dL5joyIdEUfYJt4D9wqL1VfVKOYj5bL3s+w=", "email": "niki.hp2007@gmail.com", "date_joined": "2013-10-08T12:15:36.264Z"}}, 
+{"pk": 2, "model": "auth.user", "fields": {"username": "mehman", "first_name": "", "last_name": "", "is_active": true, "is_superuser": false, "is_staff": false, "last_login": "2013-10-19T06:31:34Z", "groups": [], "user_permissions": [], "password": "pbkdf2_sha256$10000$qiC1JSmfPxoe$9LGzLCVPKcgv4Pfrwz91R69DJ55dz5KHnb4oQ8IcSQM=", "email": "mehman@ut.ac.ir", "date_joined": "2013-10-19T06:31:34Z"}}, 
+{"pk": 3, "model": "auth.user", "fields": {"username": "ashkan", "first_name": "", "last_name": "", "is_active": true, "is_superuser": false, "is_staff": false, "last_login": "2013-10-19T06:32:26Z", "groups": [], "user_permissions": [], "password": "pbkdf2_sha256$10000$cKjxtWTlbkvZ$IQLkLCcGlL2HA1mPlfi0y4WFzxMthWvjnIjJFSzVwPM=", "email": "ashkan.dant3@gmail.com", "date_joined": "2013-10-19T06:32:26Z"}}, 
+{"pk": 1, "model": "meet.event", "fields": {"guest_list": [2, 1], "creator": 3, "deadline": "2013-10-27T04:45:32Z", "description": "\u0647\u06cc\u0686\u06cc", "title": "\u0627\u0635\u063a\u0631 \u0627\u06cc\u0646\u0627"}},
+{"pk": 1, "model": "meet.vote", "fields": {"voter": 2, "state": "dc", "interval": 2}}, 
+{"pk": 2, "model": "meet.vote", "fields": {"voter": 3, "state": "ih", "interval": 2}}
+]
