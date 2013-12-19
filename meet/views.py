@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from MeetMe import settings
 from django.utils import timezone
 import pytz
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 
 from meet.exceptions import UserIsNotInvitedException
 
@@ -80,10 +80,10 @@ def vote (request):
 		try:
 			for form in validation_data.forms:
 				interval = form.cleaned_data['interval']
-				current_vote = interval.get_vote(usr)[0] if interval.get_vote(usr) else None
-				if current_vote:
+				try:
+					current_vote = interval.get_vote(usr)
 					current_vote.update_state(form.cleaned_data['state'])
-				else:
+				except ObjectDoesNotExist, e:
 					form.save()
 		except UserIsNotInvitedException, e:
 			raise PermissionDenied

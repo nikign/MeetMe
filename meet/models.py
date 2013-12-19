@@ -117,7 +117,7 @@ class Interval (models.Model):
 		return self.votes_list.filter( state__in=[Vote.COMING, Vote.IF_HAD_TO])
 
 	def get_vote(self, user):
-		return Vote.objects.filter(voter=user, interval=self)
+		return Vote.objects.filter(voter=user, interval=self).get()
 
 class Reservation(models.Model):
 	interval = models.ForeignKey(Interval)
