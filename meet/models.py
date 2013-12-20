@@ -5,6 +5,7 @@ from meet.exceptions import RoomNotAvailableException
 from datetime import datetime
 from model_utils.managers import InheritanceManager
 from django.db.models import Q 
+from django.db.models import Count
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -144,7 +145,10 @@ class Meeting (Event):
 	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 	
 	def guest_count(self):
-		return self.guest_list.count()
+		if self.creator in self.guest_list.all():
+			return self.guest_list.count()
+		else:
+			return self.guest_list.count()+1
 
 	def __how_many_voted__(self):
 		return Vote.objects.filter(interval__event=self).values('voter').distinct().count()
@@ -179,8 +183,6 @@ class Meeting (Event):
 
 
 class ClosingCondition(models.Model):
-	# key = 'abs'
-	# description = "there shouldn't be any instance of this"
 	condition_keys = []
 	key_to_type_map = {}
 	key_to_description_map = {}
@@ -191,15 +193,7 @@ class ClosingCondition(models.Model):
 
 
 	def get_feasible_intervals_in_order(self):
-		print "injaaaaaaa"
 		raise NotImplementedError("error message")
-
-	# def __init__(self, options_list, guest_list):
-	# 	self.options_list = options_list
-	# 	self.guest_list = guest_list
-
-	# def __guest_count__(self):
-	# 	return self.guest_list.count()
 
 	@classmethod
 	def register(cls, subclass):
@@ -208,26 +202,19 @@ class ClosingCondition(models.Model):
 		cls.key_to_description_map[subclass.key] = subclass.description
 		return subclass
 
-	# def is_ev(self):
-	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
-	
-	# def is_hl(self):
-	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
-	
-	# def is_hl(self):
-	# 	return hasattr(self, 'everyoneclosingcondition') and self.everyoneclosingcondition is not None
-
 
 @ClosingCondition.register
 class EveryoneClosingCondition(ClosingCondition):
 	key = 'ev'
-	description = 'Everybody Should come'
+	description = 'Everybody has to come'
 
 	def get_feasible_intervals_in_order(self):
-		guest_count = self.meeting.guest_list.count()
-		intervals = self.meeting.options_list.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO])
+		guest_count = self.meeting.guest_count()
+		intervals = self.meeting.options_list.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO])\
+			.exclude(votes_list__state=Vote.NOT_COMING).annotate(count = Count('id'))
 		intervals_list = list(intervals.all())
 		intervals_list.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		intervals_list = [interval for interval in intervals_list if interval.count == guest_count]
 		return intervals_list or []
 
 

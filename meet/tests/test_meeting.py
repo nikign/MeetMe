@@ -12,7 +12,7 @@ class MeetingTest(TestCase):
 		"""
 		meetings = Meeting.objects
 		meeting = meetings.get(pk= 1)
-		self.assertEqual(meeting.__how_many_voted__(), 3)
+		self.assertEqual(meeting.__how_many_voted__(), 4)
 		meeting = meetings.get(pk= 2)
 		self.assertEqual(meeting.__how_many_voted__(), 3)
 
@@ -22,7 +22,7 @@ class MeetingTest(TestCase):
 		"""
 		meetings = Meeting.objects
 		meeting = meetings.get(pk= 1)
-		self.assertEqual(meeting.guest_count(), 3)
+		self.assertEqual(meeting.guest_count(), 4)
 		meeting = meetings.get(pk= 2)
 		self.assertEqual(meeting.guest_count(), 4)
 
@@ -48,9 +48,9 @@ class MeetingTest(TestCase):
 		meeting = meetings.get(pk= 1)
 		res = meeting.get_feasible_intervals_in_order()
 		self.assertEqual (len(res) , 3)
-		self.assertEqual (res[0].how_many_will_come() , 2)
-		self.assertEqual (res[1].how_many_will_come() , 1)
-		self.assertEqual (res[2].how_many_will_come() , 1)
+		self.assertEqual (res[0].how_many_will_come() , 3)
+		self.assertEqual (res[1].how_many_will_come() , 2)
+		self.assertEqual (res[2].how_many_will_come() , 2)
 
 		meeting = meetings.get(pk= 2)
 		res = meeting.get_feasible_intervals_in_order()
