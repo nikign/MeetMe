@@ -15,6 +15,12 @@ from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 
 from meet.exceptions import UserIsNotInvitedException
 
+def can_close(user):
+	if user.has_perm('admin'):
+		return True
+	else:
+		raise PermissionDenied
+
 def home (request):
 	if not request.session.has_key('_auth_user_id'):
 		return render_to_response('index.html', {
@@ -22,11 +28,13 @@ def home (request):
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
+	
 	return render_to_response('home.html', {
 		'email': user.email,
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'time' : utctime,
+		'is_admin': can_close(request.user),
 	})
 
 def set_timezone(request):
@@ -61,13 +69,15 @@ def view (request, event_id):
 	}, context_instance = RequestContext(request))
 
 @login_required
-def related_events(request):
+def related_events(request, msg=None):
 	user=request.user
 	events_to_show = user.related_events(0,10);
-	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user),
+	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user), 
+	'is_meeting': hasattr(event, 'meeting'), 'is_closed': (event.status==Event.CLOSED),
 	'is_owner': (event.creator==user), 'is_google_calendarizable': event.is_google_calendarizable()} for event in events_to_show]
 	return render_to_response('related_events.html',{
 		'events' : events,
+		'message': msg, 
 	})
 
 @login_required
@@ -76,7 +86,7 @@ def vote (request):
 	usr = request.user
 	filled_forms = formset_factory(VoteForm)
 	validation_data = filled_forms(request.POST)
-	message = 'SUCCESS'
+	message = 'Your voted for event with id "'+ event_id + '" successfully.' 
 	if validation_data.is_valid():
 		try:
 			for form in validation_data.forms:
@@ -89,18 +99,11 @@ def vote (request):
 		except UserIsNotInvitedException, e:
 			raise PermissionDenied
 	else:
-		message = 'FAILURE'
-	return render_to_response('vote.html', { 
-		'post' : request.POST,
-		'message' : message,
-	}, context_instance = RequestContext(request))	
+		message = 'Your could not event with id "' + event_id + '".'
+	return related_events(request, message)	
 
 
-def can_close(user):
-	if user.has_perm('admin'):
-		return True
-	else:
-		raise PermissionDenied
+
 
 @login_required
 @user_passes_test(can_close)
@@ -149,6 +152,15 @@ def cancel_meeting(request, meeting_id):
 	return render_to_response('event_saved.html', {
 				'message': "The Meeting named "+ meeting.title +" was canceled successfully.",
 			})
+
+@login_required
+def revote(request, event_id):
+	event = get_object_or_404(Event, Q(id=event_id, creator=request.user))
+	votes = Vote.objects.filter(interval__event=event)
+	for vote in votes:
+		vote.delete() 
+	return related_events(request, 'Your revote for event "' + event.title +'" is done successfully.')
+	#TODO
 
 
 class CreateWizard(CookieWizardView):

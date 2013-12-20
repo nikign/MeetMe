@@ -46,12 +46,12 @@ class InformReservationNotification(Notification):
 	reservation = models.ForeignKey(Reservation)
 
 	def get_mail_text(self):
-		mail_body = "Reservation made for event " + self.reservation.interval.event.title + self.reservation.interval +\
+		mail_body = u"Reservation made for event "  + unicode(self.reservation.interval)  +\
 		 " in room " + self.reservation.room.name
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation made for event " + self.reservation.interval.event.title + self.reservation.interval +\
+		msg_body = u"Reservation made for event " +  unicode(self.reservation.interval)  +\
 		 " in room " + self.reservation.room.name 
 		return msg_body
 
@@ -68,12 +68,12 @@ class InformNoRoomNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation cannot be made for meeting " + self.meeting.title +\
+		mail_body = u"Reservation cannot be made for meeting " + self.meeting.title +\
 		" since there is no room available at any feasible time. Please perform revote."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation cannot be made for meeting " + self.meeting.title +\
+		msg_body = u"Reservation cannot be made for meeting " + self.meeting.title +\
 		" since there is no room available at any feasible time. Please perform revote."
 		return msg_body
 
@@ -90,14 +90,13 @@ class InformConfirmToGuestsNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
-		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
+		msg_body = u"Reservation for meeting you were invited to: " + self.meeting.title +\
+		", is confirmed by admin for time interval "+ unicode(self.meeting.reservation.interval) + ", in room " \
 		 + self.meeting.reservation.room.name + ". We'll be glad if you come!"
-		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
-		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
+		msg_body = u"Reservation for meeting you were invited to: " + self.meeting.title +\
+		", is confirmed by admin for time interval "+ unicode(self.meeting.reservation.interval) + ", in room " \
 		 + self.meeting.reservation.room.name + ". We'll be glad if you come!"
 		return msg_body
 
@@ -112,14 +111,14 @@ class InformConfirmToCreatorNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
-		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
+		mail_body = u"Reservation for meeting you had created: " + self.meeting.title +\
+		", is confirmed by admin for time interval "+ unicode(self.meeting.reservation.interval) + ", in room " \
 		 + self.meeting.reservation.room.name + ". Guests have also recieved emails and been informed."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you had created: " + self.meeting.title +\
-		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room "\
+		msg_body = u"Reservation for meeting you had created: " + self.meeting.title +\
+		", is confirmed by admin for time interval "+ unicode(self.meeting.reservation.interval) + ", in room "\
 		 + self.meeting.reservation.room.name + ". Guests have also recieved emails and been informed."
 		return msg_body
 
@@ -135,12 +134,12 @@ class InformCancelToGuestsNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
+		mail_body = u"Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is cancelled by admin. There might be an edit and revote for which you'll be informed again."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
+		msg_body = u"Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is cancelled by admin. There might be an edit and revote for which you'll be informed again."
 		return msg_body
 
@@ -156,12 +155,12 @@ class InformCancelToCreatorNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
+		mail_body = u"Reservation for meeting you had created: " + self.meeting.title +\
 		", is cancelled by admin. You can edit it and perform a revote."
 		return mail_body
 		
 	def get_msg(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
+		mail_body = u"Reservation for meeting you had created: " + self.meeting.title +\
 		", is cancelled by admin. You can edit it and perform a revote."
 		return msg_body
 
@@ -179,7 +178,7 @@ class InvitedNotification(Notification):
 	def get_mail_text(self):
 		creator = self.event.creator
 		user_id = (creator.first_name + " " + creator.last_name) if creator.last_name else self.event.creator.username
-		mail_body = "You are invited to a meeting named: " + self.event.title +\
+		mail_body = u"You are invited to a meeting named: " + self.event.title +\
 		"created by: " + user_id + \
 		". You can learn more about and vote on your events, on your 'view your events' link."
 		return mail_body
@@ -187,7 +186,7 @@ class InvitedNotification(Notification):
 	def get_msg(self):
 		creator = self.event.creator
 		user_id = (creator.first_name + " " + creator.last_name) if creator.last_name else self.event.creator.username
-		msg_body = "You are invited to a meeting named: " + self.event.title +\
+		msg_body = u"You are invited to a meeting named: " + self.event.title +\
 		"created by: " + user_id +\
 		 ". You can learn more about and vote on your events, on your 'view your events' link."
 		return msg_body

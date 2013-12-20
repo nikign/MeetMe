@@ -5,7 +5,9 @@
 	
 	<a class="btn btn-success" href="/create/">Create a meeting</a> &nbsp;
 	<a class="btn btn-primary" href="/user/events">View your events</a> &nbsp;
-
+	{% if is_admin %}
+		<a class="btn btn-primary" href="/admins/review/">Review Waiting for Confirmation Meetings</a> &nbsp;
+	{% endif %}
 	<div>
 		<div class="well">
 		{%localtime on%}
