@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render, redirect
+from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from models import Event, Interval
 from forms import *
 from django.contrib.auth.models import User
@@ -158,9 +158,33 @@ def cancel_meeting(request, meeting_id):
 
 class CreateWizard(CookieWizardView):
 
-	def done(self, form_list, **kwargs):
-		form1 = form_list[0]
-		event = form1.save(commit=False)
+	def remove_old_data(self, event):#not working!
+		intervals = event.options_list.all()
+		votes = Vote.objects.filter(interval__event=event)
+		for vote in votes:
+			vote.delete()
+		for interval in intervals:
+			interval.delete()
+
+		if is_meeting(self):
+			closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
+			closing_condition.delete()
+
+	def set_meeting_data(self, event):
+		meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
+		meeting = Meeting(event_ptr_id=event.pk)
+		meeting.__dict__.update(event.__dict__)
+		# meeting.conditions = meeting_cond
+		closing_condition = ClosingCondition.key_to_type_map[meeting_cond_key]()
+		meeting.save()
+		closing_condition.meeting = meeting
+		closing_condition.save()
+		if is_advanced(self):
+			closing_condition.must_come_list = self.get_cleaned_data_for_step('5')['must_come_list']
+			closing_condition.save()
+
+	def save_event(self, event_form):
+		event = event_form.save(commit=False)
 		creator = self.request.user
 		event.creator = creator
 		event_deadline =  self.get_cleaned_data_for_step('1')['deadline']
@@ -170,28 +194,23 @@ class CreateWizard(CookieWizardView):
 		event.save()
 		event.guest_list = guest_list
 		event.save()
-		interval_forms = form_list[2]
+		return event
+
+	def set_intervals(self, event, interval_forms):
 		intervals = interval_forms.save(commit=False)
 		for interval in intervals:
 			interval.event_id = event.id
 			interval.save()
+
+	def done(self, form_list, **kwargs):
+		event_form = form_list[0]
+		event = self.save_event(event_form)
+		if not is_create_wizard(self):
+			self.remove_old_data(event)
+		interval_forms = form_list[2]
+		self.set_intervals(event, interval_forms)
 		if is_meeting(self):
-			meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
-			meeting = Meeting(event_ptr_id=event.pk)
-			meeting.__dict__.update(event.__dict__)
-			# meeting.conditions = meeting_cond
-			closing_condition = ClosingCondition.key_to_type_map[meeting_cond_key]()
-			meeting.save()
-			closing_condition.meeting = meeting
-			closing_condition.save()
-			if is_advanced(self):
-				closing_condition.must_come_list = self.get_cleaned_data_for_step('5')['must_come_list']
-				closing_condition.save()
-
-			return render_to_response('event_saved.html', {
-				'message': "You event named "+ event.title +" was added successfully.",
-			})
-
+			self.set_meeting_data(event)
 		
 		return render_to_response('event_saved.html', {
 			'message': "You event named "+ event.title +" was added successfully.",
@@ -200,12 +219,23 @@ class CreateWizard(CookieWizardView):
 	def get_template_names(self):
 		return 'create_event.html'
 
+
+def is_create_wizard(wizard):
+	if wizard.instance_dict:
+		return False
+	else:
+		return True
+
+
 def is_meeting(wizard):
+	if not is_create_wizard(wizard):
+		return True if hasattr(wizard.instance_dict['0'], 'meeting') else False
 	event_type_data = wizard.get_cleaned_data_for_step('3')['event_type'] if wizard.get_cleaned_data_for_step('3') else None
 	if event_type_data == '2':
 		return True
 	else:
 		return False
+
 
 def is_advanced(wizard):
 	conditions = wizard.get_cleaned_data_for_step('4')['conditions'] if wizard.get_cleaned_data_for_step('4') else None
@@ -213,12 +243,43 @@ def is_advanced(wizard):
 		return True
 	return False
 
-create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
-	inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
-	condition_dict={'4': is_meeting, '5': is_advanced}
-	)
 
 @login_required
 def create_wizard (request):
+	create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
+		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
+		condition_dict={'4': is_meeting, '5': is_advanced}
+		)
 	return create_wizard_as_view(request)
+
+
+@login_required
+def edit_wizard (request, event_id):
+	event = get_object_or_404(Event, Q(id=event_id))#, Q(creator=request.user))
+	instance_dictionary = {'0': event, '1': event,}
+	initial_dict = {}
+	# votes = Vote.objects.filter(voter=request.user)
+
+	# init_dict=[]
+	# for i in xrange(len(votes)):
+	# 	initial_data = {}
+	# 	initial_data['voter']= request.user.id
+	# 	initial_data['interval']= votes[i].interval.id
+	# 	initial_data['state']= votes[i].state
+	# 	init_dict.append(initial_data)
+
+	# print init_dict
+	if hasattr(event, 'meeting'):
+		closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
+		initial_dict = {
+			'4': {'conditions': closing_condition.key, },
+		}
+
+	edit_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm,
+		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
+		instance_dict=instance_dictionary,
+		initial_dict=initial_dict,
+		condition_dict={'3': is_create_wizard, '4': is_meeting, '5': is_advanced}
+		)
+	return edit_wizard_as_view(request)
 

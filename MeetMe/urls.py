@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
     url(r'^tzset/$', 'meet.views.set_timezone' , name='set_timezone'),
     url(r'^create/', 'meet.views.create_wizard' , name='create'),
+    url(r'^edit/(?P<event_id>\d+)/$', 'meet.views.edit_wizard' , name='edit'),
     
 
     # url(r'^fakelogin/', 'meet.test_utils.views.fake_login' , name='fake_login'),
