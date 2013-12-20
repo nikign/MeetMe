@@ -341,3 +341,4 @@ def is_invited_to(self, event):
 
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
+from meet.notification import *

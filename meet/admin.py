@@ -1,5 +1,6 @@
 from django.contrib import admin
 from meet.models import *
+from notification import *
 
 class RoomAdmin(admin.ModelAdmin):
 	fields = ['name','capacity','address']
@@ -50,6 +51,14 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Meeting, MeetingAdmin)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Notification)
+admin.site.register(CustomNotification)
+admin.site.register(InformReservationNotification)
+admin.site.register(InformNoRoomNotification)
+admin.site.register(InformConfirmToGuestsNotification)
+admin.site.register(InformConfirmToCreatorNotification)
+admin.site.register(InformCancelToGuestsNotification)
+admin.site.register(InformCancelToCreatorNotification)
+admin.site.register(InvitedNotification)
 admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(ClosingCondition)
 for key in ClosingCondition.condition_keys:

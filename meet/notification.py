@@ -1,14 +1,16 @@
 from django.db import models
 from meet.models import *
+from django.core.mail import EmailMultiAlternatives
+# from django.contrib.auth.models import User
 
 class Notification(models.Model):
 	recipient = models.ForeignKey(User)
 	seen = models.BooleanField(default=False)
-	
+
 	def send_mail(self):
 		mail_body = self.get_mail_text()
-		email = EmailMultiAlternatives(subject='reservation_made', body=mail_body, 
-			from_email='info@meetme.ir', to=self.recipient.e_mail, cc=None, bcc=None,)
+		email = EmailMultiAlternatives(subject=self.get_subj(), body=mail_body, 
+			from_email='info@meetme.ir', to=[self.recipient.email], cc=[], bcc=[],)
 		email.send()
 
 	def get_mail_text(self):
@@ -17,10 +19,14 @@ class Notification(models.Model):
 	def get_msg(self):
 		pass
 
+	def get_subj(self):
+		pass
+
 
 class CustomNotification(Notification):
 	msg_body = models.TextField()
 	mail_body =  models.TextField()
+	subject = models.TextField()
 
 	def get_mail_text(self):
 		return mail_body
@@ -28,6 +34,8 @@ class CustomNotification(Notification):
 	def get_msg(self):
 		return msg_body
 
+	def get_subj(self):
+		return self.subject
 	# def save(self, *args, **kwargs):
  #		super(InformReservation, self).save(*args, **kwargs)
  #		self.send_mail()
@@ -37,17 +45,20 @@ class InformReservationNotification(Notification):
 	reservation = models.ForeignKey(Reservation)
 
 	def get_mail_text(self):
-		mail_body = "Reservation made for event " + self.reservation.interval.event + self.reservation.interval +\
-		 " in room " + self.reservation.room + ", created by " + self.reservation.interval.event.creator
+		mail_body = "Reservation made for event " + self.reservation.interval.event.title + self.reservation.interval +\
+		 " in room " + self.reservation.room.name
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation made for event " + self.reservation.interval.event + self.reservation.interval +\
-		 " in room " + self.reservation.room + ", created by " + self.reservation.interval.event.creator
+		msg_body = "Reservation made for event " + self.reservation.interval.event.title + self.reservation.interval +\
+		 " in room " + self.reservation.room.name 
 		return msg_body
 
+	def get_subj(self):
+		return "Reservation made"
+
 	def save(self, *args, **kwargs):
-		super(InformReservation, self).save(*args, **kwargs)
+		super(InformReservationNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
 
@@ -55,18 +66,21 @@ class InformNoRoomNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation cannot be made for meeting " + self.meeting +\
+		mail_body = "Reservation cannot be made for meeting " + self.meeting.title +\
 		" since there is no room available at any feasible time. Please perform revote."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation cannot be made for meeting " + self.meeting +\
+		msg_body = "Reservation cannot be made for meeting " + self.meeting.title +\
 		" since there is no room available at any feasible time. Please perform revote."
 		return msg_body
 
+	def get_subj(self):
+		return "No Room Available"
+
 	def save(self, *args, **kwargs):
-		self.recipient = meeting.creator
-		super(InformNoRoom, self).save(*args, **kwargs)
+		self.recipient = self.meeting.creator
+		super(InformNoRoomNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
 
@@ -74,55 +88,64 @@ class InformConfirmToGuestsNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you were invited to: " + self.meeting +\
+		mail_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
-		 + self.meeting.reservation.room + ". We'll be glad if you come!"
+		 + self.meeting.reservation.room.name + ". We'll be glad if you come!"
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you were invited to: " + self.meeting +\
+		msg_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
-		 + self.meeting.reservation.room + ". We'll be glad if you come!"
+		 + self.meeting.reservation.room.name + ". We'll be glad if you come!"
 		return msg_body
 
+	def get_subj(self):
+		return "Meeting Confirmed"
+
 	def save(self, *args, **kwargs):
-		super(InformConfirmToGuests, self).save(*args, **kwargs)
+		super(InformConfirmToGuestsNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
 class InformConfirmToCreatorNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting +\
+		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
 		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room " \
-		 + self.meeting.reservation.room + ". Guests have also recieved emails and been informed."
+		 + self.meeting.reservation.room.name + ". Guests have also recieved emails and been informed."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you had created: " + self.meeting +\
+		msg_body = "Reservation for meeting you had created: " + self.meeting.title +\
 		", is confirmed by admin for time interval "+ self.meeting.reservation.interval + ", in room "\
-		 + self.meeting.reservation.room + ". Guests have also recieved emails and been informed."
+		 + self.meeting.reservation.room.name + ". Guests have also recieved emails and been informed."
 		return msg_body
 
+	def get_subj(self):
+		return "Meeting Confirmed"
+
 	def save(self, *args, **kwargs):
-		super(InformConfirmToCreator, self).save(*args, **kwargs)
+		super(InformConfirmToCreatorNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
 class InformCancelToGuestsNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you were invited to: " + self.meeting +\
+		mail_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is cancelled by admin. There might be an edit and revote for which you'll be informed again."
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = "Reservation for meeting you were invited to: " + self.meeting +\
+		msg_body = "Reservation for meeting you were invited to: " + self.meeting.title +\
 		", is cancelled by admin. There might be an edit and revote for which you'll be informed again."
 		return msg_body
 
+	def get_subj(self):
+		return "Meeting Cancelled"
+
 	def save(self, *args, **kwargs):
-		super(InformCancelToGuests, self).save(*args, **kwargs)
+		super(InformCancelToGuestsNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
 
@@ -130,15 +153,44 @@ class InformCancelToCreatorNotification(Notification):
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting +\
+		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
 		", is cancelled by admin. You can edit it and perform a revote."
 		return mail_body
 		
 	def get_msg(self):
-		mail_body = "Reservation for meeting you had created: " + self.meeting +\
+		mail_body = "Reservation for meeting you had created: " + self.meeting.title +\
 		", is cancelled by admin. You can edit it and perform a revote."
 		return msg_body
 
+	def get_subj(self):
+		return "Meeting Cancelled"
+
 	def save(self, *args, **kwargs):
-		super(InformCancelToCreator, self).save(*args, **kwargs)
+		super(InformCancelToCreatorNotification, self).save(*args, **kwargs)
+		self.send_mail()
+
+class InvitedNotification(Notification):
+	event = models.ForeignKey(Event)
+
+	def get_mail_text(self):
+		creator = self.event.creator
+		user_id = (creator.first_name + " " + creator.last_name) if creator.last_name else self.event.creator.username
+		mail_body = "You are invited to a meeting named: " + self.event.title +\
+		"created by: " + user_id + \
+		". You can learn more about and vote on your events, on your 'view your events' link."
+		return mail_body
+		
+	def get_msg(self):
+		creator = self.event.creator
+		user_id = (creator.first_name + " " + creator.last_name) if creator.last_name else self.event.creator.username
+		msg_body = "You are invited to a meeting named: " + self.event.title +\
+		"created by: " + user_id +\
+		 ". You can learn more about and vote on your events, on your 'view your events' link."
+		return msg_body
+
+	def get_subj(self):
+		return "Invitation"
+
+	def save(self, *args, **kwargs):
+		super(InvitedNotification, self).save(*args, **kwargs)
 		self.send_mail()
