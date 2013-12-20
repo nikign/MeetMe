@@ -2,6 +2,11 @@
 {% load static %}
 {% block content %}
 	<div>
+		{% if msg %}
+			<div class="alert alert-info">
+				{{msg}}
+			</div>
+		{% endif %}
 		{%if meetings%}
 			<table class='table'>
 				{%for meeting in meetings%}
@@ -15,6 +20,8 @@
 					</tr>
 				{%endfor%}
 			</table>
+		{% else %}
+			There is no meeting for review.
 		{%endif%}
 	</div>
 {% endblock %}

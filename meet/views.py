@@ -107,11 +107,11 @@ def vote (request):
 
 @login_required
 @user_passes_test(can_close)
-def admin_review (request):
+def admin_review (request, msg=None):
 	meetings = Meeting.get_waiting_for_admin_meetings()
-	print meetings
 	return render(request, 'close_meeting.html' ,
-		{'meetings':meetings,})
+		{'meetings':meetings,
+		'msg': msg, })
 
 
 @login_required
@@ -129,9 +129,7 @@ def confirm_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return render_to_response('event_saved.html', {
-				'message': "The Meeting named "+ meeting.title +" was confirmed successfully.",
-			})
+	return admin_review(request, "The Meeting named "+ meeting.title +" was confirmed successfully.")
 
 
 @login_required
@@ -141,7 +139,7 @@ def cancel_meeting(request, meeting_id):
 	meeting.cancel()
 	guest_emails = meeting.get_guest_emails()
 	for email in guest_emails:
-		notif = InformCancelToGuestsNtification()
+		notif = InformCancelToGuestsNotification()
 		notif.recipient = email
 		notif.meeting = meeting
 		notif.save()
@@ -149,9 +147,7 @@ def cancel_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return render_to_response('event_saved.html', {
-				'message': "The Meeting named "+ meeting.title +" was canceled successfully.",
-			})
+	return admin_review(request, "The Meeting named "+ meeting.title +" was canceled successfully.")
 
 @login_required
 def revote(request, event_id):
@@ -167,9 +163,9 @@ class CreateWizard(CookieWizardView):
 
 	def remove_old_data(self, event):
 		intervals = event.options_list.all()
-		votes = Vote.objects.filter(interval__event=event)
-		for vote in votes:
-			vote.delete()
+		# votes = Vote.objects.filter(interval__event=event)
+		# for vote in votes:
+		# 	vote.delete()
 		for interval in intervals:
 			interval.delete()
 
@@ -216,10 +212,13 @@ class CreateWizard(CookieWizardView):
 		self.set_intervals(event, interval_forms)
 		if is_meeting(self):
 			self.set_meeting_data(event)
+		if is_create_wizard(self):
+			msg = "Your event named "+ event.title +" was added successfully."
+		else:
+			msg = "Your event named "+ event.title +" was edited and saved successfully.\
+			 You should perform a revote so that users can vote again."
 		
-		return render_to_response('event_saved.html', {
-			'message': "You event named "+ event.title +" was added successfully.",
-		})
+		return related_events(self.request, msg)
 
 	def get_template_names(self):
 		return 'create_event.html'
