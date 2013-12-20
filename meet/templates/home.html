@@ -1,26 +1,24 @@
-<html>
-{%load tz%}
-	<head>
-		<title>Home Page</title>
-	</head>
-	<body>
-			<a href="/create/">Create a meeting</a> &nbsp;
-			<a href="/user/events">View your events</a> &nbsp;
 
-			<div>
-				<div>
-				{%localtime on%}
-					</br>=====================================================</br>
-					Welcome {{username}}
-					</br>=====================================================</br>
-					You are successfully authorized as {{email}}
-					</br>=====================================================</br>
-					Your timezone is set to {{timezone}}
-					</br>=====================================================</br>
-					Your local time: {{time}} 
-					</br>=====================================================</br>
-				{%endlocaltime%}
-				</div>
-			</div>
-	</body>
-</html>
+{%load tz%}
+{% include "header.html" %}
+{% block content %}
+	
+	<a class="btn btn-success" href="/create/">Create a meeting</a> &nbsp;
+	<a class="btn btn-primary" href="/user/events">View your events</a> &nbsp;
+
+	<div>
+		<div class="well">
+		{%localtime on%}
+			</br>=====================================================</br>
+			Welcome {{username}}
+			</br>=====================================================</br>
+			You are successfully authorized as {{email}}
+			</br>=====================================================</br>
+			Your timezone is set to {{timezone}}
+			</br>=====================================================</br>
+			Your local time: {{time}} 
+			</br>=====================================================</br>
+		{%endlocaltime%}
+		</div>
+	</div>
+{% endblock %}

@@ -86,6 +86,9 @@ class Event (models.Model):
 	def get_creator_email(self):
 		return self.creator.email
 
+	def is_google_calendarizable(self):
+		return hasattr(self, 'meeting') and self.meeting.confirmed==Meeting.CONFIRMED
+
 
 class Interval (models.Model):
 	date = models.DateField()

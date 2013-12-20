@@ -4,13 +4,14 @@ from django.core.mail import EmailMultiAlternatives
 # from django.contrib.auth.models import User
 
 class Notification(models.Model):
-	recipient = models.ForeignKey(User)
+	# recipient = models.ForeignKey(User)
+	recipient = models.CharField(max_length=40)
 	seen = models.BooleanField(default=False)
 
 	def send_mail(self):
 		mail_body = self.get_mail_text()
 		email = EmailMultiAlternatives(subject=self.get_subj(), body=mail_body, 
-			from_email='info@meetme.ir', to=[self.recipient.email], cc=[], bcc=[],)
+			from_email='info@meetme.ir', to=[self.recipient], cc=[], bcc=[],)
 		email.send()
 
 	def get_mail_text(self):
@@ -58,6 +59,7 @@ class InformReservationNotification(Notification):
 		return "Reservation made"
 
 	def save(self, *args, **kwargs):
+		self.recipient = self.reservation.meeting.creator.email
 		super(InformReservationNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
@@ -79,7 +81,7 @@ class InformNoRoomNotification(Notification):
 		return "No Room Available"
 
 	def save(self, *args, **kwargs):
-		self.recipient = self.meeting.creator
+		self.recipient = self.meeting.creator.email
 		super(InformNoRoomNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
@@ -125,6 +127,7 @@ class InformConfirmToCreatorNotification(Notification):
 		return "Meeting Confirmed"
 
 	def save(self, *args, **kwargs):
+		self.recipient = self.meeting.creator.email
 		super(InformConfirmToCreatorNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
@@ -166,6 +169,7 @@ class InformCancelToCreatorNotification(Notification):
 		return "Meeting Cancelled"
 
 	def save(self, *args, **kwargs):
+		self.recipient = self.meeting.creator.email
 		super(InformCancelToCreatorNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
