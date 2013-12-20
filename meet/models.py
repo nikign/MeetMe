@@ -229,8 +229,6 @@ class HalfAtLeastClosingCondition(ClosingCondition):
 	def get_feasible_intervals_in_order(self):
 		guest_count = self.meeting.guest_count()
 		min_coming = guest_count/2 if guest_count%2==0 else (guest_count/2)+1
-		# intervals = self.meeting.options_list.filter(votes_list__state__in=[Vote.COMING, Vote.IF_HAD_TO])\
-		# 	.exclude(votes_list__state=Vote.NOT_COMING).annotate(count = Count('id'))
 		intervals = self.meeting.options_list
 		intervals_list = list(intervals.all())
 		intervals_list = [interval for interval in intervals_list if interval.how_many_will_come() == min_coming]
@@ -244,12 +242,11 @@ class MaxAvailableClosingCondition(ClosingCondition):
 	description = 'Choose the option with max people coming'
 
 	def get_feasible_intervals_in_order(self):
-		guest_count = self.meeting.guest_list.count()
-		
-		intervals = list(self.meeting.options_list.all())
-		intervals.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
-		intervals = [interval for interval in intervals if interval.how_many_will_come()>0]
-		return intervals or []
+		intervals = self.meeting.options_list
+		intervals_list = list(intervals.all())
+		intervals_list = [interval for interval in intervals_list if interval.how_many_will_come() >0]
+		intervals_list.sort(key=lambda x: (x.how_many_will_come(), x.how_many_happy_to_come()) , reverse=True)
+		return intervals_list or []
 
 
 @ClosingCondition.register
