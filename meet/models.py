@@ -4,7 +4,7 @@ from django.utils import dateformat
 from meet.exceptions import RoomNotAvailableException
 from datetime import datetime
 from model_utils.managers import InheritanceManager
-from django.db.models import Q
+from django.db.models import Q 
 
 class Room (models.Model):
 	name = models.CharField(max_length = 30)
@@ -140,19 +140,6 @@ class Meeting (Event):
 	confirmed = models.CharField(max_length=2, 
 									choices=CONFIRMATION,
 									default=NOT_SEEN)
-
-	EVERYONE = 'ev'
-	HALF_AT_LEAST = 'hl'
-	WITH_MAX_AVAILABLE = 'mx'
-	HOLDING_CONDITIONS = (
-		(EVERYONE, 'Everybody Should come'), 
-		(HALF_AT_LEAST, 'At least half should come'), 
-		(WITH_MAX_AVAILABLE, 'Choose the option with max people coming')
-	)
-
-	conditions = models.CharField(max_length=2, 
-									choices=HOLDING_CONDITIONS,
-									default=WITH_MAX_AVAILABLE)
 
 	reservation = models.ForeignKey(Reservation, null=True, blank=True, default=None)
 	
@@ -308,28 +295,6 @@ class Vote (models.Model):
 	def update_state(self, new_state):
 		self.state = new_state
 		self.save()
-
-
-class Notification (models.Model):
-	INVITED = 'in'
-	BEING_HELD = 'bh'
-	CANCELLED = 'ca'
-	SOMEONE_VOTED = 'sv'
-	ASK_CONFIRMATION = 'ac'
-	NO_ROOM = 'nr'
-	MESSAGE = (
-		(INVITED, 'Invited'),
-		(BEING_HELD, 'Being held'),
-		(CANCELLED, 'Cancelled'),
-		(SOMEONE_VOTED, 'Someone voted'),
-		(ASK_CONFIRMATION, 'Meeting is being held an waiting for your confirmation.'),
-		(NO_ROOM, 'No room is available in requested times, please ask for revote.'),
-	)
-	category = models.CharField(max_length=2,
-							choices=MESSAGE)
-	event = models.ForeignKey(Event)	
-	recepiant = models.ForeignKey(User)
-	vote = models.ForeignKey(Vote, null = True, blank= True)
 
 
 #METHODS TO ADD TO USER
