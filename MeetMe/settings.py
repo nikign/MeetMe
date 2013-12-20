@@ -173,6 +173,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'meet',
+    'meet.templatetags',
     # 'google',
     'django_openid_auth',
     'django_jenkins',

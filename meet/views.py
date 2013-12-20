@@ -64,7 +64,8 @@ def view (request, event_id):
 def related_events(request):
 	user=request.user
 	events_to_show = user.related_events(0,10);
-	events = [ {'event':event, 'is_vote_cast':event.has_user_voted(user)} for event in events_to_show]
+	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user),
+	'is_owner': (event.creator==user), 'is_google_calendarizable': event.is_google_calendarizable()} for event in events_to_show]
 	return render_to_response('related_events.html',{
 		'events' : events,
 	})
@@ -93,12 +94,6 @@ def vote (request):
 		'post' : request.POST,
 		'message' : message,
 	}, context_instance = RequestContext(request))	
-
-@login_required
-def create(request):
-	IntervalFormSet = inlineformset_factory(Event, Interval, max_num=1, extra=3)
-	event_form = EventForm()
-	return render(request, 'test.html', {'event_form': event_form, 'interval_form': IntervalFormSet(), })
 
 
 def can_close(user):

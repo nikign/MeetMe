@@ -80,8 +80,6 @@
 	});
     </script>
 
-
-	<body dir='rtl'>
 		<div class="well">
 		
 		{% if wizard.steps.step1 == 3 %}
@@ -115,78 +113,4 @@
 			</form>
 		{% endif %}	
 
-		<!-- <form action="/save_event/" method="POST">
-			{% csrf_token %}
-			{{event_form.as_p}}
-			<h4>Suggested time intervals for vote</h4>
-			{{ interval_form.management_form }}
-			{% for form in interval_form.forms %}
-			<div class="item" id="id_form-TOTAL_FORMS">
-				{{ form.as_p }}
-				<p style=""><a class="delete" href="#">Delete</a></p>
-			</div>
-			{% endfor %}
-			<p><a id="add" href="#">Add another item</a></p>
-			<input type="submit" value=" Create this Event " class="btn btn-info" />
-		</form>
-		</div> -->
-		<!-- <div class="well">
-			{% if wizard.steps.step1 == 1 %}
-			<div id="page1">
-				<form action="" method="post" class="create-ad-1st-step">
-			 		{{ wizard.management_form }}
-					{% csrf_token %}
-					<table> 
-				    	{{ wizard.form }}
-					</table>
-                <div class="form-actions center">
-	                <button type="submit" class="btn btn-primary">Save<i class="icon-arrow-right icon-white"></i></button>
-                </div>
-				</form>
-			</div>
-            {% endif %}
-            
-            {% if wizard.steps.step1 == 2 %}
-			<div id="page2" style="background-color:lightblue;">
-				<form>
-					
-				</form>
-
-				<label>Enter your guests' emails here, separated by commas.</label>
-				<textarea cols="50"></textarea>
-			</div>
-			{% endif %}
-			{% if wizard.steps.step1 == 3 %}
-			<form action="" method="POST">
-				{% csrf_token %}
-					<h2>Todo Items</h2>
-					{{ interval_form.management_form }}
-					{% for form in interval_form.forms %}
-					<div class="item" id="id_form-TOTAL_FORMS">
-						{{ form.as_p }}
-						<p style=""><a class="delete" href="#">Delete</a></p>
-					</div>
-					{% endfor %}
-					<p><a id="add" href="#">Add another item</a></p>
-					<input type="submit" value=" Submit " />
-			</form>
-			{% endif %}
-			
-
-			<div id="page4">
-				{% for radio in types_form.event_type %}
-					<div class="adtemplate row-fluid">
-						<div class="span3">
-							{{ radio.tag }}
-							<span class="ad-type">{{radio.choice_label}}</span>
-			</div>
-	                </div>	
-				{% endfor %}
-			</div>
-			<div class="form-actions">
-				<button type="submit" class="btn btn-primary"> Next </button>
-			</div>
-		</div> -->
-
-	</body>
 {% endblock %}

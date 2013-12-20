@@ -1,14 +1,27 @@
 {% include "header.html" %}
+{% load google_calendarize %}
 {% block content %}
-	Here are folan:
+	
+	Here are your events:
+	</br>
+	</br>
 	{%for folan in events%}
-	<div>
-		{{folan.event.title}} &nbsp;&nbsp; <a href="/event/{{folan.event.id}}/view">View</a></br>
+	<div class="well">
+		{{folan.event.title}} &nbsp;&nbsp; <a class="btn btn-success" href="/event/{{folan.event.id}}/view">View</a>
+		{% if folan.is_owner %}
+			<a class="btn btn-primary" href="/event/{{folan.event.id}}/edit">Edit</a></br>
+		{% endif %}
+		{% if folan.is_google_calendarizable %}
+			<a  target="_newtab" class="btn btn-info" href="{{ folan.event.meeting|google_calendarize }}">+ Add to Google Calendar</a>
+		{% endif %}
 		{%if folan.is_vote_cast%}
 			Your vote for this event is cast.
 		{%else%}
 			Your vote for this event is <b>not</b> cast.
 		{%endif%}
+		</br>
+		</br>
 	</div>
 	{%endfor%}
+
 {% endblock %}
