@@ -59,7 +59,7 @@ class InformReservationNotification(Notification):
 		return "Reservation made"
 
 	def save(self, *args, **kwargs):
-		self.recipient = self.reservation.meeting.creator.email
+		self.recipient = self.reservation.interval.meeting.creator.email
 		super(InformReservationNotification, self).save(*args, **kwargs)
 		self.send_mail()
 
