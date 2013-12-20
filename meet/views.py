@@ -158,7 +158,7 @@ def cancel_meeting(request, meeting_id):
 
 class CreateWizard(CookieWizardView):
 
-	def remove_old_data(self, event):#not working!
+	def remove_old_data(self, event):
 		intervals = event.options_list.all()
 		votes = Vote.objects.filter(interval__event=event)
 		for vote in votes:
@@ -174,7 +174,6 @@ class CreateWizard(CookieWizardView):
 		meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
 		meeting = Meeting(event_ptr_id=event.pk)
 		meeting.__dict__.update(event.__dict__)
-		# meeting.conditions = meeting_cond
 		closing_condition = ClosingCondition.key_to_type_map[meeting_cond_key]()
 		meeting.save()
 		closing_condition.meeting = meeting
@@ -189,7 +188,6 @@ class CreateWizard(CookieWizardView):
 		event.creator = creator
 		event_deadline =  self.get_cleaned_data_for_step('1')['deadline']
 		event.deadline =  event_deadline
-		# event1.creator = self.request.user
 		guest_list =  self.get_cleaned_data_for_step('1')['guest_list']
 		event.save()
 		event.guest_list = guest_list
