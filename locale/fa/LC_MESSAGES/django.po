@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-24 10:05-0600\n"
+"POT-Creation-Date: 2013-12-24 13:46-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,11 +33,65 @@ msgstr "توضیح رویداد خود را وارد کنید."
 msgid "Description"
 msgstr "توضیح"
 
+msgid "guest "
+msgstr "مهمان"
+
+msgid "Will you attend the event at this time?"
+msgstr "آیا شما در این زمان در این نشست شرکت خواهید‌ کرد؟"
+
+msgid "Unacceptable state."
+msgstr ""
+
+msgid "Event"
+msgstr "نشست"
+
+msgid "Meeting"
+msgstr "قرار ملاقات"
+
+msgid "Event or Meeting"
+msgstr "نشست یا قرار ملاقات"
+
 msgid "You should choose one type."
 msgstr "باید حداقل یک نوع را انتخاب کنید."
 
-msgid "Folaaan"
-msgstr "فلان"
+msgid "The event type you requested is not provided!"
+msgstr ""
+
+msgid "How should your meeting be closed?"
+msgstr "قرار ملاقات در چه صورت تثبیت شود؟"
+
+msgid "The condition type you requested for your event is not provided!"
+msgstr ""
+
+msgid "Everybody has to come"
+msgstr "اگر همه شرکت می‌کردند"
+
+msgid "At least half should come"
+msgstr "اگر حداقل نیمی از شرکت‌کنندگان حاضر بودند"
+
+msgid "Choose the option with max people coming"
+msgstr "گزینه‌ای که بیشترین شرکت‌کننده را دارد"
+
+msgid "Use advanced options"
+msgstr "استفاده از تنظیمات پیشرفته"
+
+msgid "Definitely coming"
+msgstr "حتما شرکت خواهم کرد"
+
+msgid "Only if I have to"
+msgstr "تنها در صورتی که مجبور باشم شرکت خواهم کرد"
+
+msgid "No way"
+msgstr "نمی‌توانم شرکت کنم"
+
+msgid "The Meeting named "
+msgstr "قرار ملاقات به نام"
+
+msgid "Your revote for event \""
+msgstr "رای گیری مجدد شما برای نشست \""
+
+msgid "Your event named "
+msgstr "نشست شما به نام "
 
 msgid "from"
 msgstr "از"

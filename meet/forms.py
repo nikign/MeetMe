@@ -27,7 +27,7 @@ class GuestListForm(forms.ModelForm):
 		all_users = User.objects.all()
 		for guest in guests:
 			if not guest in all_users:
-				error_msg =  'guest ' + guest.email + ' is not registered in the system'
+				error_msg =  _('guest ' + guest.email + ' is not registered in the system')
 				self._errors['guests'].append(self.error_class([error_msg]))
 
 		return cleaned_data
@@ -36,7 +36,7 @@ class GuestListForm(forms.ModelForm):
 class VoteForm (forms.ModelForm):
 	interval = forms.ModelChoiceField(queryset=Interval.objects.all(), widget=forms.HiddenInput())
 	voter = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
-	state = forms.ChoiceField(choices=Vote.VOTE,  widget=forms.RadioSelect, label="Will you attend the event at this time?")
+	state = forms.ChoiceField(choices=Vote.VOTE,  widget=forms.RadioSelect, label=_("Will you attend the event at this time?"))
 
 	class Meta:
 		model = Vote
@@ -51,28 +51,28 @@ class VoteForm (forms.ModelForm):
 			raise UserIsNotInvitedException
  
 		if state and not state in [option[0] for option in Vote.VOTE]:
-			self._errors['state'].append(self.error_class(['Unacceptable state.']))
+			self._errors['state'].append(self.error_class([_('Unacceptable state.')]))
 
 		return cleaned_data
 
 
 class EventTypeForm(forms.Form):
-	Choices = [('1','Event'), ('2', 'Meeting'),]
-	event_type = forms.ChoiceField(choices=Choices, widget=forms.RadioSelect, label="Event or Meeting", error_messages={'required': _('You should choose one type.')})
+	Choices = [('1',_('Event')), ('2', _('Meeting')),]
+	event_type = forms.ChoiceField(choices=Choices, widget=forms.RadioSelect, label=_("Event or Meeting"), error_messages={'required': _('You should choose one type.')})
 
 	def clean(self):
 		cleaned_data = super(EventTypeForm, self).clean()
 		ev_type = cleaned_data.get('event_type')
 		available_choices = [ch[0] for ch in self.Choices]
 		if not ev_type in available_choices:
-			error_msg = 'The event type you requested is not provided!'
+			error_msg = _('The event type you requested is not provided!')
 			self._errors['event_type'].append(error_msg)
 
 		return cleaned_data
 
 
 class MeetingConditionsForm(forms.Form):
-	conditions = forms.ChoiceField(choices=[], widget=forms.RadioSelect, label="How should your meeting be closed?", error_messages={'required': _('You should choose one type.')})
+	conditions = forms.ChoiceField(choices=[], widget=forms.RadioSelect, label=_("How should your meeting be closed?"), error_messages={'required': _('You should choose one type.')})
 	
 	def __init__(self, *args, **kwargs):
 		super(MeetingConditionsForm, self).__init__(*args, **kwargs)
@@ -84,7 +84,7 @@ class MeetingConditionsForm(forms.Form):
 		cond = cleaned_data.get('conditions')
 		available_choices = [ch[0] for ch in self.fields['conditions'].choices]
 		if not cond in available_choices:
-			error_msg = 'The condition type you requested for your event is not provided!'
+			error_msg = _('The condition type you requested for your event is not provided!')
 			self._errors['conditions'].append(self.error_class([error_msg]))
 		return cleaned_data
 
@@ -101,7 +101,7 @@ class AdvancedClosingConditionForm(forms.ModelForm):
 		all_users = User.objects.all()
 		for guest in imp_guests:
 			if not guest in all_users:
-				error_msg = 'guest ' + guest.email + ' is not registered in the system'
+				error_msg = _('guest ' + guest.email + ' is not registered in the system')
 				self._errors['must_come_list'].append(self.error_class([error_msg]))
 
 		return cleaned_data

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from django.utils import dateformat
 from meet.exceptions import RoomNotAvailableException
 from datetime import datetime
@@ -209,7 +210,7 @@ class ClosingCondition(models.Model):
 @ClosingCondition.register
 class EveryoneClosingCondition(ClosingCondition):
 	key = 'ev'
-	description = 'Everybody has to come'
+	description = _('Everybody has to come')
 
 	def get_feasible_intervals_in_order(self):
 		guest_count = self.meeting.guest_count()
@@ -224,7 +225,7 @@ class EveryoneClosingCondition(ClosingCondition):
 @ClosingCondition.register
 class HalfAtLeastClosingCondition(ClosingCondition):
 	key = 'hl'
-	description = 'At least half should come'
+	description = _('At least half should come')
 
 	def get_feasible_intervals_in_order(self):
 		guest_count = self.meeting.guest_count()
@@ -239,7 +240,7 @@ class HalfAtLeastClosingCondition(ClosingCondition):
 @ClosingCondition.register
 class MaxAvailableClosingCondition(ClosingCondition):
 	key = 'mx'
-	description = 'Choose the option with max people coming'
+	description = _('Choose the option with max people coming')
 
 	def get_feasible_intervals_in_order(self):
 		intervals = self.meeting.options_list
@@ -252,7 +253,7 @@ class MaxAvailableClosingCondition(ClosingCondition):
 @ClosingCondition.register
 class AdvancedClosingCondition(ClosingCondition):
 	key = 'ad'
-	description = 'Use advanced options'
+	description = _('Use advanced options')
 
 	must_come_list = models.ManyToManyField(User, null=True, blank=True, 
 											db_table="must_come_guest_list",
@@ -276,9 +277,9 @@ class Vote (models.Model):
 	IF_HAD_TO = 'ih'
 	NOT_COMING = 'no'
 	VOTE = (
-		(COMING, 'Definitely coming'),
-		(IF_HAD_TO, 'Only if I have to'),
-		(NOT_COMING, 'No way')
+		(COMING, _('Definitely coming')),
+		(IF_HAD_TO, _('Only if I have to')),
+		(NOT_COMING, _('No way'))
 	)
 	state = models.CharField(max_length=2, 
 							choices=VOTE)

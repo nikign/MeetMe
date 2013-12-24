@@ -129,7 +129,7 @@ def confirm_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return admin_review(request, "The Meeting named "+ meeting.title +" was confirmed successfully.")
+	return admin_review(request, _("The Meeting named "+ meeting.title +" was confirmed successfully."))
 
 
 @login_required
@@ -147,7 +147,7 @@ def cancel_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return admin_review(request, "The Meeting named "+ meeting.title +" was canceled successfully.")
+	return admin_review(request, _("The Meeting named "+ meeting.title +" was canceled successfully."))
 
 @login_required
 def revote(request, event_id):
@@ -155,8 +155,7 @@ def revote(request, event_id):
 	votes = Vote.objects.filter(interval__event=event)
 	for vote in votes:
 		vote.delete() 
-	return related_events(request, 'Your revote for event "' + event.title +'" is done successfully.')
-	#TODO
+	return related_events(request, _('Your revote for event "' + event.title +'" is done successfully.'))
 
 
 class CreateWizard(CookieWizardView):
@@ -213,10 +212,10 @@ class CreateWizard(CookieWizardView):
 		if is_meeting(self):
 			self.set_meeting_data(event)
 		if is_create_wizard(self):
-			msg = "Your event named "+ event.title +" was added successfully."
+			msg = _("Your event named "+ event.title +" was added successfully.")
 		else:
-			msg = "Your event named "+ event.title +" was edited and saved successfully.\
-			 You should perform a revote so that users can vote again."
+			msg = _("Your event named "+ event.title +" was edited and saved successfully.\
+			 You should perform a revote so that users can vote again.")
 		
 		return related_events(self.request, msg)
 

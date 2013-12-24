@@ -1,7 +1,8 @@
 {% include "header.html" %}
 {% load filters %}
 {% block content %}
-	
+	<div style="width:50%;">
+		
 	{% if message %}
 		<div class="alert alert-info">
 			{{message}}
@@ -49,4 +50,5 @@
 			{% endif %}
 		</div>
 	{%endfor%}
+	</div>
 {% endblock %}

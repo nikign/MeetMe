@@ -6,10 +6,9 @@
 	<body style="direction:rtl;">
 		<form method="post" action="/event/vote">
 			{% csrf_token %}
-			{% trans "Folaaan" %}
 			{{management_form}}
 			<input type= "hidden" name="event_id" value="{{event_id}}"/>
-			<div>
+			<div class="well" style="width:50%;">
 			{% for ballet in votes %}
 				{{ballet.option.date|jdate:LANGUAGE_CODE}} -- {% trans "from" %}
 				{{ballet.option.start|jtime:LANGUAGE_CODE}} {% trans "to" %} 
