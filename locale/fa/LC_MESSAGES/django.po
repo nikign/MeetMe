@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-18 08:36-0500\n"
+"POT-Creation-Date: 2013-12-24 10:05-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,17 +21,62 @@ msgstr ""
 msgid "Persian"
 msgstr ""
 
-msgid "English"
-msgstr ""
+msgid "Enter the title of you event."
+msgstr "عنوان رویداد خود را وارد کنید."
 
 msgid "Title"
 msgstr "عنوان"
 
-msgid "Enter the title of you event."
-msgstr "عنوان رویداد خود را وارد کنید."
+msgid "Enter the Description of you event."
+msgstr "توضیح رویداد خود را وارد کنید."
 
 msgid "Description"
 msgstr "توضیح"
 
-msgid "Enter the Description of you event."
-msgstr "توضیح رویداد خود را وارد کنید."
+msgid "You should choose one type."
+msgstr "باید حداقل یک نوع را انتخاب کنید."
+
+msgid "Folaaan"
+msgstr "فلان"
+
+msgid "from"
+msgstr "از"
+
+msgid "to"
+msgstr "تا"
+
+msgid "Farvardin"
+msgstr "فروردین"
+
+msgid "Ordibehesht"
+msgstr "اردیبهشت"
+
+msgid "Khordad"
+msgstr "خرداد"
+
+msgid "Tir"
+msgstr "تیر"
+
+msgid "Mordad"
+msgstr "مرداد"
+
+msgid "Shahrivar"
+msgstr "شهریور"
+
+msgid "Mehr"
+msgstr "مهر"
+
+msgid "Aban"
+msgstr "آبان"
+
+msgid "Azar"
+msgstr "آذر"
+
+msgid "Dey"
+msgstr "دی"
+
+msgid "Bahman"
+msgstr "بهمن"
+
+msgid "Esfand"
+msgstr "اسفند"

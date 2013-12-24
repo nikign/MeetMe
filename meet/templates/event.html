@@ -1,16 +1,19 @@
 {% include "header.html" %}
 {% load static %}
+{% load filters %}
+{% load i18n %}
 {% block content %}
 	<body style="direction:rtl;">
 		<form method="post" action="/event/vote">
 			{% csrf_token %}
+			{% trans "Folaaan" %}
 			{{management_form}}
 			<input type= "hidden" name="event_id" value="{{event_id}}"/>
 			<div>
 			{% for ballet in votes %}
-				{{ballet.option.date}} -- from
- 				{{ballet.option.start}} to 
-				{{ballet.option.finish}}<br/>
+				{{ballet.option.date|jdate:LANGUAGE_CODE}} -- {% trans "from" %}
+				{{ballet.option.start|jtime:LANGUAGE_CODE}} {% trans "to" %} 
+				{{ballet.option.finish|jtime:LANGUAGE_CODE}}<br/>
 				{{ballet.form}}
 			<br/>
 			{% endfor %}
