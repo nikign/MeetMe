@@ -1,0 +1,54 @@
+
+#banner{
+	color: #eeeeee;
+}
+
+#banner:hover{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.calendar thead tr td{
+	background-color: #aaaaff
+}
+
+.tongue{
+	height: 30px;
+	padding-top: 5px;
+	text-align: center;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.tongue-green{
+	background-color: #6cb86c;
+}
+.tongue-blue{
+	background-color: #006cb8;
+}
+.tongue-purple{
+	background-color: #b86cb8;
+}
+
+.tongue a{
+	color: white;
+}
+a:hover{
+	color: white;
+	text-decoration: none;
+}
+
+.calendar tr td{
+	background-color: #ccccff
+}
+
+
+.calendar .today{
+	background-color: #8888ff;
+}
+
+
+.calendar .event{
+	background-size: 10px 10px;
+	/*background-color: #6666ff;*/
+	background-image: linear-gradient(-45deg, rgba(255, 255, 255, .7) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .7) 50%, rgba(255, 255, 255, .7) 75%, transparent 75%, transparent);
+}

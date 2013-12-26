@@ -78,9 +78,15 @@
 	        return deleteForm(this, "2");
 	    });
 	});
+	$(function () {
+		$("input").addClass('form-control')
+		$("input[type=checkbox]").removeClass('form-control')
+		$("input[type=radio]").removeClass('form-control')
+		$("textarea").addClass('form-control')
+	})
     </script>
 
-		<div class="well" style="width:50%;">
+		<div class="well col-md-7 col-md-offset-2" >
 		
 		{% if wizard.steps.step1 == 3 %}
 			<h4>Suggested time intervals for vote</h4>

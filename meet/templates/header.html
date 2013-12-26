@@ -1,20 +1,34 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="{% get_static_prefix %}jquery.js"></script>
-		<script src="{% get_static_prefix %}bootstrap.min.js"></script>
-		<script src="{% get_static_prefix %}dynamic-formset.js"></script>
-		<link rel="stylesheet" href="{% get_static_prefix %}bootstrap.min.css" type="text/css" />
+		<script src="{% get_static_prefix %}js/jquery.js"></script>
+		<script src="{% get_static_prefix %}js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% get_static_prefix %}css/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="{% get_static_prefix %}css/style.css" type="text/css" />
 	</head>
-	<body dir='rtl'>
+	<body dir='rtl' class="col-md-12">
 		
-	<div style="margin:right; background-color: #492399; padding-left: 15px; padding-top: 15px; padding-right: 15px">
+	<div style="background-color: #492399;" class="row well col-md-13">
+	<div class="col-md-1">
 	<a href="/">
 	<img src="{% get_static_prefix %}logo.jpg" class="img-rounded" >
 	</a>
-	<img src="{% get_static_prefix %}logo.jpg" class="img-rounded" style="left: 50%; position:absolute">
-	<hr/>
+	</div>
+	<div class="col-md-8"><h1 class="text-center">
+	<a href="/" id="banner">
+	MeetMe
+	</a>
+	</h1></div>
+	<div class="col-md-2" style="color:white;">
+		{{username}}<br/>
+		{{timezone}}<br/>
+		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
+	</div>
+	<div class="col-md-1">
+	<img src="{% get_static_prefix %}user.jpg" class="img-rounded">
 	</div>
 	</body>
+	</div>
 </html>

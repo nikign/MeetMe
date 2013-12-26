@@ -1,26 +1,76 @@
 
 {%load tz%}
+{%load i18n%}
 {% include "header.html" %}
 {% block content %}
-	
-	<a class="btn btn-success" href="/create/">Create a meeting</a> &nbsp;
-	<a class="btn btn-primary" href="/user/events">View your events</a> &nbsp;
-	{% if is_admin %}
-		<a class="btn btn-primary" href="/admins/review/">Review Waiting for Confirmation Meetings</a> &nbsp;
-	{% endif %}
-	<div style="width:50%;">
-		<div class="well">
-		{%localtime on%}
-			</br>=====================================================</br>
-			Welcome {{username}}
-			</br>=====================================================</br>
-			You are successfully authorized as {{email}}
-			</br>=====================================================</br>
-			Your timezone is set to {{timezone}}
-			</br>=====================================================</br>
-			Your local time: {{time}} 
-			</br>=====================================================</br>
-		{%endlocaltime%}
-		</div>
+	<div class="row col-md-7 col-md-offset-1">
+	<div class="col-md-2 pull-right tongue tongue-green">
+	<a href="/create"><i class="glyphicon glyphicon-plus"></i></a>
 	</div>
+	<div class="col-md-2 pull-right tongue tongue-blue">
+	<a href="/user/events"><i class="glyphicon glyphicon-list-alt"></i></a>
+	</div>
+	{% if is_admin %}
+	<div class="col-md-2 pull-right tongue tongue-purple">
+	<a href="/admins/review"><i class="glyphicon glyphicon-ok-circle"></i></a>
+	</div>
+	{%endif%}
+	<table class="table-bordered table calendar">
+		<thead>
+		<td>{% trans "Sat" %}</td>
+		<td>{% trans "Sun" %}</td>
+		<td>{% trans "Mon" %}</td>
+		<td>{% trans "Tue" %}</td>
+		<td>{% trans "Wed" %}</td>
+		<td>{% trans "Thu" %}</td>
+		<td>{% trans "Fri" %}</td>
+		</thead>
+		<tr>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+		</tr>
+		<tr>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+		</tr>
+		<tr>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td >no event today</td>
+			<td class="today ">TODAY</td>
+			<td class="event">no event today</td>
+			<td class="today event">no event today</td>
+			<td>no event today</td>
+		</tr>
+		<tr>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+		</tr>
+		<tr>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+			<td>no event today</td>
+		</tr>
+	</table>
+	</div>
+	<div class="col-md-3 well col-md-offset-1">messages</div>
 {% endblock %}

@@ -20,6 +20,7 @@ class GoogleBackend:
 				user.first_name = google_firstname
 			if user.last_name == u'' :
 				user.last_name = google_lastname
+			user.save()
 
 		except User.DoesNotExist:
 			user = User.objects.create_user(google_email, google_email, 'password')

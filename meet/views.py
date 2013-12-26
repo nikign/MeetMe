@@ -34,7 +34,8 @@ def home (request):
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'time' : utctime,
-		'is_admin': can_close(request.user),
+		'is_admin': user.has_perm('admin'),
+		'day_of_week' : utctime.strftime("%w")
 	})
 
 def set_timezone(request):
