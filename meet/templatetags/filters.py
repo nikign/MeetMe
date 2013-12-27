@@ -3,6 +3,7 @@ from meet.templatetags import i18n
 from django.contrib.sites.models import Site
 from django.utils.http import urlquote_plus
 import datetime
+from django.utils import translation
 
 register = template.Library()
 

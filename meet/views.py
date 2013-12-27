@@ -12,8 +12,9 @@ from MeetMe import settings
 from django.utils import timezone
 import pytz
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-
 from meet.exceptions import UserIsNotInvitedException
+import datetime
+from datetime import timedelta as td
 
 def can_close(user):
 	if user.has_perm('admin'):
@@ -28,15 +29,28 @@ def home (request):
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
-	day_of_week = int(utctime.strftime("%w"))
-	
+	localtime = timezone.localtime(utctime)
+	day_of_week = (localtime.weekday()+2)%7
+	days_before = 14 + day_of_week
+	days_after = 21 - day_of_week
+	start_date = (localtime+td(days=-days_before)).date()
+	end_date = (localtime+td(days=days_after)).date()
+	days = []
+	cal_list = []	
+	for i in xrange(0,35):
+		days.append(start_date+td(days=i))
+		if len(days)==7:
+			cal_list.append(days)
+			days=[]
 	return render_to_response('home.html', {
 		'email': user.email,
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
-		'time' : utctime,
 		'is_admin': user.has_perm('admin'),
-		'day_of_week' : day_of_week,
+		'today' : utctime.date,
+		'cal_list' : cal_list,
+		'start_date': start_date,
+		'end_date' : end_date,
 	})
 
 def set_timezone(request):
@@ -53,7 +67,6 @@ def view (request, event_id):
 	user = request.user
 	if not user.is_invited_to(event):
 		raise PermissionDenied
-	# votes = [(option, VoteOptionForm(initial={'interval':option.id})) for option in options]
 	FormSet = formset_factory(VoteForm)
 	initial_data = {'form-TOTAL_FORMS': u''+str(len(options)),
 					'form-INITIAL_FORMS': u''+str(len(options)),
@@ -263,17 +276,6 @@ def edit_wizard (request, event_id):
 	event = get_object_or_404(Event, Q(id=event_id))#, Q(creator=request.user))
 	instance_dictionary = {'0': event, '1': event,}
 	initial_dict = {}
-	# votes = Vote.objects.filter(voter=request.user)
-
-	# init_dict=[]
-	# for i in xrange(len(votes)):
-	# 	initial_data = {}
-	# 	initial_data['voter']= request.user.id
-	# 	initial_data['interval']= votes[i].interval.id
-	# 	initial_data['state']= votes[i].state
-	# 	init_dict.append(initial_data)
-
-	# print init_dict
 	if hasattr(event, 'meeting'):
 		closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
 		initial_dict = {

@@ -298,6 +298,12 @@ def user_events(self, fr, to):
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()
 
+def meetings_on(self, date):
+	return Meeting.objects.filter(reservation__interval__date=date)\
+	.filter(Q(creator=self)|Q(guest_list=self)).filter(~Q(confirmed=Meeting.CANCELLED)).distinct()
+
+
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
+User.add_to_class('meetings_on', meetings_on)
 from meet.notification import *

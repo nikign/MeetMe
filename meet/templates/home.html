@@ -1,6 +1,8 @@
 
 {%load tz%}
 {%load i18n%}
+{% load filters %}
+
 {% include "header.html" %}
 {% block content %}
 	<div class="row col-md-7 col-md-offset-1">
@@ -15,6 +17,10 @@
 	<a href="/admins/review"><i class="glyphicon glyphicon-ok-circle"></i></a>
 	</div>
 	{%endif%}
+	<div class="col-md-4 pull-left">
+		{{start_date|jdate}} --
+		{{end_date|jdate}}
+	</div>
 	<table class="table-bordered table calendar">
 		<thead>
 		<td>{% trans "Sat" %}</td>
@@ -25,51 +31,15 @@
 		<td>{% trans "Thu" %}</td>
 		<td>{% trans "Fri" %}</td>
 		</thead>
+		{%for week in cal_list%}
 		<tr>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
+			{%for day in week%}
+			<td>
+			{{day}}
+			</td>
+			{%endfor%}
 		</tr>
-		<tr>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-		</tr>
-		<tr>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td >no event today</td>
-			<td class="today ">TODAY</td>
-			<td class="event">no event today</td>
-			<td class="today event">no event today</td>
-			<td>no event today</td>
-		</tr>
-		<tr>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-		</tr>
-		<tr>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-			<td>no event today</td>
-		</tr>
+		{%endfor%}
 	</table>
 	</div>
 	<div class="col-md-3 well col-md-offset-1">messages</div>
