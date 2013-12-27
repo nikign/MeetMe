@@ -1,12 +1,18 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from model_utils.managers import InheritanceManager
+from django.utils.translation import ugettext_lazy as _
 from meet.models import *
 from django.core.mail import EmailMultiAlternatives
-# from django.contrib.auth.models import User
 
 class Notification(models.Model):
-	# recipient = models.ForeignKey(User)
+	DANGER = 'd'
+	INFORM = 'i'
+
 	recipient = models.CharField(max_length=40)
 	seen = models.BooleanField(default=False)
+	objects = InheritanceManager()
+	state = ""
 
 	def send_mail(self):
 		mail_body = self.get_mail_text()
@@ -23,8 +29,13 @@ class Notification(models.Model):
 	def get_subj(self):
 		pass
 
+	def mark_as_seen(self):
+		self.seen = True
+		self.save()
+
 
 class CustomNotification(Notification):
+	state = Notification.INFORM
 	msg_body = models.TextField()
 	mail_body =  models.TextField()
 	subject = models.TextField()
@@ -43,20 +54,22 @@ class CustomNotification(Notification):
 
 
 class InformReservationNotification(Notification):
+	state = Notification.INFORM
 	reservation = models.ForeignKey(Reservation)
 
 	def get_mail_text(self):
-		mail_body = u"Reservation made for event "  + unicode(self.reservation.interval)  +\
-		 " in room " + self.reservation.room.name
+		translated_msg = _("Reservation made for event %s  in room %s." % (unicode(self.reservation.interval), self.reservation.room.name) )
+		mail_body = u"%s" %translated_msg
 		return mail_body
 		
 	def get_msg(self):
-		msg_body = u"Reservation made for event " +  unicode(self.reservation.interval)  +\
-		 " in room " + self.reservation.room.name 
-		return msg_body
+		translated_msg = _("Reservation made for event %s  in room %s." % (unicode(self.reservation.interval), self.reservation.room.name) )
+		msg_body = u"%s" %translated_msg
+		print "folen: ", translated_msg
+		return translated_msg
 
 	def get_subj(self):
-		return "Reservation made"
+		return _("Reservation made")
 
 	def save(self, *args, **kwargs):
 		self.recipient = self.reservation.interval.event.creator.email
@@ -65,6 +78,7 @@ class InformReservationNotification(Notification):
 
 
 class InformNoRoomNotification(Notification):
+	state = Notification.DANGER
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
@@ -87,6 +101,7 @@ class InformNoRoomNotification(Notification):
 
 
 class InformConfirmToGuestsNotification(Notification):
+	state = Notification.INFORM
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
@@ -108,6 +123,7 @@ class InformConfirmToGuestsNotification(Notification):
 		self.send_mail()
 
 class InformConfirmToCreatorNotification(Notification):
+	state = Notification.INFORM
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
@@ -131,6 +147,7 @@ class InformConfirmToCreatorNotification(Notification):
 		self.send_mail()
 
 class InformCancelToGuestsNotification(Notification):
+	state = Notification.DANGER
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
@@ -152,6 +169,7 @@ class InformCancelToGuestsNotification(Notification):
 
 
 class InformCancelToCreatorNotification(Notification):
+	state = Notification.DANGER
 	meeting = models.ForeignKey(Meeting)
 
 	def get_mail_text(self):
@@ -173,6 +191,7 @@ class InformCancelToCreatorNotification(Notification):
 		self.send_mail()
 
 class InvitedNotification(Notification):
+	state = Notification.INFORM
 	event = models.ForeignKey(Event)
 
 	def get_mail_text(self):

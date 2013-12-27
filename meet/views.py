@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
-from models import Event, Interval
+from meet.models import Event, Interval
+from meet.notification import *
 from forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
@@ -12,6 +13,7 @@ from MeetMe import settings
 from django.utils import timezone
 import pytz
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.http import HttpResponseForbidden
 
 from meet.exceptions import UserIsNotInvitedException
 
@@ -29,14 +31,18 @@ def home (request):
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
 	day_of_week = int(utctime.strftime("%w"))
+	notifications = user.get_related_unread_notifications()
 	
 	return render_to_response('home.html', {
 		'email': user.email,
-		'username' : user.username,
-		'timezone' : timezone.get_current_timezone_name(),
-		'time' : utctime,
+		'username': user.username,
+		'timezone': timezone.get_current_timezone_name(),
+		'time': utctime,
 		'is_admin': user.has_perm('admin'),
-		'day_of_week' : day_of_week,
+		'day_of_week': day_of_week,
+		'notifications': notifications,
+		'danger': Notification.DANGER,
+		'inform': Notification.INFORM,
 	})
 
 def set_timezone(request):
@@ -81,6 +87,15 @@ def related_events(request, msg=None):
 		'events' : events,
 		'message': msg, 
 	})
+
+@login_required
+def mark_notif_read(request, notif_id):
+	notif = Notification.objects.get(id=notif_id)
+	if notif.recipient == request.user.email:
+		notif.mark_as_seen()
+		return home(request)
+	else:
+		return HttpResponseForbidden()
 
 @login_required
 def vote (request):

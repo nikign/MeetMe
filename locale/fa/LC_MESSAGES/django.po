@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-24 13:46-0600\n"
+"POT-Creation-Date: 2013-12-27 14:45-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,6 +84,13 @@ msgstr "تنها در صورتی که مجبور باشم شرکت خواهم ک
 msgid "No way"
 msgstr "نمی‌توانم شرکت کنم"
 
+#, python-format
+msgid "Reservation made for event %s  in room %s."
+msgstr "برای قرار ملاقات %s ، اتاق %s رزرو شد."
+
+msgid "Reservation made"
+msgstr "اتاق رزرو شد"
+
 msgid "The Meeting named "
 msgstr "قرار ملاقات به نام"
 
@@ -98,6 +105,33 @@ msgstr "از"
 
 msgid "to"
 msgstr "تا"
+
+msgid "Log out"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Notifications"
+msgstr "پیام‌ها"
 
 msgid "Farvardin"
 msgstr "فروردین"
