@@ -28,6 +28,7 @@ def home (request):
 	user_id = request.session['_auth_user_id']
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
+	day_of_week = int(utctime.strftime("%w"))
 	
 	return render_to_response('home.html', {
 		'email': user.email,
@@ -35,7 +36,7 @@ def home (request):
 		'timezone' : timezone.get_current_timezone_name(),
 		'time' : utctime,
 		'is_admin': user.has_perm('admin'),
-		'day_of_week' : utctime.strftime("%w")
+		'day_of_week' : day_of_week,
 	})
 
 def set_timezone(request):
