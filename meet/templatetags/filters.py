@@ -52,6 +52,15 @@ def jdate(value, lang=None):
 
 
 @register.filter
+def jdate_day(value, lang=None):
+    """
+    Converts a date to unicode 'day'
+    """
+    res = jdate(value, lang)
+    return res.split()[0]
+
+
+@register.filter
 def jtime(value, lang=None):
     if not value:
         return ""
