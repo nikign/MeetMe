@@ -31,7 +31,7 @@ def home (request):
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
 	localtime = timezone.localtime(utctime)
-	day_of_week = (localtime.weekday()+2)%7
+	day_of_week = (localtime.weekday()+4)%7
 	days_before = 14 + day_of_week
 	days_after = 21 - day_of_week
 	start_date = (localtime+td(days=-days_before)).date()
