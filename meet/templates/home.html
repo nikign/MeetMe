@@ -34,8 +34,13 @@
 		{%for week in cal_list%}
 		<tr>
 			{%for day in week%}
-			<td>
-			{{day|jdate_day}}
+			<td class="{{day.1|yesno:"event,"}} {%ifequal day.0 today%}today{%endifequal%}  ">
+			{{day.0|jdate_day}}<br/>
+			{%for meeting in day.1%}
+			<span class="pull-left">
+			{{meeting}}<a href="{{meeting|google_calendarize}}" target="_balnk"><i class="glyphicon glyphicon-credit-card"></i></a><br/>
+			</span>
+			{%endfor %}
 			</td>
 			{%endfor%}
 		</tr>

@@ -41,7 +41,7 @@ def home (request):
 	for i in xrange(0,35):
 		days.append(start_date+td(days=i))
 		if len(days)==7:
-			cal_list.append(days)
+			cal_list.append([ (day, user.meetings_on(day)) for day in days])
 			days=[]
 	day_of_week = int(utctime.strftime("%w"))
 	notifications = user.get_related_unread_notifications()
@@ -50,7 +50,7 @@ def home (request):
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'is_admin': user.has_perm('admin'),
-		'today' : utctime.date,
+		'today' : localtime.date(),
 		'cal_list' : cal_list,
 		'start_date': start_date,
 		'end_date' : end_date,
