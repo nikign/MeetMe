@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^create/', 'meet.views.create_wizard' , name='create'),
     url(r'^event/(?P<event_id>\d+)/edit/$', 'meet.views.edit_wizard' , name='edit'),
     url(r'^event/(?P<event_id>\d+)/revote/$', 'meet.views.revote' , name='revote'),
+    url(r'^notif/(?P<notif_id>\d+)/mark_read/$', 'meet.views.mark_notif_read' , name='mark_notif_read'),
 
     url(r'^google/login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
     url(r'^google/login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),

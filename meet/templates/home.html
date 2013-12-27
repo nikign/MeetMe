@@ -42,5 +42,13 @@
 		{%endfor%}
 	</table>
 	</div>
-	<div class="col-md-3 well col-md-offset-1">messages</div>
+	<div class="col-md-3 well col-md-offset-1">
+		<h4>{% trans  "Notifications" %}</h4>
+		{% for notif in notifications %}
+			<div class="alert {% if notif.state == danger%} alert-danger {% elif notif.state == inform %}alert-info {%else %}{% endif %}">
+				{% trans notif.get_msg %}
+				<a class="btn btn-primary" href="/notif/{{notif.id}}/mark_read">Ok</a>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock %}

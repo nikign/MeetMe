@@ -295,6 +295,7 @@ class Vote (models.Model):
 def user_events(self, fr, to):
 	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline').distinct()[fr:to].all()
 
+
 def is_invited_to(self, event):
 	return event.creator==self or self in event.guest_list.all()
 
@@ -302,8 +303,12 @@ def meetings_on(self, date):
 	return Meeting.objects.filter(reservation__interval__date=date)\
 	.filter(Q(creator=self)|Q(guest_list=self)).filter(~Q(confirmed=Meeting.CANCELLED)).distinct()
 
+def get_related_unread_notifications(self):
+	return Notification.objects.filter(recipient=self.email, seen=False).select_subclasses()
 
 User.add_to_class('related_events', user_events)
 User.add_to_class('is_invited_to', is_invited_to)
 User.add_to_class('meetings_on', meetings_on)
+User.add_to_class('get_related_unread_notifications', get_related_unread_notifications)
+
 from meet.notification import *
