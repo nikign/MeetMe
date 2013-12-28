@@ -1,6 +1,15 @@
+body{
+	background-color: #b5b5ff;
+}
+
+.header{
+	background-color: #492399;
+	border-color: #444444;
+}
 
 #banner{
 	color: #eeeeee;
+	border-color: #444444;
 }
 
 #banner:hover{
@@ -27,6 +36,9 @@
 }
 .tongue-purple{
 	background-color: #b86cb8;
+}
+.tongue-white{
+	background-color: #f0f0f0;
 }
 
 .tongue a{
