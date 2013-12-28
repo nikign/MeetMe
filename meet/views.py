@@ -109,7 +109,7 @@ def mark_notif_read(request, notif_id):
 	notif = Notification.objects.get(id=notif_id)
 	if notif.recipient == request.user.email:
 		notif.mark_as_seen()
-		return home(request)
+		return redirect('/')
 	else:
 		return HttpResponseForbidden()
 
