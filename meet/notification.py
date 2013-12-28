@@ -178,7 +178,7 @@ class InformCancelToCreatorNotification(Notification):
 		return mail_body
 		
 	def get_msg(self):
-		mail_body = u"Reservation for meeting you had created: " + self.meeting.title +\
+		msg_body = u"Reservation for meeting you had created: " + self.meeting.title +\
 		", is cancelled by admin. You can edit it and perform a revote."
 		return msg_body
 

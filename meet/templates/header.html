@@ -1,13 +1,29 @@
 {% load static %}
 {% load i18n %}
+{% load tz %}
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>{{view_name}}|MeetMe</title>
 		<script src="{% get_static_prefix %}js/jquery.js"></script>
 		<script src="{% get_static_prefix %}js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="{% get_static_prefix %}css/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="{% get_static_prefix %}css/style.css" type="text/css" />
 	</head>
+	<script type="text/javascript">
+	$(function init () {		
+	$("#tzform").hide()
+	$("html").click(function(){
+		$("#tzform").hide()
+	})
+	$("#tzlink").click(function(){
+		$("#tzform").toggle()
+	})
+	$("#tzholder").click(function(e){
+		e.stopPropagation()
+	})
+	})
+	</script>
 	<body dir='rtl' class="col-md-12">
 		
 	<div style="background-color: #492399;" class="row well col-md-13">
@@ -23,9 +39,23 @@
 	</h1></div>
 	<div class="col-md-2" style="color:white;">
 		{{username}}<br/>
-		{{timezone}}<br/>
+		<div id="tzholder">
+		<a href="#" style="color:white;" id='tzlink'>{{timezone}}</a><br/>
+		</div>
+		<div id="tzform" class="timezone-form col-md-4">
+		<form action="{% url 'set_timezone' %}" method="POST">
+		    {% csrf_token %}
+		    <label for="timezone">{%trans "Time zone"%}:</label><br/>
+		    <select name="timezone">
+		        {% for tz in timezones %}
+		        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected="selected"{% endif %}>{{ tz }}</option>
+		        {% endfor %}
+		    </select><br/>
+		    <input type="submit" value="Set" />
+		</form></div>
 		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
-	</div>
+		</div>
+
 	<div class="col-md-1">
 	<img src="{% get_static_prefix %}user.jpg" class="img-circle">
 	</div>

@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from django.utils.http import urlquote_plus
 import datetime
 from django.utils import translation
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -58,6 +59,14 @@ def jdate_day(value, lang=None):
     """
     res = jdate(value, lang)
     return res.split()[0]
+
+@register.filter
+def len_literal(value, lang=None):
+    l = len(value)
+    lang = lang or translation.get_language()
+    if lang == 'en':
+        return "%d" % l
+    return i18n.to_literal(l, lang)    
 
 
 @register.filter

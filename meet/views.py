@@ -14,8 +14,9 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from meet.exceptions import UserIsNotInvitedException
-import datetime
+import datetime, pytz
 from datetime import timedelta as td
+
 
 def can_close(user):
 	if user.has_perm('admin'):
@@ -31,7 +32,7 @@ def home (request):
 	user = User.objects.get(id=user_id)
 	utctime = timezone.now()
 	localtime = timezone.localtime(utctime)
-	day_of_week = (localtime.weekday()+4)%7
+	day_of_week = (localtime.weekday()+2)%7
 	days_before = 14 + day_of_week
 	days_after = 21 - day_of_week
 	start_date = (localtime+td(days=-days_before)).date()
@@ -45,7 +46,7 @@ def home (request):
 			days=[]
 	day_of_week = int(utctime.strftime("%w"))
 	notifications = user.get_related_unread_notifications()
-	return render_to_response('home.html', {
+	return render(request, 'home.html', {
 		'email': user.email,
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
@@ -57,6 +58,8 @@ def home (request):
 		'notifications': notifications,
 		'danger': Notification.DANGER,
 		'inform': Notification.INFORM,
+		'view_name' : 'Home',
+		'timezones': pytz.common_timezones,
 	})
 
 def set_timezone(request):
