@@ -72,3 +72,8 @@ a:hover{
 	z-index: 1000;
 	border-radius: 6px;
 }
+
+.btn-sabzabi{
+	background-color: #00aaaa;
+	color: white;
+}

@@ -4,14 +4,13 @@
 {% block content %}
 	<div>
 		
-	<div class="col-md-8 col-md-offset-2">
+	<div class="col-md-8 col-md-offset-2 row">
 		
 	{% if message %}
-		<div class="alert alert-info">
+		<div class="alert alert-info col-md-11 text-center">
 			{{message}}
 		</div>
 	{% endif %}
-	Here are your events:
 	</br>
 	</br>
 	{%for folan in events%}
@@ -37,8 +36,8 @@
 					<div class="pull-left">
 					<a class="btn btn-success" href="/event/{{folan.event.id}}/view">{% trans "View" %}</a>
 					{% if folan.is_owner %}
-						<a class="btn btn-primary" href="/event/{{folan.event.id}}/edit">{% trans "Edit" %}</a> 
-						<a class="btn btn-warning" href="/event/{{folan.event.id}}/revote">{% trans "Revote" %}</a></br>
+						<a class="btn btn-sabzabi" href="/event/{{folan.event.id}}/edit">{% trans "Edit" %}</a> 
+						<a class="btn btn-primary" href="/event/{{folan.event.id}}/revote">{% trans "Revote" %}</a></br>
 					{% endif %}
 					</div>
 				</div>
@@ -62,6 +61,8 @@
 				</div>
 			{% endif %}
 		</div>
+	{%empty%}
+	<h2 class="text-center">{%trans "No event for you to view"%}</h2>
 	{%endfor%}
 	</div>
 	</div>
