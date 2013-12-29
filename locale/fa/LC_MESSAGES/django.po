@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-29 06:20-0600\n"
+"POT-Creation-Date: 2013-12-29 09:50-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,6 +148,45 @@ msgstr ""
 "\n"
 "\t\tشما %(num)s پیام جدید دارید\n"
 "\t\t"
+
+#, fuzzy
+msgid "This event is still open to vote."
+msgstr "اگر این رویداد در این زمان برگزار شود"
+
+#, fuzzy
+msgid "Your vote for this event is cast."
+msgstr "رای گیری مجدد شما برای نشست \""
+
+msgid ""
+"\n"
+"\t\t\t\t\t\tYour vote for this event is <b>not</b> cast.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Revote"
+msgstr ""
+
+msgid "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."
+msgstr ""
+
+#, fuzzy
+msgid "You had voted on it."
+msgstr "باید حداقل یک نوع را انتخاب کنید."
+
+msgid "You hadn't voted on it, though!"
+msgstr ""
+
+msgid "This event is closed and confirmed. You can add it to your calendar now!"
+msgstr ""
+
+msgid "Add to Google Calendar"
+msgstr ""
 
 msgid "Farvardin"
 msgstr "فروردین"
