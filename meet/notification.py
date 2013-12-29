@@ -111,7 +111,7 @@ class InformConfirmToGuestsNotification(Notification):
 		mail_body = _("Reservation %(interval)s that you were invited to, is confirmed by admin, in room %(room)s. We'll be glad if you come!")\
 		% {
 			"interval": unicode(self.meeting.reservation.interval),
-			"room": self.meeting.reservation.room.name
+			"room": u"%s" %self.meeting.reservation.room.name
 			}
 		return u"%s" %mail_body
 
@@ -119,7 +119,7 @@ class InformConfirmToGuestsNotification(Notification):
 		msg_body = _("Reservation %(interval)s that you were invited to, is confirmed by admin, in room %(room)s. We'll be glad if you come!")\
 		% {
 			"interval": unicode(self.meeting.reservation.interval),
-			"room": self.meeting.reservation.room.name
+			"room": u"%s" %self.meeting.reservation.room.name
 			}
 		return u"%s" %msg_body
 
@@ -138,7 +138,7 @@ class InformConfirmToCreatorNotification(Notification):
 		mail_body = _("Reservation %(interval)s that you had created, is confirmed by admin, and will be held in room %(room)s. Guests have also been informed.")\
 		%{
 		"interval": unicode(self.meeting.reservation.interval),
-		"room": self.meeting.reservation.room.name
+		"room": u"%s" %self.meeting.reservation.room.name
 		}
 		return u"%s" %mail_body
 		
@@ -146,7 +146,7 @@ class InformConfirmToCreatorNotification(Notification):
 		msg_body = _("Reservation %(interval)s that you had created, is confirmed by admin, and will be held in room %(room)s. Guests have also been informed.")\
 		%{
 		"interval": unicode(self.meeting.reservation.interval),
-		"room": self.meeting.reservation.room.name
+		"room": u"%s" %self.meeting.reservation.room.name
 		}
 		return u"%s" %msg_body
 
@@ -167,7 +167,7 @@ class InformCancelToGuestsNotification(Notification):
 		return u"%s" %mail_body
 		
 	def get_msg(self):
-		m_body = _("Reservation for meeting %s that you were invited to, is cancelled by admin. There might be an edit and revote for which you'll be informed again.") %self.meeting.title 
+		msg_body = _("Reservation for meeting %s that you were invited to, is cancelled by admin. There might be an edit and revote for which you'll be informed again.") %self.meeting.title 
 		return u"%s" %msg_body
 
 	def get_subj(self):
