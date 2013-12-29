@@ -36,7 +36,8 @@ class GuestListForm(forms.ModelForm):
 class VoteForm (forms.ModelForm):
 	interval = forms.ModelChoiceField(queryset=Interval.objects.all(), widget=forms.HiddenInput())
 	voter = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
-	state = forms.ChoiceField(choices=Vote.VOTE,  widget=forms.RadioSelect, label=_("Will you attend the event at this time?"))
+	state = forms.ChoiceField(choices=Vote.VOTE,  widget=forms.RadioSelect,
+	label=_("If this event is being held in this time"))
 
 	class Meta:
 		model = Vote

@@ -46,6 +46,7 @@ def home (request):
 			days=[]
 	day_of_week = int(utctime.strftime("%w"))
 	notifications = user.get_related_unread_notifications()
+	farsi_tzs = [_(tz) for tz in pytz.common_timezones]
 	return render(request, 'home.html', {
 		'email': user.email,
 		'username' : user.username,

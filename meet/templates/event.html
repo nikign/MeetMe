@@ -4,20 +4,25 @@
 {% load i18n %}
 {% block content %}
 	<body style="direction:rtl;">
+		<div class="col-md-4 col-md-offset-4">
 		<form method="post" action="/event/vote">
+			<input type="submit" value="{%trans "Submit"%}" class="btn btn-primary btn-block" /><br/>
+			<div class="well">
 			{% csrf_token %}
 			{{management_form}}
 			<input type= "hidden" name="event_id" value="{{event_id}}"/>
-			<div class="well" style="width:50%;">
 			{% for ballet in votes %}
 				{{ballet.option.date|jdate:LANGUAGE_CODE}} -- {% trans "from" %}
 				{{ballet.option.start|jtime:LANGUAGE_CODE}} {% trans "to" %} 
 				{{ballet.option.finish|jtime:LANGUAGE_CODE}}<br/>
+				<div class="balletholder">
 				{{ballet.form}}
+				</div>
 			<br/>
 			{% endfor %}
 			</div>
-			<input type="submit" value="{%trans "Submit"%}" class="btn btn-primary" />
+			<input type="submit" value="{%trans "Submit"%}" class="btn btn-primary btn-block" />
 		</form>
+		</div>
 	</body>
 {%endblock%}

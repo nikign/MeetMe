@@ -22,6 +22,13 @@
 	$("#tzholder").click(function(e){
 		e.stopPropagation()
 	})
+	$('form ul').each(function() {
+		$(this).addClass('list-unstyled')
+	})
+	$(".errorlist").each(function() {
+		$(this).parent().append($(this))
+		$(this).find(':gt(0)').remove()
+	})
 	})
 	</script>
 	<body dir='rtl' class="col-md-12">
@@ -41,18 +48,19 @@
 		{{username}}<br/>
 		<div id="tzholder">
 		<a href="#" style="color:white;" id='tzlink'>{{timezone}}</a><br/>
-		</div>
-		<div id="tzform" class="timezone-form col-md-4">
+		<div id="tzform" class="timezone-form col-md-3">
 		<form action="{% url 'set_timezone' %}" method="POST">
 		    {% csrf_token %}
 		    <label for="timezone">{%trans "Time zone"%}:</label><br/>
-		    <select name="timezone">
+		    <select name="timezone" class=" form-control">
 		        {% for tz in timezones %}
-		        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected="selected"{% endif %}>{{ tz }}</option>
+		        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected="selected"{% endif %}>
+		        {%trans tz %}</option>
 		        {% endfor %}
 		    </select><br/>
-		    <input type="submit" value="Set" />
+		    <input type="submit" value="{%trans "Set"%}" class="btn btn-default" />
 		</form></div>
+		</div>
 		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
 		</div>
 

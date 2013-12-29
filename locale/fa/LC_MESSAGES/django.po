@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-27 14:45-0600\n"
+"POT-Creation-Date: 2013-12-29 06:20-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,8 +36,8 @@ msgstr "توضیح"
 msgid "guest "
 msgstr "مهمان"
 
-msgid "Will you attend the event at this time?"
-msgstr "آیا شما در این زمان در این نشست شرکت خواهید‌ کرد؟"
+msgid "If this event is being held in this time"
+msgstr "اگر این رویداد در این زمان برگزار شود"
 
 msgid "Unacceptable state."
 msgstr ""
@@ -58,7 +58,7 @@ msgid "The event type you requested is not provided!"
 msgstr ""
 
 msgid "How should your meeting be closed?"
-msgstr "قرار ملاقات در چه صورت تثبیت شود؟"
+msgstr "قرار ملاقات در صورتی تثبیت شود که"
 
 msgid "The condition type you requested for your event is not provided!"
 msgstr ""
@@ -100,11 +100,20 @@ msgstr "رای گیری مجدد شما برای نشست \""
 msgid "Your event named "
 msgstr "نشست شما به نام "
 
+msgid "Submit"
+msgstr "ثبت"
+
 msgid "from"
 msgstr "از"
 
 msgid "to"
 msgstr "تا"
+
+msgid "Time zone"
+msgstr "منطقه‌ی زمانی"
+
+msgid "Set"
+msgstr "انتخاب"
 
 msgid "Log out"
 msgstr ""
@@ -130,8 +139,15 @@ msgstr ""
 msgid "Fri"
 msgstr ""
 
-msgid "Notifications"
-msgstr "پیام‌ها"
+#, python-format
+msgid ""
+"\n"
+"\t\tYou have %(num)s New Notifications\n"
+"\t\t"
+msgstr ""
+"\n"
+"\t\tشما %(num)s پیام جدید دارید\n"
+"\t\t"
 
 msgid "Farvardin"
 msgstr "فروردین"
