@@ -295,8 +295,8 @@ class Vote (models.Model):
 
 
 #METHODS TO ADD TO USER
-def user_events(self, fr, to):
-	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline').distinct()[fr:to].all()
+def user_events(self):
+	return Event.objects.filter(Q(creator=self)|Q(guest_list=self)).order_by('-deadline').distinct().all()
 
 
 def is_invited_to(self, event):

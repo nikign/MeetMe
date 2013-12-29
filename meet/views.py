@@ -46,6 +46,7 @@ def home (request):
 			days=[]
 	day_of_week = int(utctime.strftime("%w"))
 	notifications = user.get_related_unread_notifications()
+	farsi_tzs = [_(tz) for tz in pytz.common_timezones]
 	return render(request, 'home.html', {
 		'email': user.email,
 		'username' : user.username,
@@ -95,7 +96,7 @@ def view (request, event_id):
 @login_required
 def related_events(request, msg=None):
 	user=request.user
-	events_to_show = user.related_events(0,10);
+	events_to_show = user.related_events();
 	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user), 
 	'is_meeting': hasattr(event, 'meeting'), 'is_closed': (event.status==Event.CLOSED),
 	'is_owner': (event.creator==user), 'is_google_calendarizable': event.is_google_calendarizable()} for event in events_to_show]

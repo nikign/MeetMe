@@ -1,54 +1,69 @@
 {% include "header.html" %}
 {% load filters %}
+{% load i18n %}
 {% block content %}
-	<div style="width:50%;">
+	<div>
+		
+	<div class="col-md-8 col-md-offset-2 row">
 		
 	{% if message %}
-		<div class="alert alert-info">
+		<div class="alert alert-info col-md-11 text-center">
 			{{message}}
 		</div>
 	{% endif %}
-	Here are your events:
 	</br>
 	</br>
 	{%for folan in events%}
-		<div class="well">
+		<div class="well col-md-11">
 			{{folan.event.title}} &nbsp;&nbsp; 
 			{% if not folan.is_closed%}
-				<div class="alert alert-info">
-					This event is still open to vote.
+				<div class="alert alert-info col-md-11">
+					<ul class="list-unstyled">
+					<li>
+					{%trans "This event is still open to vote."%}	
+					</li>
 					{%if folan.is_vote_cast%}
-						Your vote for this event is cast.
+						<li>	
+						{%trans "Your vote for this event is cast."%}
+						</li>
 					{%else%}
+						{%blocktrans%}
 						Your vote for this event is <b>not</b> cast.
+						{%endblocktrans%}
 					{%endif%}
+					</ul>
 					</br>
-					<a class="btn btn-success" href="/event/{{folan.event.id}}/view">View</a>
+					<div class="pull-left">
+					<a class="btn btn-success" href="/event/{{folan.event.id}}/view">{% trans "View" %}</a>
 					{% if folan.is_owner %}
-						<a class="btn btn-primary" href="/event/{{folan.event.id}}/edit">Edit</a>
-						<a class="btn btn-warning" href="/event/{{folan.event.id}}/revote">Revote</a></br>
+						<a class="btn btn-sabzabi" href="/event/{{folan.event.id}}/edit">{% trans "Edit" %}</a> 
+						<a class="btn btn-primary" href="/event/{{folan.event.id}}/revote">{% trans "Revote" %}</a></br>
 					{% endif %}
+					</div>
 				</div>
 			{% elif folan.is_meeting and not folan.is_google_calendarizable %}
 				<div class="alert alert-warning">
-					This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore.
+					{%trans "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."%}
 					</br>
 					{%if folan.is_vote_cast%}
-						You had voted on it.
+						{%trans "You had voted on it."%}
 					{%else%}
-						You hadn't voted on it, though!
+						{%trans "You hadn't voted on it, though!"%}
 					{%endif%}
 					</br>
 				</div>
 			{% endif %}
 			{% if folan.is_google_calendarizable %}
 				<div class="alert alert-success">
-					This event is closed and confirmed. You can add it to your calendar now!
+					{%trans "This event is closed and confirmed. You can add it to your calendar now!"%}
 					</br>
-					<a  target="_newtab" class="btn btn-info" href="{{ folan.event.meeting|google_calendarize }}">+ Add to Google Calendar</a>
+					<a  target="_newtab" class="btn btn-info" href="{{ folan.event.meeting|google_calendarize }}"><i class="glyphicon glyphicon-plus"></i> {%trans "Add to Google Calendar"%}</a>
 				</div>
 			{% endif %}
 		</div>
+	{%empty%}
+	<h2 class="text-center">{%trans "No event for you to view"%}</h2>
 	{%endfor%}
+	</div>
 	</div>
 {% endblock %}

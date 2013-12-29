@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-29 11:01-0600\n"
+"POT-Creation-Date: 2013-12-29 09:50-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,8 +39,8 @@ msgstr "آدرس پست‌الکترونیکی مهمانان خود را (به 
 msgid "Guests"
 msgstr "مهمانان"
 
-msgid "Will you attend the event at this time?"
-msgstr "آیا شما در این زمان در این نشست شرکت خواهید‌ کرد؟"
+msgid "If this event is being held in this time"
+msgstr "اگر این رویداد در این زمان برگزار شود"
 
 msgid "Unacceptable state."
 msgstr ""
@@ -61,7 +61,7 @@ msgid "The event type you requested is not provided!"
 msgstr ""
 
 msgid "How should your meeting be closed?"
-msgstr "قرار ملاقات در چه صورت تثبیت شود؟"
+msgstr "قرار ملاقات در صورتی تثبیت شود که"
 
 msgid "The condition type you requested for your event is not provided!"
 msgstr ""
@@ -110,14 +110,14 @@ msgstr "اتاقی موجود نیست"
 
 #, python-format
 msgid "Reservation %(interval)s that you were invited to, is confirmed by admin, in room %(room)s. We'll be glad if you come!"
-msgstr "اتاق %(room)s %(interval) که به آن دعوت شده‌اید رزرو شده‌ است. با آمدنتان ما را خرسند می‌کنید."
+msgstr "اتاق %(room)s %(interval)s که به آن دعوت شده‌اید رزرو شده‌ است. با آمدنتان ما را خرسند می‌کنید."
 
 msgid "Meeting Confirmed"
 msgstr "قرار ملاقات تأیید شد"
 
 #, python-format
 msgid "Reservation %(interval)s that you had created, is confirmed by admin, and will be held in room %(room)s. Guests have also been informed."
-msgstr "اتاق %(room)s %(interval) که آن را ایجاد کرده‌اید رزرو شده‌ است. به مهمانان نیز اطلاع داده شده است."
+msgstr "اتاق %(room)s %(interval)s که آن را ایجاد کرده‌اید رزرو شده‌ است. به مهمانان نیز اطلاع داده شده است."
 
 #, python-format
 msgid "Reservation for meeting %s that you were invited to, is cancelled by admin. There might be an edit and revote for which you'll be informed again."
@@ -146,17 +146,20 @@ msgstr "رای گیری مجدد شما برای نشست \""
 msgid "Your event named "
 msgstr "نشست شما به نام "
 
+msgid "Submit"
+msgstr "ثبت"
+
 msgid "from"
 msgstr "از"
 
 msgid "to"
 msgstr "تا"
 
-msgid "Submit"
-msgstr ""
-
 msgid "Time zone"
-msgstr ""
+msgstr "منطقه‌ی زمانی"
+
+msgid "Set"
+msgstr "انتخاب"
 
 msgid "Log out"
 msgstr ""
@@ -182,8 +185,54 @@ msgstr ""
 msgid "Fri"
 msgstr ""
 
-msgid "Notifications"
-msgstr "پیام‌ها"
+#, python-format
+msgid ""
+"\n"
+"\t\tYou have %(num)s New Notifications\n"
+"\t\t"
+msgstr ""
+"\n"
+"\t\tشما %(num)s پیام جدید دارید\n"
+"\t\t"
+
+#, fuzzy
+msgid "This event is still open to vote."
+msgstr "اگر این رویداد در این زمان برگزار شود"
+
+#, fuzzy
+msgid "Your vote for this event is cast."
+msgstr "رای گیری مجدد شما برای نشست \""
+
+msgid ""
+"\n"
+"\t\t\t\t\t\tYour vote for this event is <b>not</b> cast.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Revote"
+msgstr ""
+
+msgid "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."
+msgstr ""
+
+#, fuzzy
+msgid "You had voted on it."
+msgstr "باید حداقل یک نوع را انتخاب کنید."
+
+msgid "You hadn't voted on it, though!"
+msgstr ""
+
+msgid "This event is closed and confirmed. You can add it to your calendar now!"
+msgstr ""
+
+msgid "Add to Google Calendar"
+msgstr ""
 
 msgid "Farvardin"
 msgstr "فروردین"

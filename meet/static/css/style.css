@@ -70,4 +70,10 @@ a:hover{
 	position: fixed;
 	background-color: #8888ff;
 	z-index: 1000;
+	border-radius: 6px;
+}
+
+.btn-sabzabi{
+	background-color: #00aaaa;
+	color: white;
 }
