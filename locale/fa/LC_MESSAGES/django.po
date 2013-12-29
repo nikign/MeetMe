@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-27 14:45-0600\n"
+"POT-Creation-Date: 2013-12-29 11:01-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,8 +33,11 @@ msgstr "توضیح رویداد خود را وارد کنید."
 msgid "Description"
 msgstr "توضیح"
 
-msgid "guest "
-msgstr "مهمان"
+msgid "Enter the emails of guests you want to invite."
+msgstr "آدرس پست‌الکترونیکی مهمانان خود را (به صورت جدا شده با ویرگول) وارد کنید."
+
+msgid "Guests"
+msgstr "مهمانان"
 
 msgid "Will you attend the event at this time?"
 msgstr "آیا شما در این زمان در این نشست شرکت خواهید‌ کرد؟"
@@ -63,6 +66,13 @@ msgstr "قرار ملاقات در چه صورت تثبیت شود؟"
 msgid "The condition type you requested for your event is not provided!"
 msgstr ""
 
+msgid "guest "
+msgstr "مهمان"
+
+#, python-format
+msgid "On %(date)s from %(stime)s to %(etime)s for event %(event)s"
+msgstr "در روز %(date)s از ساعت %(stime)s تا %(etime)s برای رویداد %(event)s"
+
 msgid "Everybody has to come"
 msgstr "اگر همه شرکت می‌کردند"
 
@@ -85,11 +95,47 @@ msgid "No way"
 msgstr "نمی‌توانم شرکت کنم"
 
 #, python-format
-msgid "Reservation made for event %s  in room %s."
-msgstr "برای قرار ملاقات %s ، اتاق %s رزرو شد."
+msgid "Reservation made %(event)s  in room %(room)s."
+msgstr "%(event)s ، اتاق %(room)s رزرو شد."
 
 msgid "Reservation made"
 msgstr "اتاق رزرو شد"
+
+#, python-format
+msgid "Reservation cannot be made for meeting %s, since there is no room available at any feasible time. Please perform revote."
+msgstr "رزرو اتاق برای نشست %s ممکن نیست چون در هیچ‌یک از زمان‌های مجاز اتاقی موجود نیست. لطفا دوباره نظرسنجی برگزار کنید."
+
+msgid "No Room Available"
+msgstr "اتاقی موجود نیست"
+
+#, python-format
+msgid "Reservation %(interval)s that you were invited to, is confirmed by admin, in room %(room)s. We'll be glad if you come!"
+msgstr "اتاق %(room)s %(interval) که به آن دعوت شده‌اید رزرو شده‌ است. با آمدنتان ما را خرسند می‌کنید."
+
+msgid "Meeting Confirmed"
+msgstr "قرار ملاقات تأیید شد"
+
+#, python-format
+msgid "Reservation %(interval)s that you had created, is confirmed by admin, and will be held in room %(room)s. Guests have also been informed."
+msgstr "اتاق %(room)s %(interval) که آن را ایجاد کرده‌اید رزرو شده‌ است. به مهمانان نیز اطلاع داده شده است."
+
+#, python-format
+msgid "Reservation for meeting %s that you were invited to, is cancelled by admin. There might be an edit and revote for which you'll be informed again."
+msgstr "قرار ملاقات %s که به آن دعوت شده بودید توسط مدیریت لغو شده است. ممکن است تغییری در آن ایجاد شود و نظرسنجی مجدد برگزار گردد که در آن صورت مجددا به شما اطلاع داده می‌شود."
+
+msgid "Meeting Cancelled"
+msgstr "قرار ملاقات لغو شد"
+
+#, python-format
+msgid "Reservation for meeting %s you had created, is cancelled by admin. You can edit it and perform a revote."
+msgstr "قرار ملاقات %s که آن را ایجاد کرده بودید توسط مدیریت لغو شده است. شما می‌توانید آن را تغییر دهید و نظرسنجی مجدد برگزار کنید."
+
+#, python-format
+msgid "You are invited to a meeting named: %(title)s, created by: %(creator)s. You can learn more about and vote on your events, on your 'view events' page."
+msgstr "شما به نشستی با نام %(title)s که توسط %(creator)s ایجاد شده است دعوت شده‌اید. می‌تانید در صفحه‌ی 'مشاهده‌ی نشست‌ها' از جزئیات بیشتر آن آگاهی یابید و در نظرسنجی شرکت کنید."
+
+msgid "Invitation"
+msgstr "دعوت"
 
 msgid "The Meeting named "
 msgstr "قرار ملاقات به نام"
@@ -105,6 +151,12 @@ msgstr "از"
 
 msgid "to"
 msgstr "تا"
+
+msgid "Submit"
+msgstr ""
+
+msgid "Time zone"
+msgstr ""
 
 msgid "Log out"
 msgstr ""
