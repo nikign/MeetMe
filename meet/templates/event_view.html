@@ -1,0 +1,12 @@
+{% include "header.html" %}
+{% load filters %}
+{% load i18n %}
+{% block content %}
+	<body style="direction:rtl;">
+		<div class="col-md-4 col-md-offset-4">
+		{{event.title}}
+
+		<a href="/event/{{event.id}}/vote">Vote</a>
+		</div>
+	</body>
+{%endblock%}
