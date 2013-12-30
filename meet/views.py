@@ -38,7 +38,7 @@ def home (request):
 	start_date = (localtime+td(days=-days_before)).date()
 	end_date = (localtime+td(days=days_after)).date()
 	days = []
-	cal_list = []	
+	cal_list = []
 	for i in xrange(0,35):
 		days.append(start_date+td(days=i))
 		if len(days)==7:
@@ -96,7 +96,7 @@ def vote_event (request, event_id):
 @login_required
 def view_event (request, event_id):
 	event = Event.objects.get(id=event_id)
-	for stts in Event.STATUS :
+	for stts in Event.STATUS : #FIX THIS!
 		if stts[0] == event.status:
 			status = stts[1]
 	return render_to_response('event_view.html', {
