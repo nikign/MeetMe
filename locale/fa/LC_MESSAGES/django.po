@@ -207,47 +207,47 @@ msgstr ""
 "\t\tشما %(num)s پیام جدید دارید\n"
 "\t\t"
 
-#, fuzzy
 msgid "This event is still open to vote."
-msgstr "اگر این رویداد در این زمان برگزار شود"
+msgstr "این رویداد هنوز برای نظرسنجی باز است."
 
-#, fuzzy
 msgid "Your vote for this event is cast."
-msgstr "رای گیری مجدد شما برای نشست \""
+msgstr "نظر شما برای این رویداد ثبت شده است."
 
 msgid ""
 "\n"
 "\t\t\t\t\t\tYour vote for this event is <b>not</b> cast.\n"
 "\t\t\t\t\t\t"
 msgstr ""
+"\n"
+"\t\t\t\t\t\t نظر شما در مورد این رویداد <b>ثبت نشده است</b>.\n"
+"\t\t\t\t\t\t"
 
 msgid "View"
-msgstr ""
+msgstr "مشاهده"
 
 msgid "Edit"
-msgstr ""
+msgstr "ویرایش"
 
 msgid "Revote"
-msgstr ""
+msgstr "نظرسنجی مجدد"
 
 msgid "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."
-msgstr ""
+msgstr "این رویداد بسته شده و منتظر تأیید مدیر سیستم است. دیگر نمی‌توانید در نظرسنجی آن شرکت کنید."
 
-#, fuzzy
 msgid "You had voted on it."
-msgstr "باید حداقل یک نوع را انتخاب کنید."
+msgstr "در مورد آن نظر داده بودید."
 
 msgid "You hadn't voted on it, though!"
-msgstr ""
+msgstr "گرچه، شما در مورد آن نظر نداده بودید."
 
 msgid "This event is closed and confirmed. You can add it to your calendar now!"
-msgstr ""
+msgstr "این رویداد بسته و تأیید شده است. اکنون می‌توانید آن را به تقویم گوگل خود بیافزایید."
 
 msgid "Add to Google Calendar"
-msgstr ""
+msgstr "افزودن به تقویم گوگل"
 
 msgid "No event for you to view"
-msgstr ""
+msgstr "رویدادی برای مشاهده‌ی شما وجود ندارد."
 
 msgid "Farvardin"
 msgstr "فروردین"
