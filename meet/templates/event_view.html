@@ -4,9 +4,19 @@
 {% block content %}
 	<body style="direction:rtl;">
 		<div class="col-md-4 col-md-offset-4">
+		<legend>
+			
 		{{event.title}}
-
-		<a href="/event/{{event.id}}/vote">Vote</a>
+		</legend>
+		{{event.description}}<br>
+		{%trans "Creator"%} : {{event.creator}}<br/>
+		{%trans "Deadline"%} : {{event.deadline|jdatetime:LANGUAGE_CODE}}<br/>
+		{%trans "Status"%} : {%trans status%}<br/>
+		
+		<br/>
+		{%ifnotequal event.status 'cl'%}
+		<a href="/event/{{event.id}}/vote" class="link">{%trans "Vote it!"%}</a>
+		{%endifnotequal%}
 		</div>
 	</body>
 {%endblock%}

@@ -96,24 +96,12 @@ def vote_event (request, event_id):
 @login_required
 def view_event (request, event_id):
 	event = Event.objects.get(id=event_id)
-	# options = event.options_list.all()
-	# user = request.user
-	# if not user.is_invited_to(event):
-		# raise PermissionDenied
-	# FormSet = formset_factory(VoteForm)
-	# initial_data = {'form-TOTAL_FORMS': u''+str(len(options)),
-					# 'form-INITIAL_FORMS': u''+str(len(options)),
-					# 'form-MAX_NUM_FORMS': u'',
-	# }
-	# for i in xrange(len(options)):
-		# initial_data['form-'+str(i)+'-voter']= user.id
-		# initial_data['form-'+str(i)+'-interval']= options[i].id
-	# pfilled_form = FormSet(initial_data)
-	# votes = [ {'option': option, 'form': form} for option, form in zip(options, pfilled_form)]
+	for stts in Event.STATUS :
+		if stts[0] == event.status:
+			status = stts[1]
 	return render_to_response('event_view.html', {
 		'event' : event,
-		# 'votes'  : votes,
-		# 'management_form': pfilled_form.management_form,
+		'status' : status,
 	}, context_instance = RequestContext(request))
 
 @login_required
