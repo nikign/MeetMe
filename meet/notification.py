@@ -225,3 +225,22 @@ class InvitedNotification(Notification):
 	def save(self, *args, **kwargs):
 		super(InvitedNotification, self).save(*args, **kwargs)
 		self.send_mail()
+
+
+class InviteToMeetMeNotification(Notification):
+	state = Notification.INFORM
+
+	def get_mail_text(self):
+		mail_body = _("You are invited to MeetMe, a website to perform meetings among people and vote for the best time. An account is created for you automatically with username=your_email(%(email)s). You can login using your gmail. Visit us on 'meetme.ir'.")%{"email": self.recipient, }
+		return u"%s" % mail_body
+
+	def get_msg(self):
+		msg_body = _("Welcome to MeetMe. You can create new events or vote on the events you're invited to easily.")
+		return u"%s" % msg_body
+
+	def get_subj(self):
+		return _("Invitation To MeetMe")
+
+	def save(self, *args, **kwargs):
+		super(InviteToMeetMeNotification, self).save(*args, **kwargs)
+		self.send_mail()

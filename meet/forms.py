@@ -16,19 +16,37 @@ class TitleDescriptionForm(forms.ModelForm):
 
 
 class GuestListForm(forms.ModelForm):
-	
+	guests = fields.CharField(widget=forms.Textarea(attrs={'placeholder': _("Enter the emails of guests you want to invite.")}), label=_("Guests"))
 	class Meta:
 		model = Event
-		fields = ('guest_list', 'deadline' )
+		fields = ('guests', 'deadline', )
+
+	@classmethod
+	def get_users_with_these_emails(cls, emails_string):
+		print emails_string
+		l = emails_string.replace(' ', '').split(',')
+		user_objects = User.objects
+		users = list(user_objects.filter(email__in=l))
+		user_emails = user_objects.values_list("email", flat=True)
+		new_emails = [email for email in l if email not in user_emails]
+		for email in new_emails:
+			user = User.objects.create_user(email, email, 'password')
+			user.save()
+			notif = InviteToMeetMeNotification()
+			notif.recipient = email
+			notif.save()
+			users.append(user)
+		return users
 
 	def clean(self):
 		cleaned_data = super(GuestListForm, self).clean()
-		guests = cleaned_data.get('guest_list')
+		cleaned_data['guest_list'] = GuestListForm.get_users_with_these_emails(cleaned_data.get('guests'))
+		# guests = cleaned_data.get('guest_list')
 		all_users = User.objects.all()
-		for guest in guests:
-			if not guest in all_users:
-				error_msg =  _('guest ' + guest.email + ' is not registered in the system')
-				self._errors['guests'].append(self.error_class([error_msg]))
+		# for guest in guests:
+		# 	if not guest in all_users:
+		# 		error_msg =  _('guest ' + guest.email + ' is not registered in the system')
+		# 		self._errors['guests'].append(self.error_class([error_msg]))
 
 		return cleaned_data
 
