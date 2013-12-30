@@ -16,7 +16,9 @@
 		<br/>
 		{%ifnotequal event.status 'cl'%}
 		<a href="/event/{{event.id}}/vote" class="link">{%trans "Vote it!"%}</a>
+		<br/>
 		{%endifnotequal%}
+		<a href="/user/events" class="link">{%trans "List of my events"%}</a>
 		</div>
 	</body>
 {%endblock%}

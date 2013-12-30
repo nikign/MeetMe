@@ -42,7 +42,7 @@
 					</div>
 				</div>
 			{% elif folan.is_meeting and not folan.is_google_calendarizable %}
-				<div class="alert alert-warning">
+				<div class="alert alert-warning col-md-11">
 					{%trans "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."%}
 					</br>
 					{%if folan.is_vote_cast%}
@@ -54,10 +54,10 @@
 				</div>
 			{% endif %}
 			{% if folan.is_google_calendarizable %}
-				<div class="alert alert-success">
+				<div class="alert alert-success col-md-11">
 					{%trans "This event is closed and confirmed. You can add it to your calendar now!"%}
 					</br>
-					<a  target="_newtab" class="btn btn-info" href="{{ folan.event.meeting|google_calendarize }}"><i class="glyphicon glyphicon-plus"></i> {%trans "Add to Google Calendar"%}</a>
+					<a  target="_newtab" class="btn btn-info pull-left" href="{{ folan.event.meeting|google_calendarize }}"><i class="glyphicon glyphicon-plus"></i> {%trans "Add to Google Calendar"%}</a>
 				</div>
 			{% endif %}
 		</div>
