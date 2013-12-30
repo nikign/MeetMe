@@ -127,11 +127,12 @@ def mark_notif_read(request, notif_id):
 
 @login_required
 def vote (request):
-	event_id = request.POST['event_id']	
+	event_id = request.POST['event_id']
+	event_name = Event.objects.get(id=event_id).title
 	usr = request.user
 	filled_forms = formset_factory(VoteForm)
 	validation_data = filled_forms(request.POST)
-	message = 'Your voted for event with id "'+ event_id + '" successfully.' 
+	message = _('You voted for event "%s" successfully.') %event_name
 	if validation_data.is_valid():
 		try:
 			for form in validation_data.forms:
@@ -144,7 +145,7 @@ def vote (request):
 		except UserIsNotInvitedException, e:
 			raise PermissionDenied
 	else:
-		message = 'Your could not event with id "' + event_id + '".'
+		message = _('You could not vote on event "%s".') %event_name
 	return related_events(request, message)	
 
 
@@ -174,7 +175,7 @@ def confirm_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return admin_review(request, _("The Meeting named "+ meeting.title +" was confirmed successfully."))
+	return admin_review(request, _("The Meeting named %s was confirmed successfully.") %meeting.title)
 
 
 @login_required
@@ -192,7 +193,7 @@ def cancel_meeting(request, meeting_id):
 	notif.recipient = meeting.get_creator_email()
 	notif.meeting = meeting
 	notif.save()
-	return admin_review(request, _("The Meeting named "+ meeting.title +" was canceled successfully."))
+	return admin_review(request, _("The Meeting named %s was canceled successfully.") %meeting.title)
 
 @login_required
 def revote(request, event_id):
@@ -200,7 +201,7 @@ def revote(request, event_id):
 	votes = Vote.objects.filter(interval__event=event)
 	for vote in votes:
 		vote.delete() 
-	return related_events(request, _('Your revote for event "' + event.title +'" is done successfully.'))
+	return related_events(request, _('Your revote for event "%s" is done successfully.') %event.title)
 
 
 class CreateWizard(CookieWizardView):
@@ -257,10 +258,9 @@ class CreateWizard(CookieWizardView):
 		if is_meeting(self):
 			self.set_meeting_data(event)
 		if is_create_wizard(self):
-			msg = _("Your event named "+ event.title +" was added successfully.")
+			msg = _("Your event named %s was added successfully.") %event.title
 		else:
-			msg = _("Your event named "+ event.title +" was edited and saved successfully.\
-			 You should perform a revote so that users can vote again.")
+			msg = _("Your event named %s was edited and saved successfully. You should perform a revote so that users can vote again.") %event.title
 		
 		return related_events(self.request, msg)
 

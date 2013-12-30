@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-30 06:37-0600\n"
+"POT-Creation-Date: 2013-12-30 11:05-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,12 @@ msgstr "توضیح رویداد خود را وارد کنید."
 msgid "Description"
 msgstr "توضیح"
 
-msgid "guest "
+#, fuzzy
+msgid "Enter the emails of guests you want to invite."
+msgstr "عنوان رویداد خود را وارد کنید."
+
+#, fuzzy
+msgid "Guests"
 msgstr "مهمان"
 
 msgid "If this event is being held in this time"
@@ -62,6 +67,9 @@ msgstr "قرار ملاقات در صورتی تثبیت شود که"
 
 msgid "The condition type you requested for your event is not provided!"
 msgstr ""
+
+msgid "guest "
+msgstr "مهمان"
 
 msgid "Open"
 msgstr "باز (امکان رای دادن وجود دارد)"
@@ -137,14 +145,43 @@ msgstr "شما به نشستی با نام %(title)s که توسط %(creator)s �
 msgid "Invitation"
 msgstr "دعوت"
 
-msgid "The Meeting named "
-msgstr "قرار ملاقات به نام"
+#, python-format
+msgid "You are invited to MeetMe, a website to perform meetings among people and vote for the best time. An account is created for you automatically with username=your_email(%(email)s). You can login using your gmail. Visit us on 'meetme.ir'."
+msgstr "شما به MeetMe دعوت شده‌اید. وب‌گاهی که طراحی شده است تا قرار ملاقات ترتیب دهید و برای بهترین زمان ممکن نظرسنجی کنید. برای شما به صورت خودکار با نام کاربری ایمیلتان (%(email)s) یک حساب کاربری ایجاد شده است که می‌توانید با جیمیل خود وارد آن شوید. به 'meetme.ir' مراجعه کنید."
 
-msgid "Your revote for event \""
-msgstr "رای گیری مجدد شما برای نشست \""
+msgid "Welcome to MeetMe. You can create new events or vote on the events you're invited to easily."
+msgstr "به MeetMe خوش آمدید. به سادگی می‌توانید رویداد‌های جدید ایجاد کنید یا در مورد رویدادهایی که یه آنها دعوت شده‌اید نظر بدهید."
 
-msgid "Your event named "
-msgstr "نشست شما به نام "
+msgid "Invitation To MeetMe"
+msgstr "دعوت به MeetMe"
+
+#, python-format
+msgid "You voted for event \"%s\" successfully."
+msgstr "نظر شما برای رویداد \"%s\" با موفقیت ثبت شد."
+
+#, python-format
+msgid "You could not vote on event \"%s\"."
+msgstr "نظر شما برای رویداد \"%s\" ثبت نشد."
+
+#, python-format
+msgid "The Meeting named %s was confirmed successfully."
+msgstr "قرار ملاقات به نام %s با موفقیت تأیید شد."
+
+#, python-format
+msgid "The Meeting named %s was canceled successfully."
+msgstr "قرار ملاقات به نام %s با موفقیت لغو شد."
+
+#, python-format
+msgid "Your revote for event \"%s\" is done successfully."
+msgstr "نظرسنجی مجدد شما برای رویداد \"%s\" با موفقیت ثبت شد."
+
+#, python-format
+msgid "Your event named %s was added successfully."
+msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
+
+#, python-format
+msgid "Your event named %s was edited and saved successfully. You should perform a revote so that users can vote again."
+msgstr "رویداد شما با نام %s با موفقیت ویرایش شد. شما باید نظرسنجی مجدد برگزار کنید تا مهمانان دوباره نظر بدهند."
 
 msgid "Creator"
 msgstr "سازنده"
