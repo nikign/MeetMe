@@ -305,13 +305,16 @@ def create_wizard (request):
 def edit_wizard (request, event_id):
 	event = get_object_or_404(Event, Q(id=event_id))#, Q(creator=request.user))
 	instance_dictionary = {'0': event, '1': event,}
+	guests = [guest.email for guest in event.guest_list.all()]
+	guest_string = ",".join(guests)
+	print guest_string
 	initial_dict = {}
 	if hasattr(event, 'meeting'):
 		closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
 		initial_dict = {
 			'4': {'conditions': closing_condition.key, },
 		}
-
+	initial_dict['1'] = {'guests': guest_string, }
 	edit_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm,
 		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 		instance_dict=instance_dictionary,

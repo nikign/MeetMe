@@ -33,13 +33,11 @@ msgstr "توضیح رویداد خود را وارد کنید."
 msgid "Description"
 msgstr "توضیح"
 
-#, fuzzy
 msgid "Enter the emails of guests you want to invite."
-msgstr "عنوان رویداد خود را وارد کنید."
+msgstr "ایمیل میهمانانی که می‌خواهید دعوت کنید را (به صورت جدا شده با ویرگول) وارد کنید."
 
-#, fuzzy
 msgid "Guests"
-msgstr "مهمان"
+msgstr "مهمانان"
 
 msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
