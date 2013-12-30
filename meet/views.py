@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from meet.models import Event, Interval
-from meet.notification import *
+from meet.notification import inform_confirm, inform_cancel, inform_reservation, Notification
 from forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
@@ -23,6 +23,7 @@ def can_close(user):
 		return True
 	else:
 		raise PermissionDenied
+
 
 def home (request):
 	if not request.session.has_key('_auth_user_id'):
@@ -149,8 +150,6 @@ def vote (request):
 	return related_events(request, message)	
 
 
-
-
 @login_required
 @user_passes_test(can_close)
 def admin_review (request, msg=None):
@@ -165,16 +164,7 @@ def admin_review (request, msg=None):
 def confirm_meeting(request, meeting_id):
 	meeting = Meeting.objects.get(id=meeting_id)
 	meeting.confirm()
-	guest_emails = meeting.get_guest_emails()
-	for email in guest_emails:
-		notif = InformConfirmToGuestsNotification()
-		notif.recipient = email
-		notif.meeting = meeting
-		notif.save()
-	notif = InformConfirmToCreatorNotification()
-	notif.recipient = meeting.get_creator_email()
-	notif.meeting = meeting
-	notif.save()
+	inform_confirm(meeting)
 	return admin_review(request, _("The Meeting named %s was confirmed successfully.") %meeting.title)
 
 
@@ -183,16 +173,7 @@ def confirm_meeting(request, meeting_id):
 def cancel_meeting(request, meeting_id):
 	meeting = Meeting.objects.get(id=meeting_id)
 	meeting.cancel()
-	guest_emails = meeting.get_guest_emails()
-	for email in guest_emails:
-		notif = InformCancelToGuestsNotification()
-		notif.recipient = email
-		notif.meeting = meeting
-		notif.save()
-	notif = InformCancelToCreatorNotification()
-	notif.recipient = meeting.get_creator_email()
-	notif.meeting = meeting
-	notif.save()
+	inform_cancel(meeting)
 	return admin_review(request, _("The Meeting named %s was canceled successfully.") %meeting.title)
 
 @login_required
@@ -201,6 +182,7 @@ def revote(request, event_id):
 	votes = Vote.objects.filter(interval__event=event)
 	for vote in votes:
 		vote.delete() 
+	inform_revote(event)
 	return related_events(request, _('Your revote for event "%s" is done successfully.') %event.title)
 
 
@@ -208,9 +190,6 @@ class CreateWizard(CookieWizardView):
 
 	def remove_old_data(self, event):
 		intervals = event.options_list.all()
-		# votes = Vote.objects.filter(interval__event=event)
-		# for vote in votes:
-		# 	vote.delete()
 		for interval in intervals:
 			interval.delete()
 
@@ -240,6 +219,8 @@ class CreateWizard(CookieWizardView):
 		event.save()
 		event.guest_list = guest_list
 		event.save()
+		if is_create_wizard(self):
+			invite_guests(event)
 		return event
 
 	def set_intervals(self, event, interval_forms):
@@ -303,7 +284,7 @@ def create_wizard (request):
 
 @login_required
 def edit_wizard (request, event_id):
-	event = get_object_or_404(Event, Q(id=event_id))#, Q(creator=request.user))
+	event = get_object_or_404(Event, Q(id=event_id), Q(creator=request.user))
 	instance_dictionary = {'0': event, '1': event,}
 	guests = [guest.email for guest in event.guest_list.all()]
 	guest_string = ",".join(guests)

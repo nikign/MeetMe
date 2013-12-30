@@ -1,6 +1,5 @@
 from meet.models import Meeting, Reservation
-from meet.notification import *
-from meet.mail_and_notification import *
+from meet.notification import inform_reservation, inform_no_room
 from datetime import datetime
 import pytz
 
@@ -18,16 +17,6 @@ def reserve_room_for_meetings():
 		try:
 			if meeting.is_it_time_to_close(datetime.now.replace(tzinfo=utc)):
 				meeting_reserve = RoomManager.reserve_room_for(meeting)
-				admins = User.objects.filter(super_user = True).all() #TODO : FIX
-				for admin in admins:
-					notif = InformReservationNotification()
-					notif.reservation = meeting_reserve
-					notif.recipient = admin.e_mail
-					notif.save()
-				print "meeting waiting for admin verification, id = ",meeting.id
+				inform_reservation(meeting_reserve)
 		except Exception, e:
-			notif = InformNoRoomNotification()
-			notif.meeting = meeting
-			notif.save()
-			print "meeting cancelled due to lack of suitable rooms, id = ",meeting.id
-
+			inform_no_room(meeting)

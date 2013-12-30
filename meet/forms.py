@@ -1,4 +1,5 @@
 from models import *
+from notification import invite_new_guests
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
@@ -23,19 +24,9 @@ class GuestListForm(forms.ModelForm):
 
 	@classmethod
 	def get_users_with_these_emails(cls, emails_string):
-		print emails_string
-		l = emails_string.replace(' ', '').split(',')
-		user_objects = User.objects
-		users = list(user_objects.filter(email__in=l))
-		user_emails = user_objects.values_list("email", flat=True)
-		new_emails = [email for email in l if email not in user_emails]
-		for email in new_emails:
-			user = User.objects.create_user(email, email, 'password')
-			user.save()
-			notif = InviteToMeetMeNotification()
-			notif.recipient = email
-			notif.save()
-			users.append(user)
+		l = emails_string.replace(' ', '').replace('\n', '').replace('\r', '').split(',')
+		invite_new_guests(l)
+		users = User.objects.filter(email__in=l)
 		return users
 
 	def clean(self):

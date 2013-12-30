@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from meet.models import *
 from django.core.mail import EmailMultiAlternatives
 
+
 class Notification(models.Model):
 	DANGER = 'd'
 	INFORM = 'i'
@@ -33,6 +34,11 @@ class Notification(models.Model):
 		self.seen = True
 		self.save()
 
+	def save(self, *args, **kwargs):
+		super(Notification, self).save(*args, **kwargs)
+		self.send_mail()
+
+
 
 class CustomNotification(Notification):
 	state = Notification.INFORM
@@ -41,16 +47,13 @@ class CustomNotification(Notification):
 	subject = models.TextField()
 
 	def get_mail_text(self):
-		return mail_body
+		return self.mail_body
 		
 	def get_msg(self):
-		return msg_body
+		return self.msg_body
 
 	def get_subj(self):
 		return self.subject
-	# def save(self, *args, **kwargs):
- #		super(InformReservation, self).save(*args, **kwargs)
- #		self.send_mail()
 
 
 class InformReservationNotification(Notification):
@@ -77,7 +80,6 @@ class InformReservationNotification(Notification):
 	def save(self, *args, **kwargs):
 		self.recipient = self.reservation.interval.event.creator.email
 		super(InformReservationNotification, self).save(*args, **kwargs)
-		self.send_mail()
 
 
 class InformNoRoomNotification(Notification):
@@ -100,7 +102,6 @@ class InformNoRoomNotification(Notification):
 	def save(self, *args, **kwargs):
 		self.recipient = self.meeting.creator.email
 		super(InformNoRoomNotification, self).save(*args, **kwargs)
-		self.send_mail()
 
 
 class InformConfirmToGuestsNotification(Notification):
@@ -126,9 +127,6 @@ class InformConfirmToGuestsNotification(Notification):
 	def get_subj(self):
 		return _("Meeting Confirmed")
 
-	def save(self, *args, **kwargs):
-		super(InformConfirmToGuestsNotification, self).save(*args, **kwargs)
-		self.send_mail()
 
 class InformConfirmToCreatorNotification(Notification):
 	state = Notification.INFORM
@@ -156,7 +154,7 @@ class InformConfirmToCreatorNotification(Notification):
 	def save(self, *args, **kwargs):
 		self.recipient = self.meeting.creator.email
 		super(InformConfirmToCreatorNotification, self).save(*args, **kwargs)
-		self.send_mail()
+
 
 class InformCancelToGuestsNotification(Notification):
 	state = Notification.DANGER
@@ -172,10 +170,6 @@ class InformCancelToGuestsNotification(Notification):
 
 	def get_subj(self):
 		return u"%s" %_("Meeting Cancelled")
-
-	def save(self, *args, **kwargs):
-		super(InformCancelToGuestsNotification, self).save(*args, **kwargs)
-		self.send_mail()
 
 
 class InformCancelToCreatorNotification(Notification):
@@ -196,7 +190,6 @@ class InformCancelToCreatorNotification(Notification):
 	def save(self, *args, **kwargs):
 		self.recipient = self.meeting.creator.email
 		super(InformCancelToCreatorNotification, self).save(*args, **kwargs)
-		self.send_mail()
 
 class InvitedNotification(Notification):
 	state = Notification.INFORM
@@ -222,9 +215,21 @@ class InvitedNotification(Notification):
 	def get_subj(self):
 		return _("Invitation")
 
-	def save(self, *args, **kwargs):
-		super(InvitedNotification, self).save(*args, **kwargs)
-		self.send_mail()
+
+class RevoteNotification(Notification):
+	state = Notification.INFORM
+	event = models.ForeignKey(Event)
+
+	def get_mail_text(self):
+		mail_body = _("There has been a revote for event named: %s. Please cast your vote again.") %self.event.title
+		return u"%s" % mail_body
+
+	def get_msg(self):
+		msg_body = _("There has been a revote for event named: %s. Please cast your vote again.") %self.event.title
+		return u"%s" %msg_body
+
+	def get_subj(self):
+		return _("Revote Performed")
 
 
 class InviteToMeetMeNotification(Notification):
@@ -241,6 +246,75 @@ class InviteToMeetMeNotification(Notification):
 	def get_subj(self):
 		return _("Invitation To MeetMe")
 
-	def save(self, *args, **kwargs):
-		super(InviteToMeetMeNotification, self).save(*args, **kwargs)
-		self.send_mail()
+
+def inform_revote(event):
+	guests = event.guest_list.all()
+	for guest in guests:
+		notif = RevoteNotification()
+		notif.recipient = guest.email
+		notif.event = event
+		notif.save()
+
+def invite_guests(event):
+	guests = event.guest_list.all()
+	for guest in guests:
+		notif = InvitedNotification()
+		notif.recipient = guest.email
+		notif.event = event
+		notif.save()
+
+
+def invite_new_guests(l):
+	user_emails = User.objects.filter(email__in=l).values_list("email", flat=True)
+	new_emails = [email for email in l if email not in user_emails]
+	for email in new_emails:
+		user = User.objects.create_user(email, email, 'password')
+		user.save()
+		notif = InviteToMeetMeNotification()
+		notif.recipient = email
+		notif.save()
+
+
+def inform_no_room(meeting):
+	guests = meeting.guest_list.all()
+	for guest in guests:
+		notif = InformNoRoomNotification()
+		notif.recipient = guest.email
+		notif.meeting = meeting
+		notif.save()
+	notif = InformNoRoomNotification()
+	notif.meeting = meeting
+	notif.recipient = meeting.creator
+	notif.save()
+
+
+def inform_confirm(meeting):
+	guests = meeting.guest_list.all()
+	for guest in guests:
+		notif = InformConfirmToGuestsNotification()
+		notif.recipient = guest.email
+		notif.meeting = meeting
+		notif.save()
+	notif = InformConfirmToCreatorNotification()
+	notif.meeting = meeting
+	notif.save()
+
+
+def inform_cancel(meeting):
+	guests = meeting.guest_list.all()
+	for guest in guests:
+		notif = InformCancelToGuestsNotification()
+		notif.recipient = guest.email
+		notif.meeting = meeting
+		notif.save()
+	notif = InformCancelToCreatorNotification()
+	notif.meeting = meeting
+	notif.save()
+
+def inform_reservation(reservation):
+	admins = User.objects.filter(is_superuser=True)
+	for admin in admins:
+		notif = InformReservationNotification()
+		notif.reservation = reservation
+		notif.recipient = admin.email
+		notif.save()
