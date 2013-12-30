@@ -38,7 +38,7 @@
 			{{day.0|jdate_day}}<br/>
 			{%for meeting in day.1%}
 			<span class="pull-left">
-			{{meeting}}<a href="{{meeting|google_calendarize}}" target="_balnk"><i class="glyphicon glyphicon-credit-card"></i></a><br/>
+			{{meeting}}&nbsp;<a href="/event/{{meeting.id}}/view"><i class="glyphicon glyphicon-dashboard"></i></a>&nbsp;<a href="{{meeting|google_calendarize}}" target="_balnk"><i class="glyphicon glyphicon-credit-card"></i></a><br/>
 			</span>
 			{%endfor %}
 			</td>
@@ -49,7 +49,7 @@
 	</div>
 	<div class="col-md-3 well col-md-offset-1">
 		<h4>
-		{%blocktrans with notifications|len_literal as num %}
+		{%blocktrans with notifications|len_literal:'fa' as num %} <!-- FIX: KASIF TAR AZ IN NEMISHE YANI! -->
 		You have {{num}} New Notifications
 		{%endblocktrans%}
 		</h4>
