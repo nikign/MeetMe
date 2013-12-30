@@ -57,8 +57,8 @@ class Event (models.Model):
 	CLOSED = 'cl'
 
 	STATUS = (
-		(OPEN, 'Open'),
-		(CLOSED, 'Closed'),
+		(OPEN, _('Open')),
+		(CLOSED, _('Closed')),
 	)
 
 	title = models.CharField(max_length=30)

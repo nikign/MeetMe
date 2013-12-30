@@ -41,10 +41,10 @@ def jdate(value, lang=None):
         return mark_safe('&mdash;')
     lang = lang or translation.get_language()
     if isinstance(value, datetime.datetime):
-        if local_tz:
-            timezone = getattr(value, 'tzinfo', None)
-            if timezone:
-                value = value.astimezone(local_tz)
+        # if local_tz:
+        #     timezone = getattr(value, 'tzinfo', None)
+        #     if timezone:
+        #         value = value.astimezone(local_tz)
         value = value.date()
     if lang == 'en':
         return "%d/%d/%d" % (value.year, value.month, value.day)

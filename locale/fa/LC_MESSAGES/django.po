@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-29 09:50-0600\n"
+"POT-Creation-Date: 2013-12-30 06:37-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,11 +33,8 @@ msgstr "توضیح رویداد خود را وارد کنید."
 msgid "Description"
 msgstr "توضیح"
 
-msgid "Enter the emails of guests you want to invite."
-msgstr "آدرس پست‌الکترونیکی مهمانان خود را (به صورت جدا شده با ویرگول) وارد کنید."
-
-msgid "Guests"
-msgstr "مهمانان"
+msgid "guest "
+msgstr "مهمان"
 
 msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
@@ -66,8 +63,11 @@ msgstr "قرار ملاقات در صورتی تثبیت شود که"
 msgid "The condition type you requested for your event is not provided!"
 msgstr ""
 
-msgid "guest "
-msgstr "مهمان"
+msgid "Open"
+msgstr "باز (امکان رای دادن وجود دارد)"
+
+msgid "Closed"
+msgstr "بسته (امکان رای دادن وجود ندارد)"
 
 #, python-format
 msgid "On %(date)s from %(stime)s to %(etime)s for event %(event)s"
@@ -145,6 +145,18 @@ msgstr "رای گیری مجدد شما برای نشست \""
 
 msgid "Your event named "
 msgstr "نشست شما به نام "
+
+msgid "Creator"
+msgstr "سازنده"
+
+msgid "Deadline"
+msgstr "زمان پایان رای گیری"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Vote it!"
+msgstr "نظر بدهید!"
 
 msgid "Submit"
 msgstr "ثبت"
@@ -232,6 +244,9 @@ msgid "This event is closed and confirmed. You can add it to your calendar now!"
 msgstr ""
 
 msgid "Add to Google Calendar"
+msgstr ""
+
+msgid "No event for you to view"
 msgstr ""
 
 msgid "Farvardin"
