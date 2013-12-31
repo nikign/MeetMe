@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-31 06:31-0600\n"
+"POT-Creation-Date: 2013-12-31 07:07-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,6 +212,10 @@ msgstr "از"
 msgid "to"
 msgstr "تا"
 
+#
+msgid "MeetMe"
+msgstr "گِرد آورد"
+
 msgid "Time zone"
 msgstr "منطقه‌ی زمانی"
 
@@ -242,15 +246,9 @@ msgstr ""
 msgid "Fri"
 msgstr ""
 
-#python-format
-msgid ""
-" <!-- FIX: KASIF TAR AZ IN NEMISHE YANI! -->\n"
-"\t\tYou have %(num)s New Notifications\n"
-"\t\t"
-msgstr ""
-"\n"
-"\t\tشما %(num)s پیام جدید دارید\n"
-"\t\t"
+#, python-format
+msgid "You have %(num)s New Notifications"
+msgstr "شما %(num)s پیام جدید دارید"
 
 msgid "This event is still open to vote."
 msgstr "این رویداد هنوز برای نظرسنجی باز است."
