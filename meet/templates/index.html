@@ -1,8 +1,26 @@
+{% load static %}
+{% load i18n %}
+{% load tz %}
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Welcome</title>
+		<title>{%trans "Welcome to MeetMe"%}</title>
+		<script src="{% get_static_prefix %}js/jquery.js"></script>
+		<script src="{% get_static_prefix %}js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% get_static_prefix %}css/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="{% get_static_prefix %}css/style.css" type="text/css" />
 	</head>
-	<body>
-			<a href="/google/login">Login with your google account</a>
+	<body >
+	<div class="welcomepage-body">
+	  <img src='{% get_static_prefix %}welcome.jpg' alt='[]' />
+	</div>
+		<div class="row col-md-12" >
+			<div ></div>
+			<div class="col-md-5 col-md-offset-4 text-center">
+			
+			<h1 class="welcome">{%trans "Welcome to MeetMe"%}</h1>
+			<a class="btn btn-primary btn-block" href="/google/login">{%trans "Join us using Google"%}</a>
+			</div>
+		</div>
 	</body>
 </html>

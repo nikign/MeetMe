@@ -2,6 +2,24 @@ body{
 	background-color: #b5b5ff;
 }
 
+div.welcomepage-body{
+	position:absolute;
+	z-index:0;
+	left:0;top:0;
+	width:100%;
+	height:100%;
+}
+ img{
+ 	width:100%;
+ 	height:100%;
+ }
+
+ h1.welcome{
+ 	color: #ccff99;
+ 	margin-top: 100px;
+ 	margin-bottom: 100px;
+ }
+
 .header{
 	background-color: #492399;
 	border-color: #444444;
