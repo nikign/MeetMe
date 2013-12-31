@@ -90,6 +90,11 @@ class Event (models.Model):
 	def is_google_calendarizable(self):
 		return hasattr(self, 'meeting') and self.meeting.confirmed==Meeting.CONFIRMED
 
+	def get_status_message(self):
+		for stts in Event.STATUS :
+			if self.status == stts[0] :
+				return stts[1]
+
 
 class Interval (models.Model):
 	date = models.DateField()

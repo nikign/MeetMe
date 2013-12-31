@@ -97,12 +97,9 @@ def vote_event (request, event_id):
 @login_required
 def view_event (request, event_id):
 	event = Event.objects.get(id=event_id)
-	for stts in Event.STATUS : #FIX THIS!
-		if stts[0] == event.status:
-			status = stts[1]
 	return render_to_response('event_view.html', {
 		'event' : event,
-		'status' : status,
+		'status' : event.get_status_message(),
 	}, context_instance = RequestContext(request))
 
 @login_required

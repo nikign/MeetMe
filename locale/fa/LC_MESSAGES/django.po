@@ -201,7 +201,7 @@ msgid "Vote it!"
 msgstr "نظر بدهید!"
 
 msgid "List of my events"
-msgstr ""
+msgstr "سیاهه‌ی رویداد‌های من"
 
 msgid "Submit"
 msgstr "ثبت"
