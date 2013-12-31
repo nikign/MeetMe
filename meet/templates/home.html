@@ -49,7 +49,7 @@
 	</div>
 	<div class="col-md-3 well col-md-offset-1">
 		<h4>
-		{%blocktrans with notifications|len_literal:'fa' as num %} <!-- FIX: KASIF TAR AZ IN NEMISHE YANI! -->
+		{%blocktrans with notifications|len_literal:LANGUAGE_CODE as num %} <!-- FIX: KASIF TAR AZ IN NEMISHE YANI! -->
 		You have {{num}} New Notifications
 		{%endblocktrans%}
 		</h4>

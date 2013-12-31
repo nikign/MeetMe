@@ -46,7 +46,7 @@ LANGUAGES = (
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'fa-IR'
+LANGUAGE_CODE = 'fa'
 DEFAULT_LANGUAGE = 'fa'  # for locale middleware
 # SITE_DEFAULT_LANGUAGE = 'fa'  # for locale middleware
 

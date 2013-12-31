@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-30 11:05-0600\n"
+"POT-Creation-Date: 2013-12-31 06:31-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,6 +144,13 @@ msgid "Invitation"
 msgstr "دعوت"
 
 #, python-format
+msgid "There has been a revote for event named: %s. Please cast your vote again."
+msgstr ""
+
+msgid "Revote Performed"
+msgstr ""
+
+#, python-format
 msgid "You are invited to MeetMe, a website to perform meetings among people and vote for the best time. An account is created for you automatically with username=your_email(%(email)s). You can login using your gmail. Visit us on 'meetme.ir'."
 msgstr "شما به MeetMe دعوت شده‌اید. وب‌گاهی که طراحی شده است تا قرار ملاقات ترتیب دهید و برای بهترین زمان ممکن نظرسنجی کنید. برای شما به صورت خودکار با نام کاربری ایمیلتان (%(email)s) یک حساب کاربری ایجاد شده است که می‌توانید با جیمیل خود وارد آن شوید. به 'meetme.ir' مراجعه کنید."
 
@@ -193,6 +200,9 @@ msgstr "وضعیت"
 msgid "Vote it!"
 msgstr "نظر بدهید!"
 
+msgid "List of my events"
+msgstr ""
+
 msgid "Submit"
 msgstr "ثبت"
 
@@ -232,9 +242,9 @@ msgstr ""
 msgid "Fri"
 msgstr ""
 
-#, python-format
+#python-format
 msgid ""
-"\n"
+" <!-- FIX: KASIF TAR AZ IN NEMISHE YANI! -->\n"
 "\t\tYou have %(num)s New Notifications\n"
 "\t\t"
 msgstr ""
