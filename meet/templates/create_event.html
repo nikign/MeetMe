@@ -1,4 +1,5 @@
 {% include "header.html" %}
+{% load i18n %}
 
 {% block content %}
 	
@@ -89,7 +90,7 @@
 		<div class="well col-md-4 col-md-offset-4 row" >
 		
 		{% if wizard.steps.step1 == 3 %}
-			<h4>Suggested time intervals for vote</h4>
+			<h4>{%trans "Suggested time intervals for vote"%}</h4>
 			<form action="" method="POST">
 				{% csrf_token %}
 				{{ wizard.management_form }}
@@ -97,12 +98,12 @@
 				{% for form in wizard.form.forms %}
 				<div class="item" id="id_form-TOTAL_FORMS">
 					{{ form.as_p }}
-					<p style=""><a class="delete" href="#">Delete</a></p>
+					<p style=""><a class="delete" href="#">{%trans "Delete"%}</a></p>
 				</div>
 				{% endfor %}
-				<p><a id="add" href="#">Add another item</a></p>
+				<p><a id="add" href="#">{%trans "Add another item"%}</a></p>
 				<div class="form-actions center">
-	                <button type="submit" class="btn btn-primary">Next<i class="icon-arrow-right icon-white"></i></button>
+	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
                 </div>
 			</form>
 		
@@ -114,7 +115,7 @@
 					    	{{ wizard.form }}
 						</table>
 	                <div class="form-actions center">
-		                <button type="submit" class="btn btn-primary">Next<i class="icon-arrow-right icon-white"></i></button>
+		                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
 	                </div>
 			</form>
 		{% endif %}	

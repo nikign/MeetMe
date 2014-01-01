@@ -13,6 +13,9 @@
 	</head>
 	<script type="text/javascript">
 	$(function init () {		
+	$(".errorlist").each(function() {
+		$($(this).next()).after($(this))
+	})
 	$("#tzform").hide()
 	$("html").click(function(){
 		$("#tzform").hide()
@@ -26,9 +29,12 @@
 	$('form ul').each(function() {
 		$(this).addClass('list-unstyled')
 	})
-	$(".errorlist").each(function() {
-		$(this).parent().append($(this))
-		$(this).find(':gt(0)').remove()
+	$('select').each(function() {
+		$(this).addClass('form-control')
+	})
+	$('p select').each(function() {
+		var label = $(this).parent().addClass('row').find('label').addClass('col-md-3')
+		$(this).wrap('<div class="col-md-6 col-md-offset-2 row"></div>').parent().wrap('<div class="col-md-11 pull-right"></div>').parent().append(label)
 	})
 	})
 	</script>

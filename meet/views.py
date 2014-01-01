@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from meet.models import Event, Interval
 from meet.notification import inform_confirm, inform_cancel, inform_reservation, Notification
-from forms import *
+from meet.forms import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
@@ -273,7 +273,7 @@ def is_advanced(wizard):
 @login_required
 def create_wizard (request):
 	create_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm, 
-		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
+		inlineformset_factory(Event, Interval, max_num=1, extra=3, form=IntervalForm), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 		condition_dict={'4': is_meeting, '5': is_advanced}
 		)
 	return create_wizard_as_view(request)
@@ -294,7 +294,7 @@ def edit_wizard (request, event_id):
 		}
 	initial_dict['1'] = {'guests': guest_string, }
 	edit_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm,
-		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
+		inlineformset_factory(Event, Interval, max_num=1, extra=3, form=IntervalForm), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 		instance_dict=instance_dictionary,
 		initial_dict=initial_dict,
 		condition_dict={'3': is_create_wizard, '4': is_meeting, '5': is_advanced}
