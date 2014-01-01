@@ -1,6 +1,7 @@
 {% include "header.html" %}
 {% load filters %}
 {% load i18n %}
+{% load tz %}
 {% block content %}
 	<body style="direction:rtl;">
 		<div class="col-md-4 col-md-offset-4">
@@ -8,11 +9,13 @@
 			
 		{{event.title}}
 		</legend>
+		{% timezone "Asia/Tehran" %}
 		{{event.description}}<br>
 		{%trans "Creator"%} : {{event.creator}}<br/>
-		{%trans "Deadline"%} : {{event.deadline|jdatetime:LANGUAGE_CODE}}<br/>
+		{%trans "Deadline"%} : {{deadline|jdatetime:LANGUAGE_CODE}}<br/>
 		{%trans "Status"%} : {%trans status%}<br/>
 		
+		{% endtimezone %}
 		<br/>
 		{%ifnotequal event.status 'cl'%}
 		<a href="/event/{{event.id}}/vote" class="link">{%trans "Vote it!"%}</a>

@@ -22,10 +22,15 @@ class TitleDescriptionForm(forms.ModelForm):
 
 class GuestListForm(forms.ModelForm):
 	guests = fields.CharField(widget=forms.Textarea(attrs={'placeholder': _("Enter the emails of guests you want to invite.")}), label=_("Guests"))
-	deadline = fields.DateTimeField()
+	deadline = fields.DateTimeField(widget=forms.HiddenInput(), required=False)
+	year = fields.ChoiceField(label=_('Year'))
+	month = fields.ChoiceField(label=_('Month'))
+	day = fields.ChoiceField(label=_('Day'))
+	hour = fields.ChoiceField(label=_('Hour'))
+	
 	class Meta:
 		model = Event
-		fields = ('guests', 'deadline', )
+		fields = ('guests', 'deadline', 'year', 'month', 'day', 'hour')
 
 	@classmethod
 	def get_users_with_these_emails(cls, emails_string):
@@ -34,16 +39,39 @@ class GuestListForm(forms.ModelForm):
 		users = User.objects.filter(email__in=l)
 		return users
 
+	def __init__(self, *args, **kwargs):
+		super(GuestListForm, self).__init__(*args, **kwargs)
+		g_today = timezone.now().date()
+		j_this_year = i18n.topersiandate(g_today)[0]
+		year_choices = [(i, i18n.iranian_digits(i)) for i in xrange(j_this_year,j_this_year+10)]
+		self.fields['year'].choices = year_choices
+		month_choices = [(i+1, i18n.PERSIAN_MONTHS[i]) for i in xrange(0,12)]
+		self.fields['month'].choices = month_choices
+		day_choices = [(i,i18n.iranian_digits(i)) for i in xrange(1,32)]
+		self.fields['day'].choices = day_choices
+		hour_choices = [(i,i18n.iranian_digits(i)) for i in xrange(0,24)]
+		self.fields['hour'].choices = hour_choices
+
 	def clean(self):
 		cleaned_data = super(GuestListForm, self).clean()
+		utc = pytz.UTC
 		cleaned_data['guest_list'] = GuestListForm.get_users_with_these_emails(cleaned_data.get('guests'))
-		# guests = cleaned_data.get('guest_list')
-		all_users = User.objects.all()
-		# for guest in guests:
-		# 	if not guest in all_users:
-		# 		error_msg =  _('guest ' + guest.email + ' is not registered in the system')
-		# 		self._errors['guests'].append(self.error_class([error_msg]))
-
+		date_year = cleaned_data.get('year')
+		date_month = cleaned_data.get('month')
+		date_day = cleaned_data.get('day')
+		hour = cleaned_data.get('hour')
+		date = i18n.persiandate(int(date_year), int(date_month), int(date_day))
+		tz = timezone.get_current_timezone()
+		print tz
+		print utc
+		date_time = tz.localize(timezone.datetime(date.year, date.month, date.day, int(hour)))
+		utc_time = utc.normalize(date_time.astimezone(utc))
+		print date_time
+		print utc_time
+		print date_time.tzinfo
+		print utc_time.tzinfo
+		cleaned_data['deadline'] = utc_time
+		print cleaned_data.get('deadline')
 		return cleaned_data
 
 

@@ -114,6 +114,24 @@
 	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
                 </div>
 			</form>
+		{% elif wizard.steps.current == '1' %}
+			<h4>{%trans "Guest list"%}</h4>
+			<form action="" method="POST">
+				{% csrf_token %}
+				{{ wizard.management_form }}
+				
+				{{wizard.form.guests}}
+
+				<br/> <h4>{%trans "Deadline"%}</h4>
+				{{wizard.form.year}}
+				{{wizard.form.month}}
+				{{wizard.form.day}}
+				{{wizard.form.hour}}
+
+				<div class="form-actions center submit-btn">
+	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
+                </div>
+			</form>
 		
 		{% else %}
 			<form action="" method="post">
