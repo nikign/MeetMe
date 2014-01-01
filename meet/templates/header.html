@@ -13,6 +13,9 @@
 	</head>
 	<script type="text/javascript">
 	$(function init () {		
+	$(".errorlist").each(function() {
+		$($(this).next()).after($(this))
+	})
 	$("#tzform").hide()
 	$("html").click(function(){
 		$("#tzform").hide()
@@ -26,26 +29,29 @@
 	$('form ul').each(function() {
 		$(this).addClass('list-unstyled')
 	})
-	$(".errorlist").each(function() {
-		$(this).parent().append($(this))
-		$(this).find(':gt(0)').remove()
+	$('select').each(function() {
+		$(this).addClass('form-control')
+	})
+	$('p select').each(function() {
+		var label = $(this).parent().addClass('row').find('label').addClass('col-md-3')
+		$(this).wrap('<div class="col-md-6 col-md-offset-2 row"></div>').parent().wrap('<div class="col-md-11 pull-right"></div>').parent().append(label)
 	})
 	})
 	</script>
 	<body dir='rtl' class="col-md-12">
 		
 	<div class="row well col-md-13 header">
-	<div class="col-md-1">
+	<div class="col-md-1 col-sm-1 col-xs-3">
 	<a href="/">
 	<img src="{% get_static_prefix %}logo.jpg" class="img-rounded" >
 	</a>
 	</div>
-	<div class="col-md-8"><h1 class="text-center">
+	<div class="col-md-8 col-xs-2 "><h1 class="text-center">
 	<a href="/" id="banner">
 	{%trans "MeetMe"%}
 	</a>
 	</h1></div>
-	<div class="col-md-2" style="color:white;">
+	<div class="col-md-2 col-sm-2 col-xs-2" style="color:white;">
 		{{username}}<br/>
 		<div id="tzholder">
 		<a href="#" style="color:white;" id='tzlink'>{{timezone}}</a><br/>
@@ -65,7 +71,7 @@
 		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
 		</div>
 
-	<div class="col-md-1">
+	<div class="col-md-1 col-xs-3 col-sm-1">
 	<img src="{% get_static_prefix %}user.jpg" class="img-circle">
 	</div>
 	</body>

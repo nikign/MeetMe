@@ -15,7 +15,7 @@ def google_calendarize(event):
     date = event.reservation.interval.date
     st = datetime.datetime.combine(date, st)
     en = datetime.datetime.combine(date, en)
-    tfmt = '%Y%m%dT000000'
+    tfmt = '%Y%m%dT%H%M%S'
 
     dates = '%s%s%s' % (st.strftime(tfmt), '%2F', en.strftime(tfmt))
     name = urlquote_plus(event.title)
