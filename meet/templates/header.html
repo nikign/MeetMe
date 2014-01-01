@@ -86,7 +86,9 @@
 		    <input type="submit" value="{%trans "Set"%}" class="btn btn-default" />
 		</form></div>
 		</div>
+		{% if user.is_authenticated %}
 		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
+		{% endif %}
 		</div>
 
 	<div class="col-md-1 col-xs-3 col-sm-1">
