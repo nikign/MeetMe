@@ -12,7 +12,14 @@
 		<link rel="shortcut icon" href="{% get_static_prefix %}logo.ico">
 	</head>
 	<script type="text/javascript">
-	$(function init () {		
+	$(function init () {
+	$('label').each(function(){
+		var checkboxsibling = $(this).siblings('input[type=checkbox]') 
+		if(checkboxsibling.length){
+			checkboxsibling.remove()
+			$(this).remove()
+		}
+	})
 	$(".errorlist").each(function() {
 		$($(this).next()).after($(this))
 	})
