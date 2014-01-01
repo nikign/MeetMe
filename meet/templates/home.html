@@ -38,7 +38,7 @@
 			{{day.0|jdate_day}}<br/>
 			{%for meeting in day.1%}
 			<span class="pull-left">
-			{{meeting}}&nbsp;<a href="/event/{{meeting.id}}/view"><i class="glyphicon glyphicon-dashboard"></i></a>&nbsp;<a href="{{meeting|google_calendarize}}" target="_balnk"><i class="glyphicon glyphicon-credit-card"></i></a><br/>
+			{{meeting}}&nbsp;<a href="/event/{{meeting.id}}/view"><i class="glyphicon glyphicon-time"></i></a>&nbsp;<a href="{{meeting|google_calendarize}}" target="_balnk"><i class="glyphicon glyphicon-credit-card"></i></a><br/>
 			</span>
 			{%endfor %}
 			</td>
