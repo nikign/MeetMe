@@ -7,7 +7,7 @@ from meet.exceptions import UserIsNotInvitedException
 from django.forms.extras.widgets import SelectDateWidget
 from meet.templatetags import i18n
 from django.utils import timezone
-
+import pytz
 
 class ValidationException (Exception):
 	pass
@@ -50,13 +50,14 @@ class GuestListForm(forms.ModelForm):
 class IntervalForm (forms.ModelForm):
 	class Meta:
 		model = Interval
-		fields = ('event', 'date_year', 'date_month', 'date_day','start', 'finish')
+		fields = ('event', 'date_year', 'date_month', 'date_day','start', 'finish', 'date')
 	event = forms.ModelChoiceField(queryset=Event.objects.all())
 	date_year = fields.ChoiceField(label=_('Year'))
 	date_month = fields.ChoiceField(label=_('Month'))
 	date_day = fields.ChoiceField(label=_('Day'))
-	start = fields.CharField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
-	finish = fields.CharField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
+	start = fields.TimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
+	finish = fields.TimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
+	date = fields.CharField(widget=forms.HiddenInput(), required=False)
 	def __init__(self, *args, **kwargs):
 		super(IntervalForm, self).__init__(*args, **kwargs)
 		g_today = timezone.now().date()
@@ -67,6 +68,25 @@ class IntervalForm (forms.ModelForm):
 		self.fields['date_month'].choices = month_choices
 		day_choices = [(i,i18n.iranian_digits(i)) for i in xrange(1,32)]
 		self.fields['date_day'].choices = day_choices
+
+	def clean(self):
+		cleaned_data = super(IntervalForm,self).clean()
+		date_year = cleaned_data.get('date_year')
+		date_month = cleaned_data.get('date_month')
+		date_day = cleaned_data.get('date_day')
+		date = i18n.persiandate(int(date_year), int(date_month), int(date_day))
+		tz = timezone.get_current_timezone()
+		utc = pytz.UTC
+		start_time = cleaned_data.get('start')
+		start_date_time = tz.localize(timezone.datetime(date.year, date.month, date.day, start_time.hour, start_time.minute))
+		finish_time = cleaned_data.get('finish')
+		finish_date_time = tz.localize(timezone.datetime(date.year, date.month, date.day, finish_time.hour, finish_time.minute))
+		utc_start = utc.normalize(start_date_time.astimezone(utc))
+		utc_finish = utc.normalize(finish_date_time.astimezone(utc))
+		cleaned_data['date'] = date
+		cleaned_data['start'] = utc_start.time()
+		cleaned_data['finish'] = utc_finish.time()
+		return cleaned_data
 
 class VoteForm (forms.ModelForm):
 	interval = forms.ModelChoiceField(queryset=Interval.objects.all(), widget=forms.HiddenInput())
