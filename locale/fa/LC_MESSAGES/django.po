@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-01 10:13-0600\n"
+"POT-Creation-Date: 2014-01-01 15:46-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,10 @@ msgstr "ایمیل میهمانانی که می‌خواهید دعوت کنید
 msgid "Guests"
 msgstr "مهمانان"
 
+#, fuzzy
+msgid "You should enter at least one guest."
+msgstr "نظر شما برای رویداد \"%s\" ثبت نشد."
+
 msgid "Year"
 msgstr "سال"
 
@@ -47,6 +51,12 @@ msgstr "ماه"
 
 msgid "Day"
 msgstr "روز"
+
+msgid "Hour"
+msgstr "ساعت"
+
+msgid "You should enter at least one guest and guests' emails should be valid."
+msgstr "باید حداقل یک میهمان دعوت کنید. ایمیل مهمانان باید معتبر باشد."
 
 msgid "Time format HH:MM"
 msgstr "زمان را به شکل HH:MM وارد کنید"
@@ -201,9 +211,6 @@ msgstr "۴۰۳! شما اجازه‌ی دسترسی به این صفحه را ن
 msgid "500! Something went wrong with our server. We are sorry!"
 msgstr "۵۰۰! متأسفیم. برای سرور ما مشکلی پیش آمده است."
 
-msgid "400! Invalid request!"
-msgstr "۴۰۰! درخواست شما معتبر نیست!"
-
 #, python-format
 msgid "Your event named %s was added successfully."
 msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
@@ -224,11 +231,14 @@ msgstr "گزینه‌ی دیگری بیفزایید"
 msgid "Next"
 msgstr "گام بعدی"
 
-msgid "Creator"
-msgstr "سازنده"
+msgid "Guest list"
+msgstr "فهرست مهمانان"
 
 msgid "Deadline"
 msgstr "زمان پایان رای گیری"
+
+msgid "Creator"
+msgstr "سازنده"
 
 msgid "Status"
 msgstr "وضعیت"

@@ -68,7 +68,7 @@ class GuestListForm(forms.ModelForm):
 				utc_time = utc.normalize(date_time.astimezone(utc))
 				cleaned_data['deadline'] = utc_time
 			except forms.ValidationError:
-				self._errors['guests'] = self.error_class(["You should enter at least one guest and guests' emails should be valid."])
+				self._errors['guests'] = self.error_class([_("You should enter at least one guest and guests' emails should be valid.")])
 
 		return cleaned_data
 
