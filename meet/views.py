@@ -198,11 +198,6 @@ def handler500(request):
 	return render(request, 'errors.html', {'message': message,})
 
 
-def handler400(request):
-	message = _("400! Invalid request!")
-	return render(request, 'errors.html', {'message': message,})
-
-
 class CreateWizard(CookieWizardView):
 
 	def remove_old_data(self, event):
