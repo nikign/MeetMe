@@ -104,6 +104,11 @@ class AdvancedClosingConditionForm(forms.ModelForm):
 		model = AdvancedClosingCondition
 		fields = ('must_come_list',)
 
+	def __init__(self, guests=None, *args, **kwargs):
+		guests = guests
+		super(AdvancedClosingConditionForm, self).__init__(*args, **kwargs)
+		self.fields['must_come_list'].choices = [(guest.id, guest.email) for guest in guests]
+
 	def clean(self):
 		#TODO: check that must come list is in guests of meeting
 		cleaned_data = super(AdvancedClosingConditionForm, self).clean()

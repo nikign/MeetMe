@@ -194,6 +194,13 @@ class CreateWizard(CookieWizardView):
 			closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
 			closing_condition.delete()
 
+	def get_form_kwargs(self, step=None):
+		step = step or self.steps.current
+		if step == '5':
+			return {'guests': self.get_cleaned_data_for_step('1')['guest_list'], }
+		else:
+			return {}
+
 	def set_meeting_data(self, event):
 		meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
 		meeting = Meeting(event_ptr_id=event.pk)
@@ -285,14 +292,16 @@ def edit_wizard (request, event_id):
 	instance_dictionary = {'0': event, '1': event,}
 	guests = [guest.email for guest in event.guest_list.all()]
 	guest_string = ",".join(guests)
-	print guest_string
 	initial_dict = {}
 	if hasattr(event, 'meeting'):
-		closing_condition = ClosingCondition.objects.get_subclass(meeting=event)
+		closing_condition = ClosingCondition.objects.get_subclass(meeting=event.meeting)
 		initial_dict = {
 			'4': {'conditions': closing_condition.key, },
 		}
-	initial_dict['1'] = {'guests': guest_string, }
+		if hasattr(closing_condition, 'must_come_list'):
+			initial_dict['5'] = {'must_come_list': closing_condition.must_come_list.all() }
+			
+	initial_dict['1'] = {'guests': guest_string, 'deadline': event.deadline, }
 	edit_wizard_as_view =CreateWizard.as_view([TitleDescriptionForm, GuestListForm,
 		inlineformset_factory(Event, Interval, max_num=1, extra=3), EventTypeForm, MeetingConditionsForm, AdvancedClosingConditionForm],
 		instance_dict=instance_dictionary,

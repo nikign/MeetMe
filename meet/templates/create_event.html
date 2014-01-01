@@ -80,15 +80,23 @@
 	});
 	$(function () {
 		$("input").addClass('form-control col-md-6')
+		$("span.helptext").remove()
+		$("select").addClass('form-control col-md-6')
 		$("input[type=checkbox]").removeClass('form-control col-md-6')
 		$("input[type=radio]").removeClass('form-control col-md-6')
 		$("textarea").addClass('form-control col-md-12')
+		$('option').mousedown(function (e){
+			e.preventDefault();
+			$(this).prop('selected', !$(this).prop('selected'));
+			return false;
+		})
 	})
+
     </script>
 
 		<div class="well col-md-4 col-md-offset-4 row" >
 		
-		{% if wizard.steps.step1 == 3 %}
+		{% if wizard.steps.current == '2' %}
 			<h4>Suggested time intervals for vote</h4>
 			<form action="" method="POST">
 				{% csrf_token %}
@@ -119,4 +127,5 @@
 			</form>
 		{% endif %}	
 		</div>
+
 {% endblock %}
