@@ -1,0 +1,10 @@
+{%load tz%}
+{%load i18n%}
+{% load filters %}
+
+{% include "header.html" %}
+{% block content %}
+	<div class="alert alert-danger">
+		{% trans message %}
+	</div>
+{% endblock %}

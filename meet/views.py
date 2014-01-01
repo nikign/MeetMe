@@ -183,6 +183,26 @@ def revote(request, event_id):
 	return related_events(request, _('Your revote for event "%s" is done successfully.') %event.title)
 
 
+def handler404(request):
+	message = _("404! The page you requested was not found!")
+	return render(request, 'errors.html', {'message': message,})
+
+
+def handler403(request):
+	message = _("403! You Don't have permission to access this page!")
+	return render(request, 'errors.html', {'message': message,})
+
+
+def handler500(request):
+	message = _("500! Something went wrong with our server. We are sorry!")
+	return render(request, 'errors.html', {'message': message,})
+
+
+def handler400(request):
+	message = _("400! Invalid request!")
+	return render(request, 'errors.html', {'message': message,})
+
+
 class CreateWizard(CookieWizardView):
 
 	def remove_old_data(self, event):

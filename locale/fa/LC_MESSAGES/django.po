@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-31 09:27-0600\n"
+"POT-Creation-Date: 2014-01-01 10:13-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,18 @@ msgstr "ایمیل میهمانانی که می‌خواهید دعوت کنید
 
 msgid "Guests"
 msgstr "مهمانان"
+
+msgid "Year"
+msgstr "سال"
+
+msgid "Month"
+msgstr "ماه"
+
+msgid "Day"
+msgstr "روز"
+
+msgid "Time format HH:MM"
+msgstr "زمان را به شکل HH:MM وارد کنید"
 
 msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
@@ -145,10 +157,10 @@ msgstr "دعوت"
 
 #, python-format
 msgid "There has been a revote for event named: %s. Please cast your vote again."
-msgstr ""
+msgstr "برای رویداد %s نظرسنجی مجدد برگزار شده است. لطفا دوباره در نظرسنجی شرکت کنید."
 
 msgid "Revote Performed"
-msgstr ""
+msgstr "نظرسنجی مجدد برگزار شد"
 
 #, python-format
 msgid "You are invited to MeetMe, a website to perform meetings among people and vote for the best time. An account is created for you automatically with username=your_email(%(email)s). You can login using your gmail. Visit us on 'meetme.ir'."
@@ -180,6 +192,18 @@ msgstr "قرار ملاقات به نام %s با موفقیت لغو شد."
 msgid "Your revote for event \"%s\" is done successfully."
 msgstr "نظرسنجی مجدد شما برای رویداد \"%s\" با موفقیت ثبت شد."
 
+msgid "404! The page you requested was not found!"
+msgstr "۴۰۴! صفحه‌ی مورد نظر یافت نشد"
+
+msgid "403! You Don't have permission to access this page!"
+msgstr "۴۰۳! شما اجازه‌ی دسترسی به این صفحه را ندارید!"
+
+msgid "500! Something went wrong with our server. We are sorry!"
+msgstr "۵۰۰! متأسفیم. برای سرور ما مشکلی پیش آمده است."
+
+msgid "400! Invalid request!"
+msgstr "۴۰۰! درخواست شما معتبر نیست!"
+
 #, python-format
 msgid "Your event named %s was added successfully."
 msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
@@ -187,6 +211,18 @@ msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
 #, python-format
 msgid "Your event named %s was edited and saved successfully. You should perform a revote so that users can vote again."
 msgstr "رویداد شما با نام %s با موفقیت ویرایش شد. شما باید نظرسنجی مجدد برگزار کنید تا مهمانان دوباره نظر بدهند."
+
+msgid "Suggested time intervals for vote"
+msgstr "بازه‌های زمانی پیشنهادی برای نظرسنجی"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Add another item"
+msgstr "گزینه‌ی دیگری بیفزایید"
+
+msgid "Next"
+msgstr "گام بعدی"
 
 msgid "Creator"
 msgstr "سازنده"

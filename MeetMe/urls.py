@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from django.conf.urls.defaults import handler404, handler500, handler403, handler400
 # from meet.views import create_wizard
 
 admin.autodiscover()
@@ -38,3 +39,7 @@ urlpatterns = patterns('',
 
     # url(r'^fakelogin/', 'meet.test_utils.views.fake_login' , name='fake_login'),
 )
+handler404 = "meet.views.handler404"
+handler500 = "meet.views.handler500"
+handler403 = "meet.views.handler403"
+handler400 = "meet.views.handler400"
