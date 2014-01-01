@@ -52,6 +52,7 @@ def home (request):
 		'email': user.email,
 		'username' : user.username,
 		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,
 		'is_admin': user.has_perm('admin'),
 		'today' : localtime.date(),
 		'cal_list' : cal_list,
@@ -61,7 +62,6 @@ def home (request):
 		'danger': Notification.DANGER,
 		'inform': Notification.INFORM,
 		'view_name' : 'Home',
-		'timezones': pytz.common_timezones,
 	})
 
 def set_timezone(request):
@@ -104,6 +104,9 @@ def vote_event (request, event_id):
 		'event_id' : event_id,
 		'votes'  : votes,
 		'management_form': pfilled_form.management_form,
+		'username' : request.user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,
 	}, context_instance = RequestContext(request))
 
 @login_required
@@ -116,6 +119,9 @@ def view_event (request, event_id):
 		'event' : event,
 		'status' : event.get_status_message(),
 		'deadline' : jdeadline,
+		'username' : request.user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,
 	}, context_instance = RequestContext(request))
 
 @login_required
@@ -128,6 +134,10 @@ def related_events(request, msg=None):
 	return render_to_response('related_events.html',{
 		'events' : events,
 		'message': msg, 
+		'user': user,
+		'username' : request.user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,
 	})
 
 @login_required
@@ -169,7 +179,10 @@ def admin_review (request, msg=None):
 	meetings = Meeting.get_waiting_for_admin_meetings()
 	return render(request, 'close_meeting.html' ,
 		{'meetings':meetings,
-		'msg': msg, })
+		'msg': msg,
+		'username' : request.user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,})
 
 
 @login_required
@@ -201,20 +214,38 @@ def revote(request, event_id):
 
 def handler404(request):
 	message = _("404! The page you requested was not found!")
-	return render(request, 'errors.html', {'message': message,})
+	return render(request, 'errors.html', {'message': message,
+											'username' : request.user.username,
+											'timezone' : timezone.get_current_timezone_name(),
+											'timezones': pytz.common_timezones,})
 
 
 def handler403(request):
 	message = _("403! You Don't have permission to access this page!")
-	return render(request, 'errors.html', {'message': message,})
+	return render(request, 'errors.html', {'message': message,
+											'username' : request.user.username,
+											'timezone' : timezone.get_current_timezone_name(),
+											'timezones': pytz.common_timezones,})
 
 
 def handler500(request):
 	message = _("500! Something went wrong with our server. We are sorry!")
-	return render(request, 'errors.html', {'message': message,})
+	return render(request, 'errors.html', {'message': message,
+											'username' : request.user.username,
+											'timezone' : timezone.get_current_timezone_name(),
+											'timezones': pytz.common_timezones,})
 
 
 class CreateWizard(CookieWizardView):
+
+	def get_context_data(self, form, **kwargs):
+		context = super(CreateWizard, self).get_context_data(form=form, **kwargs)
+		context.update({'email': self.request.user.email,
+		'username' : self.request.user.username,
+		'timezone' : timezone.get_current_timezone_name(),
+		'timezones': pytz.common_timezones,})
+		return context
+
 
 	def remove_old_data(self, event):
 		intervals = event.options_list.all()
