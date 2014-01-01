@@ -4,6 +4,7 @@ from model_utils.managers import InheritanceManager
 from django.utils.translation import ugettext_lazy as _
 from meet.models import *
 from django.core.mail import EmailMultiAlternatives
+from django.core.validators import validate_email
 
 
 class Notification(models.Model):
@@ -268,6 +269,7 @@ def invite_new_guests(l):
 	user_emails = User.objects.filter(email__in=l).values_list("email", flat=True)
 	new_emails = [email for email in l if email not in user_emails]
 	for email in new_emails:
+		validate_email(email)
 		user = User.objects.create_user(email, email, 'password')
 		user.save()
 		notif = InviteToMeetMeNotification()

@@ -232,6 +232,12 @@ class CreateWizard(CookieWizardView):
 		else:
 			return {}
 
+	def check_existance_of_intervals_and_guests(self, interval_forms):
+		intervals = interval_forms.save(commit=False)
+		if len(intervals)==0 :
+			self.render_revalidation_failure('2', inlineformset_factory(Event, Interval, max_num=1, extra=3, form=IntervalForm))
+
+
 	def set_meeting_data(self, event):
 		meeting_cond_key = self.get_cleaned_data_for_step('4')['conditions']
 		meeting = Meeting(event_ptr_id=event.pk)
@@ -267,9 +273,10 @@ class CreateWizard(CookieWizardView):
 	def done(self, form_list, **kwargs):
 		event_form = form_list[0]
 		event = self.save_event(event_form)
+		interval_forms = form_list[2]
+		self.check_existance_of_intervals_and_guests(interval_forms)
 		if not is_create_wizard(self):
 			self.remove_old_data(event)
-		interval_forms = form_list[2]
 		self.set_intervals(event, interval_forms)
 		if is_meeting(self):
 			self.set_meeting_data(event)

@@ -119,14 +119,18 @@
 			<form action="" method="POST">
 				{% csrf_token %}
 				{{ wizard.management_form }}
-				
 				{{wizard.form.guests}}
+				{{wizard.form.guests.errors}}
 
 				<br/> <h4>{%trans "Deadline"%}</h4>
 				{{wizard.form.year}}
+				{{wizard.form.year.errors}}
 				{{wizard.form.month}}
+				{{wizard.form.month.errors}}
 				{{wizard.form.day}}
+				{{wizard.form.day.errors}}
 				{{wizard.form.hour}}
+				{{wizard.form.hour.errors}}
 
 				<div class="form-actions center submit-btn">
 	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>

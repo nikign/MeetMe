@@ -5,4 +5,3 @@ class RoomNotAvailableException(Exception):
 
 class UserIsNotInvitedException(Exception):
 	pass
-
