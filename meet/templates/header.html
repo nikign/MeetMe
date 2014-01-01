@@ -43,6 +43,17 @@
 		var label = $(this).parent().addClass('row').find('label').addClass('col-md-3')
 		$(this).wrap('<div class="col-md-6 col-md-offset-2 row"></div>').parent().wrap('<div class="col-md-11 pull-right"></div>').parent().append(label)
 	})
+	$("input").addClass('form-control col-md-6')
+	$("span.helptext").remove()
+	$("select").addClass('form-control col-md-6')
+	$("input[type=checkbox]").removeClass('form-control col-md-6')
+	$("input[type=radio]").removeClass('form-control col-md-6')
+	$("textarea").addClass('form-control col-md-12')
+	$('option').mousedown(function (e){
+		e.preventDefault();
+		$(this).prop('selected', !$(this).prop('selected'));
+		return false;
+	})
 	})
 	</script>
 	<body dir='rtl' class="col-md-12">

@@ -79,19 +79,6 @@
 	        return deleteForm(this, "2");
 	    });
 	});
-	$(function () {
-		$("input").addClass('form-control col-md-6')
-		$("span.helptext").remove()
-		$("select").addClass('form-control col-md-6')
-		$("input[type=checkbox]").removeClass('form-control col-md-6')
-		$("input[type=radio]").removeClass('form-control col-md-6')
-		$("textarea").addClass('form-control col-md-12')
-		$('option').mousedown(function (e){
-			e.preventDefault();
-			$(this).prop('selected', !$(this).prop('selected'));
-			return false;
-		})
-	})
 
     </script>
 
@@ -131,7 +118,6 @@
 					<div class="col-md-2">{{wizard.form.day.label}}</div></div>
 				<div class="col-md-12 row"> <div class="col-md-9">{{wizard.form.hour}}</div>
 					<div class="col-md-2">{{wizard.form.hour.label}}</div></div>
-
 				<div class="form-actions center submit-btn">
 	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
                 </div>
