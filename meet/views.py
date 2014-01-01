@@ -71,10 +71,22 @@ def set_timezone(request):
 	else:
 		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
 
+def jdata(interval):
+	utc = pytz.UTC
+	start = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.start.hour, interval.start.minute))
+	
+	finish = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.finish.hour, interval.finish.minute))
+
+	localstart = timezone.localtime(start)
+	localfinish = timezone.localtime(finish)
+	return {'date':localstart.date(), 'start':localstart.time(), 'finish':localfinish.time()}
+
 @login_required
 def vote_event (request, event_id):
 	event = Event.objects.get(id=event_id)
 	options = event.options_list.all()
+	
+	joptions = [jdata(option) for option in options]
 	user = request.user
 	if not user.is_invited_to(event):
 		raise PermissionDenied
@@ -87,7 +99,7 @@ def vote_event (request, event_id):
 		initial_data['form-'+str(i)+'-voter']= user.id
 		initial_data['form-'+str(i)+'-interval']= options[i].id
 	pfilled_form = FormSet(initial_data)
-	votes = [ {'option': option, 'form': form} for option, form in zip(options, pfilled_form)]
+	votes = [ {'option': option, 'form': form} for option, form in zip(joptions, pfilled_form)]
 	return render_to_response('event_vote.html', {
 		'event_id' : event_id,
 		'votes'  : votes,
@@ -97,9 +109,13 @@ def vote_event (request, event_id):
 @login_required
 def view_event (request, event_id):
 	event = Event.objects.get(id=event_id)
+	deadline = event.deadline
+	jdeadline = timezone.localtime(deadline)
+	print jdeadline
 	return render_to_response('event_view.html', {
 		'event' : event,
 		'status' : event.get_status_message(),
+		'deadline' : jdeadline,
 	}, context_instance = RequestContext(request))
 
 @login_required
