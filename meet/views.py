@@ -105,7 +105,6 @@ def view_event (request, event_id):
 	event = Event.objects.get(id=event_id)
 	deadline = event.deadline
 	jdeadline = timezone.localtime(deadline)
-	print jdeadline
 	return render_to_response('event_view.html', {
 		'event' : event,
 		'status' : event.get_status_message(),
@@ -113,7 +112,7 @@ def view_event (request, event_id):
 		'username' : request.user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
-		'view_name' : 'View Event',
+		'view_name' : event.title,
 	}, context_instance = RequestContext(request))
 
 @login_required

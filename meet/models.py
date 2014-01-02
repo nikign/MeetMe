@@ -48,7 +48,6 @@ class RoomManager(models.Model):
 				reservation.room=room
 				reservation.save()
 				meeting.make_closed(reservation)
-				print reservation
 				return reservation
 		raise RoomNotAvailableException()
 
@@ -172,7 +171,7 @@ class Meeting (Event):
 		return closing_condition.get_feasible_intervals_in_order()
 
 	def is_it_time_to_close(self, now_time):
-		if self.deadline >= now_time:
+		if self.deadline < now_time:
 			return True
 		return self.__how_many_voted__() == self.guest_count()
 
