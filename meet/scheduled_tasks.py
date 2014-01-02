@@ -13,7 +13,6 @@ def every_hour(fn):
 @every_hour
 def reserve_room_for_meetings():
 	meeting_list = Meeting.objects.filter(status = Event.OPEN, confirmed = Meeting.NOT_SEEN)
-	print meeting_list
 	utc = pytz.UTC
 	for meeting in meeting_list :
 		try:
