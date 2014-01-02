@@ -36,8 +36,8 @@ class MeetingTest(TestCase):
 		self.assertTrue (meeting.is_it_time_to_close(datetime(2011, 5, 18, 21, 5, 53, 266396, utc)))
 		self.assertTrue (meeting.is_it_time_to_close(datetime(2014, 5, 18, 21, 5, 53, 266396, utc)))
 		meeting = meetings.get(pk= 2)
-		self.assertTrue (meeting.is_it_time_to_close(datetime(2011, 5, 18, 21, 5, 53, 266396, utc)))
-		self.assertFalse (meeting.is_it_time_to_close(datetime(2013, 4, 18, 21, 5, 53, 266396, utc)))
+		self.assertFalse (meeting.is_it_time_to_close(datetime(2011, 5, 18, 21, 5, 53, 266396, utc)))
+		self.assertTrue (meeting.is_it_time_to_close(datetime(2013, 4, 18, 21, 5, 53, 266396, utc)))
 
 	def test_how_get_feasible_intervals_in_order(self):
 		"""

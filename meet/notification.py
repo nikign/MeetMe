@@ -285,7 +285,7 @@ def inform_no_room(meeting):
 		notif.save()
 	notif = InformNoRoomNotification()
 	notif.meeting = meeting
-	notif.recipient = meeting.creator
+	notif.recipient = meeting.creator.email
 	notif.save()
 
 	
