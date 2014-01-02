@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-02 05:30-0600\n"
+"POT-Creation-Date: 2014-01-02 15:31-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,9 +39,8 @@ msgstr "ایمیل میهمانانی که می‌خواهید دعوت کنید
 msgid "Guests"
 msgstr "مهمانان"
 
-#, fuzzy
 msgid "You should enter at least one guest."
-msgstr "نظر شما برای رویداد \"%s\" ثبت نشد."
+msgstr "باید حداقل یک میهمان وارد کنید."
 
 msgid "Year"
 msgstr "سال"
@@ -65,7 +64,7 @@ msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
 
 msgid "Unacceptable state."
-msgstr ""
+msgstr "وضعیت واردشده غیرقابل قبول است"
 
 msgid "Event"
 msgstr "نشست"
@@ -80,13 +79,13 @@ msgid "You should choose one type."
 msgstr "باید حداقل یک نوع را انتخاب کنید."
 
 msgid "The event type you requested is not provided!"
-msgstr ""
+msgstr "نوع رویداد درخواست شده معتبر نیست."
 
 msgid "How should your meeting be closed?"
 msgstr "قرار ملاقات در صورتی تثبیت شود که"
 
 msgid "The condition type you requested for your event is not provided!"
-msgstr ""
+msgstr "نوع شرط بسته‌شدن درخواستی معتبر نیست."
 
 msgid "guest "
 msgstr "مهمان"
@@ -219,23 +218,21 @@ msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
 msgid "Your event named %s was edited and saved successfully. You should perform a revote so that users can vote again."
 msgstr "رویداد شما با نام %s با موفقیت ویرایش شد. شما باید نظرسنجی مجدد برگزار کنید تا مهمانان دوباره نظر بدهند."
 
-#, fuzzy
 msgid "Here are events for admins to review"
-msgstr "رویدادی برای مشاهده‌ی شما وجود ندارد."
+msgstr "در زیر می‌توانید رویدادهایی که نیاز به بررسی مدیر سیستم دارند را مشاهده کنید."
 
 #, python-format
 msgid "In room %(roomname)s"
-msgstr ""
+msgstr "در اتاق %(roomname)s"
 
 msgid "confirm"
-msgstr ""
+msgstr "تأیید"
 
 msgid "cancel"
-msgstr ""
+msgstr "لغو"
 
-#, fuzzy
 msgid "No event for admins to review"
-msgstr "رویدادی برای مشاهده‌ی شما وجود ندارد."
+msgstr "رویدادی برای مشاهده‌ی مدیران وجود ندارد."
 
 msgid "Suggested time intervals for vote"
 msgstr "بازه‌های زمانی پیشنهادی برای نظرسنجی"
