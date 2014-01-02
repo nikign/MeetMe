@@ -15,6 +15,7 @@ class IntervalTest(TestCase):
 
 		msg_usual_interference_true = "Even usual interference isn't working, when interference!"
 		self.assertEqual(intervals[0].has_interference(intervals[1]), True, msg_usual_interference_true)
+		self.assertEqual(intervals[0].has_interference(intervals[0]), True, msg_usual_interference_true)
 		
 		msg_usual_interference_false = "Even usual interference isn't working, when no interference!"
 		self.assertEqual(intervals[0].has_interference(intervals[2]), False, msg_usual_interference_false)

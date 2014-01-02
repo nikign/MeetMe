@@ -21,7 +21,6 @@ class Room (models.Model):
 		for reserve in reserves:
 			if(reserve.interval.has_interference(interval)):
 				return False
-
 		return True
 
 
@@ -36,10 +35,12 @@ class RoomManager(models.Model):
 		return None
 
 	@classmethod
-	def reserve_room_for(cl, meeting):
+	def reserve_room_for(cl, meeting, today):
 		options = meeting.get_feasible_intervals_in_order()
 		guest_count = meeting.guest_count()
 		for option in options:
+			if option.date < today.date():
+				continue
 			room = RoomManager.find_best_room_for_interval_and_capacity(option, guest_count)
 			if room != None :
 				reservation = Reservation()
@@ -47,6 +48,7 @@ class RoomManager(models.Model):
 				reservation.room=room
 				reservation.save()
 				meeting.make_closed(reservation)
+				print reservation
 				return reservation
 		raise RoomNotAvailableException()
 

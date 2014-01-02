@@ -4,7 +4,6 @@ from meet.models import *
 
 class RoomTest(TestCase):
 	fixtures = ['test_room.json', ]
-	# TODO: use Interval Mock
 	def test_suitable_room(self):
 		"""
 		Tests that checking if a room is suitable for an interval works correctly.

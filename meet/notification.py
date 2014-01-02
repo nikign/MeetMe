@@ -19,7 +19,7 @@ class Notification(models.Model):
 	def send_mail(self):
 		mail_body = self.get_mail_text()
 		email = EmailMultiAlternatives(subject=self.get_subj(), body=mail_body, 
-			from_email='info@meetme.ir', to=[self.recipient], cc=[], bcc=[],)
+			from_email='info@meetme.ir', to=[self.recipient], cc=[], bcc=[],)# NEEDS FIXING!
 		email.send()
 
 	def get_mail_text(self):
@@ -101,7 +101,6 @@ class InformNoRoomNotification(Notification):
 		return u"%s" %_("No Room Available")
 
 	def save(self, *args, **kwargs):
-		self.recipient = self.meeting.creator.email
 		super(InformNoRoomNotification, self).save(*args, **kwargs)
 
 
@@ -289,7 +288,7 @@ def inform_no_room(meeting):
 	notif.recipient = meeting.creator
 	notif.save()
 
-
+	
 def inform_confirm(meeting):
 	guests = meeting.guest_list.all()
 	for guest in guests:
