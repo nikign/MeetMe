@@ -1,6 +1,7 @@
 from models import *
 from notification import invite_new_guests
 from django import forms
+from meet.fields import PersianTimeField
 from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
 from meet.exceptions import UserIsNotInvitedException
@@ -81,8 +82,8 @@ class IntervalForm (forms.ModelForm):
 	date_year = fields.ChoiceField(label=_('Year'))
 	date_month = fields.ChoiceField(label=_('Month'))
 	date_day = fields.ChoiceField(label=_('Day'))
-	start = fields.TimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
-	finish = fields.TimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
+	start = PersianTimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
+	finish = PersianTimeField(widget=forms.TextInput(attrs={'placeholder':_('Time format HH:MM')}))
 	date = fields.CharField(widget=forms.HiddenInput(), required=False)
 
 	def __init__(self, *args, **kwargs):
