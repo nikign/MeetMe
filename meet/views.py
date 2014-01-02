@@ -16,7 +16,7 @@ from django.http import HttpResponseForbidden
 from meet.exceptions import UserIsNotInvitedException
 import datetime, pytz
 from datetime import timedelta as td
-
+from meet.templatetags.i18n import jdata
 
 def can_close(user):
 	if user.has_perm('admin'):
@@ -37,7 +37,7 @@ def home (request):
 	days_before = 14 + day_of_week
 	days_after = 21 - day_of_week
 	start_date = (localtime+td(days=-days_before)).date()
-	end_date = (localtime+td(days=days_after)).date()
+	end_date = (localtime+td(days=days_after-1)).date()
 	days = []
 	cal_list = []
 	for i in xrange(0,35):
@@ -70,16 +70,6 @@ def set_timezone(request):
 		return redirect('/')
 	else:
 		return render(request, 'timezone_sel.html', {'timezones': pytz.common_timezones})
-
-def jdata(interval):
-	utc = pytz.UTC
-	start = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.start.hour, interval.start.minute))
-	
-	finish = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.finish.hour, interval.finish.minute))
-
-	localstart = timezone.localtime(start)
-	localfinish = timezone.localtime(finish)
-	return {'date':localstart.date(), 'start':localstart.time(), 'finish':localfinish.time()}
 
 @login_required
 def vote_event (request, event_id):

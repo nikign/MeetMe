@@ -1,27 +1,31 @@
+{% load i18n %}
+{% load filters %}
 {% include "header.html" %}
 {% load static %}
 {% block content %}
-	<div>
+	<div class='row'>
 		{% if msg %}
 			<div class="alert alert-info">
 				{{msg}}
 			</div>
 		{% endif %}
 		{%if meetings%}
-			<table class='table'>
-				{%for meeting in meetings%}
-					</tr>
-					
-				        <td>{{meeting.title}}</td>
-				        <td>{{meeting.reservation.interval}}</td>
-				        <td>In room {{meeting.reservation.room.name}}</td>
-				        <td><a href="/meeting/{{meeting.id}}/confirm">confirm</a></td>
-				        <td><a href="/meeting/{{meeting.id}}/cancel">cancel</a></td>
-					</tr>
-				{%endfor%}
-			</table>
+		<h2 class="text-center">{%trans "Here are events for admins to review"%}</h2>
+		<div class="col-md-8 col-md-offset-2 well">
+		<table class='table'>
+		{%for meeting in meetings%}
+		</tr>
+	        <!-- <td>{{meeting.title}}</td> -->
+	        <td>{{meeting.reservation.interval|jinterval}}</td>
+	   		<td>{% blocktrans with meeting.reservation.room.name as roomname %}In room {{roomname}}{% endblocktrans %}</td>
+	        <td><a class='btn btn-sabzabi' href="/meeting/{{meeting.id}}/confirm">{%trans "confirm"%}</a></td>
+	        <td><a class='btn btn-primary' href="/meeting/{{meeting.id}}/cancel">{%trans "cancel"%}</a></td>
+		</tr>
+		{%endfor%}
+		</table>
+		</div>
 		{% else %}
-			There is no meeting for review.
+			<h2 class="text-center">{%trans "No event for admins to review"%}</h2>
 		{%endif%}
 	</div>
 {% endblock %}

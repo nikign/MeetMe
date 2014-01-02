@@ -88,6 +88,8 @@
 		</div>
 		{% if user.is_authenticated %}
 		<a href="/logout" style="color:white;">{%trans "Log out"%}</a>
+		{%else%}
+		<a href="/google/login" style="color:white;">{%trans "Join us using Google"%}</a>
 		{% endif %}
 		</div>
 

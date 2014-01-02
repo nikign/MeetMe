@@ -8,7 +8,8 @@ from django.utils.encoding import force_unicode
 from django.utils.cache import patch_vary_headers
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils import timezone
+import pytz
 
 EPOCH = 226895
 PERSIAN_NUMBER = u"۰۱۲۳۴۵۶۷۸۹"
@@ -267,3 +268,14 @@ class UnicodeCsvReader(object):
     @property
     def line_num(self):
         return self.csv_reader.line_num
+
+def jdata(interval):
+    utc = pytz.UTC
+    start = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.start.hour, interval.start.minute))
+    
+    finish = utc.localize(datetime.datetime(interval.date.year, interval.date.month, interval.date.day, interval.finish.hour, interval.finish.minute))
+
+    localstart = timezone.localtime(start)
+    localfinish = timezone.localtime(finish)
+    return {'date':localstart.date(), 'start':localstart.time(), 'finish':localfinish.time()}
+

@@ -5,6 +5,7 @@ from django.utils.http import urlquote_plus
 import datetime
 from django.utils import translation
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 register = template.Library()
 
@@ -84,4 +85,13 @@ def jtime(value, lang=None):
 @register.filter
 def jdatetime(value, lang=None):
     return jdate(value, lang) + ' ' + jtime(value, lang)
+
+@register.filter
+def jinterval(interval):
+    data = i18n.jdata(interval)
+    trans_str = _("On %(date)s from %(stime)s to %(etime)s for event %(event)s") \
+        %{ "date": jdate(data.get('date')), "stime": jtime(data.get('start')),
+            "etime": jtime(data.get('finish')), "event": interval.event.title
+        }
+    return trans_str
 
