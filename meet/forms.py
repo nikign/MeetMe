@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
 from meet.exceptions import UserIsNotInvitedException
 from django.forms.extras.widgets import SelectDateWidget
-from meet.utils import i18n
+from meet.utils import i18n, utils
 from django.utils import timezone
 import pytz
 
@@ -44,15 +44,20 @@ class GuestListForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(GuestListForm, self).__init__(*args, **kwargs)
 		g_today = timezone.now().date()
+		jnow_datetime = utils.jnow()
 		j_this_year = i18n.topersiandate(g_today)[0]
 		year_choices = [(i, i18n.iranian_digits(i)) for i in xrange(j_this_year,j_this_year+10)]
 		self.fields['year'].choices = year_choices
+		self.fields['year'].initial = jnow_datetime.date().year
 		month_choices = [(i+1, i18n.PERSIAN_MONTHS[i]) for i in xrange(0,12)]
 		self.fields['month'].choices = month_choices
+		self.fields['month'].initial = jnow_datetime.date().month
 		day_choices = [(i,i18n.iranian_digits(i)) for i in xrange(1,32)]
 		self.fields['day'].choices = day_choices
+		self.fields['day'].initial = jnow_datetime.date().day
 		hour_choices = [(i,i18n.iranian_digits(i)) for i in xrange(0,24)]
 		self.fields['hour'].choices = hour_choices
+		self.fields['hour'].initial = jnow_datetime.time().hour
 
 	def clean(self):
 		cleaned_data = super(GuestListForm, self).clean()
@@ -91,12 +96,16 @@ class IntervalForm (forms.ModelForm):
 		super(IntervalForm, self).__init__(*args, **kwargs)
 		g_today = timezone.now().date()
 		j_this_year = i18n.topersiandate(g_today)[0]
+		jnow_datetime = utils.jnow()
 		year_choices = [(i, i18n.iranian_digits(i)) for i in xrange(j_this_year,j_this_year+10)]
 		self.fields['date_year'].choices = year_choices
+		self.fields['date_year'].initial = jnow_datetime.date().year
 		month_choices = [(i+1, i18n.PERSIAN_MONTHS[i]) for i in xrange(0,12)]
 		self.fields['date_month'].choices = month_choices
+		self.fields['date_month'].initial = jnow_datetime.date().month
 		day_choices = [(i,i18n.iranian_digits(i)) for i in xrange(1,32)]
 		self.fields['date_day'].choices = day_choices
+		self.fields['date_day'].initial = jnow_datetime.date().day
 
 	def clean(self):
 		cleaned_data = super(IntervalForm,self).clean()
