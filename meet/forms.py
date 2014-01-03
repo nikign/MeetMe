@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import fields
 from meet.exceptions import UserIsNotInvitedException
 from django.forms.extras.widgets import SelectDateWidget
-from meet.templatetags import i18n
+from meet.utils import i18n
 from django.utils import timezone
 import pytz
 

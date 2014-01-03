@@ -1,5 +1,5 @@
 from django import forms
-from templatetags import i18n
+from meet.utils import i18n
 
 class PersianTimeField(forms.TimeField):
     "A time field accepting Persian/Arabic digits in addition to Latin digits."
