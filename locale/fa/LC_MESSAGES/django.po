@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-03 06:20-0600\n"
+"POT-Creation-Date: 2014-01-03 06:44-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,9 @@ msgstr "روز"
 msgid "Hour"
 msgstr "ساعت"
 
+msgid "Time for deadline is already passed."
+msgstr "زمان پایان نظرسنجی گذشته است."
+
 msgid "You should enter at least one guest and guests' emails should be valid."
 msgstr "باید حداقل یک میهمان دعوت کنید. ایمیل مهمانان باید معتبر باشد."
 
@@ -62,6 +65,9 @@ msgstr "زمان را به شکل HH:MM وارد کنید"
 
 msgid "Finish time must be after start time."
 msgstr "زمان پایان باید پس از زمان شروع باشد."
+
+msgid "The time you provide should not be already passed."
+msgstr "زمانی که مشخص می‌کنید نباید گذشته باشد."
 
 msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
@@ -185,12 +191,13 @@ msgid "Invitation To MeetMe"
 msgstr "دعوت به MeetMe"
 
 msgid "Home"
-msgstr ""
+msgstr "آغازه"
 
 msgid "Vote"
 msgstr "نظر بدهید!"
 
 # python-format
+#, python-format
 msgid "%s's Events"
 msgstr "رویداد‌های %s"
 
@@ -354,7 +361,12 @@ msgstr "به گِردآورد خوش آمدید"
 msgid "This event is still open to vote."
 msgstr "این رویداد هنوز برای نظرسنجی باز است."
 
+msgid "Your vote for this event is cast."
+msgstr "نظر شما در مورد این رویداد <b>ثبت نشده است</b>.\n"
+
+
 msgid ""
+"\n"
 "\t\t\t\t\t\tYour vote for this event is <b>not</b> cast.\n"
 "\t\t\t\t\t\t"
 msgstr ""
