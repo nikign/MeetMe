@@ -187,6 +187,10 @@ class Meeting (Event):
 
 	def cancel(self):
 		self.confirmed = Meeting.CANCELLED
+		if self.reservation:
+			res = self.reservation
+			self.reservation = None
+			res.delete()
 		self.save()
 
 	@classmethod
