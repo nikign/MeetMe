@@ -61,7 +61,7 @@ def home (request):
 		'notifications': notifications,
 		'danger': Notification.DANGER,
 		'inform': Notification.INFORM,
-		'view_name' : 'Home',
+		'view_name' : _('Home'),
 	})
 
 def set_timezone(request):
@@ -97,7 +97,7 @@ def vote_event (request, event_id):
 		'username' : request.user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
-		'view_name': 'Vote',
+		'view_name': _('Vote'),
 	}, context_instance = RequestContext(request))
 
 @login_required
@@ -122,14 +122,15 @@ def related_events(request, msg=None):
 	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user), 
 	'is_meeting': hasattr(event, 'meeting'), 'is_closed': (event.status==Event.CLOSED),
 	'is_owner': (event.creator==user), 'is_google_calendarizable': event.is_google_calendarizable()} for event in events_to_show]
+	username = request.user.username
 	return render_to_response('related_events.html',{
 		'events' : events,
 		'message': msg, 
 		'user': user,
-		'username' : request.user.username,
+		'username' : username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
-		'view_name' : 'View Events',
+		'view_name' : _("%s's Events") % username,
 	})
 
 @login_required
@@ -175,7 +176,7 @@ def admin_review (request, msg=None):
 		'username' : request.user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
-		'view_name' : 'Admin Review',})
+		'view_name' : _('Admin Review'),})
 
 
 @login_required
@@ -211,7 +212,7 @@ def handler404(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : '404',})
+											'view_name' : _('404'),})
 
 
 def handler403(request):
@@ -220,7 +221,7 @@ def handler403(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : '403',})
+											'view_name' : _('403'),})
 
 
 def handler500(request):
@@ -229,7 +230,7 @@ def handler500(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : '500',})
+											'view_name' : _('500'),})
 
 
 class CreateWizard(CookieWizardView):
