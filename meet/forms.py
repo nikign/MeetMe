@@ -73,6 +73,8 @@ class GuestListForm(forms.ModelForm):
 				tz = timezone.get_current_timezone()
 				date_time = tz.localize(timezone.datetime(date.year, date.month, date.day, int(hour)))
 				utc_time = utc.normalize(date_time.astimezone(utc))
+				if utils.has_passed(utc_time):
+					self._errors['deadline'] = self.error_class([_("Time for deadline is already passed.")])
 				cleaned_data['deadline'] = utc_time
 			except forms.ValidationError:
 				self._errors['guests'] = self.error_class([_("You should enter at least one guest and guests' emails should be valid.")])
@@ -124,6 +126,8 @@ class IntervalForm (forms.ModelForm):
 			utc_finish = utc.normalize(finish_date_time.astimezone(utc))
 			if utc_start >=	utc_finish :
 				self._errors['finish']=self.error_class([_('Finish time must be after start time.')])
+			if utils.has_passed(date_and_time=utc_start):
+				self._errors['finish']=self.error_class([_('The time you provide should not be already passed.')])
 			cleaned_data['date'] = date
 			cleaned_data['start'] = utc_start.time()
 			cleaned_data['finish'] = utc_finish.time()

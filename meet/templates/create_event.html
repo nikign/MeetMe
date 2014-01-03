@@ -111,18 +111,19 @@
 
 				<br/> <h4>{%trans "Deadline"%}</h4>
 
+				{{wizard.form.year.errors}}
 				<div class="col-md-12 row"> <div class="col-md-9">{{wizard.form.year}} </div>
 				 	<div class="col-md-2">{{wizard.form.year.label}}</div></div>
-				{{wizard.form.year.errors}}
+				{{wizard.form.month.errors}}
 				<div class="col-md-12 row"> <div class="col-md-9">{{wizard.form.month}}</div>
 					<div class="col-md-2">{{wizard.form.month.label}}</div></div>
-				{{wizard.form.month.errors}}
+				{{wizard.form.day.errors}}
 				<div class="col-md-12 row"> <div class="col-md-9">{{wizard.form.day}}</div>
 					<div class="col-md-2">{{wizard.form.day.label}}</div></div>
-				{{wizard.form.day.errors}}
+                {{wizard.form.deadline.errors}}
+				{{wizard.form.hour.errors}}
 				<div class="col-md-12 row"> <div class="col-md-9">{{wizard.form.hour}}</div>
 					<div class="col-md-2">{{wizard.form.hour.label}}</div></div>
-				{{wizard.form.hour.errors}}
 				<div class="form-actions center submit-btn">
 	                <button type="submit" class="btn btn-primary">{%trans "Next"%}<i class="icon-arrow-right icon-white"></i></button>
                 </div>
