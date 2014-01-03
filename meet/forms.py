@@ -99,7 +99,6 @@ class IntervalForm (forms.ModelForm):
 		self.fields['date_day'].choices = day_choices
 
 	def clean(self):
-		print self.cleaned_data
 		cleaned_data = super(IntervalForm,self).clean()
 		if not self._errors:
 			date_year = cleaned_data.get('date_year')

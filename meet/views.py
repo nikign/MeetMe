@@ -16,7 +16,7 @@ from django.http import HttpResponseForbidden
 from meet.exceptions import UserIsNotInvitedException
 import datetime, pytz
 from datetime import timedelta as td
-from meet.utils.i18n import jdata
+from meet.utils.utils import jdata
 
 def can_close(user):
 	if user.has_perm('admin'):
