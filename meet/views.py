@@ -124,6 +124,7 @@ def related_events(request, msg=None):
 	events_to_show = user.related_events();
 	events = [{'event':event, 'is_vote_cast':event.has_user_voted(user), 
 	'is_meeting': hasattr(event, 'meeting'), 'is_closed': (event.status==Event.CLOSED),
+	'is_cancelled': hasattr(event, 'meeting') and event.meeting.confirmed == Meeting.CANCELLED,
 	'is_owner': (event.creator==user), 'is_google_calendarizable': event.is_google_calendarizable()} for event in events_to_show]
 	username = request.user.username
 	return render_to_response('related_events.html',{
@@ -207,7 +208,8 @@ def revote(request, event_id):
 	event = get_object_or_404(Event, Q(id=event_id, creator=request.user))
 	votes = Vote.objects.filter(interval__event=event)
 	for vote in votes:
-		vote.delete() 
+		vote.delete()
+	event.open_again()
 	inform_revote(event)
 	return related_events(request, _('Your revote for event "%s" is done successfully.') %event.title)
 
@@ -322,6 +324,7 @@ class CreateWizard(CookieWizardView):
 		self.set_intervals(event, interval_forms)
 		if is_meeting(self):
 			self.set_meeting_data(event)
+		
 		if is_create_wizard(self):
 			msg = _("Your event named %s was added successfully.") %event.title
 		else:
