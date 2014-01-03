@@ -16,7 +16,7 @@ from django.http import HttpResponseForbidden
 from meet.exceptions import UserIsNotInvitedException
 import datetime, pytz
 from datetime import timedelta as td
-from meet.utils.utils import jdata
+from meet.utils.utils import localdata
 
 def can_close(user):
 	if user.has_perm('admin'):
@@ -76,7 +76,7 @@ def vote_event (request, event_id):
 	event = Event.objects.get(id=event_id)
 	options = event.options_list.all()
 	
-	joptions = [jdata(option) for option in options]
+	joptions = [localdata(option) for option in options]
 	user = request.user
 	if not user.is_invited_to(event):
 		raise PermissionDenied

@@ -1,5 +1,6 @@
 from django import template
 from meet.utils import i18n
+from meet.utils.utils import localdata
 from django.contrib.sites.models import Site
 from django.utils.http import urlquote_plus
 import datetime
@@ -88,7 +89,7 @@ def jdatetime(value, lang=None):
 
 @register.filter
 def jinterval(interval):
-    data = i18n.jdata(interval)
+    data = localdata(interval)
     trans_str = _("On %(date)s from %(stime)s to %(etime)s for event %(event)s") \
         %{ "date": jdate(data.get('date')), "stime": jtime(data.get('start')),
             "etime": jtime(data.get('finish')), "event": interval.event.title
