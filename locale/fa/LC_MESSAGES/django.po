@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-02 15:31-0600\n"
+"POT-Creation-Date: 2014-01-03 06:20-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr "باید حداقل یک میهمان دعوت کنید. ایمیل مه
 
 msgid "Time format HH:MM"
 msgstr "زمان را به شکل HH:MM وارد کنید"
+
+msgid "Finish time must be after start time."
+msgstr "زمان پایان باید بعد از زمان آغاز باشد"
 
 msgid "If this event is being held in this time"
 msgstr "اگر این رویداد در این زمان برگزار شود"
@@ -341,6 +344,9 @@ msgstr "ویرایش"
 msgid "Revote"
 msgstr "نظرسنجی مجدد"
 
+msgid "This meeting is closed and cancelled, either by admin, or because there was no room available. You can't Vote on it anymore."
+msgstr "این رویداد یا توسط مدیر سیستم، یا به علت موجود نبودن اتاق، بسته و لغو شده است. شما دیگر نمی‌توانید در نظرسنجی آن شرکت کنید."
+
 msgid "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."
 msgstr "این رویداد بسته شده و منتظر تأیید مدیر سیستم است. دیگر نمی‌توانید در نظرسنجی آن شرکت کنید."
 
@@ -355,6 +361,9 @@ msgstr "این رویداد بسته و تأیید شده است. اکنون م�
 
 msgid "Add to Google Calendar"
 msgstr "افزودن به تقویم گوگل"
+
+msgid "This event is closed. You can't Vote on it anymore."
+msgstr "این رویداد بسته شده است. دیگر نمی‌توانید در نظرسنجی آن شرکت کنید."
 
 msgid "No event for you to view"
 msgstr "رویدادی برای مشاهده‌ی شما وجود ندارد."

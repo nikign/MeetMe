@@ -11,6 +11,15 @@ def to_jalali(date_and_time=None, date=None, time=None, year=None, month=None, d
 		date = date or datetime.date(year,month,day)
 	return datetime.datetime.combine(i18n.tojalalidate(date),time)
 
+def to_gregorian(date_and_time=None, date=None, time=None, year=None, month=None, day=None, hour=0, minute=0, second=0):
+	if date_and_time:
+		time = date_and_time.time()
+		date = date_and_time.date()
+	else:
+		time = time or datetime.time(hour,minute,second)
+		date = date or datetime.date(year,month,day)
+	return datetime.datetime.combine(i18n.persiandate(date.year, date.month, date.day),time)
+
 def to_local(date_and_time=None, date=None, time=None, year=None, month=None, day=None, hour=0, minute=0, second=0):
 	if date_and_time:
 		time = date_and_time.time()
@@ -21,16 +30,18 @@ def to_local(date_and_time=None, date=None, time=None, year=None, month=None, da
 	utc = pytz.UTC
 	return utc.localize(datetime.datetime(date.year, date.month, date.day, time.hour, time.minute))
 
-# def is_today(date_and_time=None, date=None, time=None, year=None, month=None, day=None, hour=0, minute=0, second=0):
-# 	if date_and_time:
-# 		time = date_and_time.time()
-# 		date = date_and_time.date()
-# 	else:
-# 		time = time or datetime.time(hour,minute,second)
-# 		date = date or datetime.date(year,month,day)
-# 	utc = pytz.UTC
-# 	return utc.localize(datetime.datetime(date.year, date.month, date.day, time.hour, time.minute))
-
+def has_passed(date_and_time=None, date=None, time=None, year=None, month=None, day=None, hour=0, minute=0, second=0, is_jalali=False):
+	if date_and_time:
+		time = date_and_time.time()
+		date = date_and_time.date()
+	else:
+		time = time or datetime.time(hour,minute,second)
+		date = date or datetime.date(year,month,day)
+	if is_jalali:
+		date = to_gregorian(date=date).date()
+	utc = pytz.UTC
+	now= utc.localize(datetime.datetime(date.year, date.month, date.day, time.hour, time.minute, time.second))
+	return now< timezone.now()
 
 
 def localdata(interval):

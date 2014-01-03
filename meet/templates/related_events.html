@@ -43,7 +43,11 @@
 				</div>
 			{% elif folan.is_meeting and not folan.is_google_calendarizable %}
 				<div class="alert alert-warning col-md-11">
-					{%trans "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore."%}
+					{% if folan.is_cancelled %}
+					{%trans "This meeting is closed and cancelled, either by admin, or because there was no room available. You can't Vote on it anymore." %}
+					{% else %}
+					{%trans "This meeting is closed and waiting for admin confirmation. You can't Vote on it anymore." %} 
+					{% endif %}
 					</br>
 					{%if folan.is_vote_cast%}
 						{%trans "You had voted on it."%}
@@ -51,13 +55,21 @@
 						{%trans "You hadn't voted on it, though!"%}
 					{%endif%}
 					</br>
+					{% if folan.is_owner and folan.is_cancelled %}
+						<a class="btn btn-sabzabi" href="/event/{{folan.event.id}}/edit">{% trans "Edit" %}</a> 
+						<a class="btn btn-primary" href="/event/{{folan.event.id}}/revote">{% trans "Revote" %}</a></br>
+					{% endif %}
+					</br>
 				</div>
-			{% endif %}
-			{% if folan.is_google_calendarizable %}
+			{% elif folan.is_google_calendarizable %}
 				<div class="alert alert-success col-md-11">
 					{%trans "This event is closed and confirmed. You can add it to your calendar now!"%}
 					</br>
 					<a  target="_newtab" class="btn btn-info pull-left" href="{{ folan.event.meeting|google_calendarize }}"><i class="glyphicon glyphicon-plus"></i> {%trans "Add to Google Calendar"%}</a>
+				</div>
+			{% else %}
+				<div class="alert alert-warning col-md-11">
+					{%trans "This event is closed. You can't Vote on it anymore." %} 
 				</div>
 			{% endif %}
 		</div>

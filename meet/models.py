@@ -80,6 +80,12 @@ class Event (models.Model):
 	def has_user_voted(self,user):
 		return Vote.objects.filter(voter=user,interval__event=self).count()>0
 
+	def open_again(self):
+		self.status = Event.OPEN
+		if self.meeting:
+			self.meeting.open_again()
+		self.save()
+
 	def get_guest_emails(self):
 		_list = list(self.guest_list.all())
 		email_list = [user.email for user in _list]
@@ -163,6 +169,8 @@ class Meeting (Event):
 		else:
 			return self.guest_list.count()+1
 
+
+
 	def __how_many_voted__(self):
 		return Vote.objects.filter(interval__event=self).values('voter').distinct().count()
 		
@@ -181,6 +189,10 @@ class Meeting (Event):
 		self.reservation = reservation
 		self.save()
 
+	def open_again(self):
+		self.confirmed = Meeting.NOT_SEEN
+		self.save()
+
 	def confirm(self):
 		self.confirmed = Meeting.CONFIRMED
 		self.save()
@@ -190,12 +202,13 @@ class Meeting (Event):
 		if self.reservation:
 			res = self.reservation
 			self.reservation = None
+			self.save()
 			res.delete()
 		self.save()
 
 	@classmethod
 	def get_waiting_for_admin_meetings(cls):
-		meetings = Meeting.objects.filter(status=Event.CLOSED, confirmed=Meeting.NOT_SEEN)
+		meetings = Meeting.objects.filter(status=Event.CLOSED, confirmed=Meeting.NOT_SEEN).exclude(reservation=None)
 		return meetings
 
 
