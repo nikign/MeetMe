@@ -94,7 +94,20 @@
 		</div>
 
 	<div class="col-md-1 col-xs-3 col-sm-1">
+	<div class="dropdown">
+	<a class="dropdown-toggle" data-toggle="dropdown" href="#" >
 	<img src="{% get_static_prefix %}user.jpg" class="img-circle">
+	</a>
+	<ul class="dropdown-menu nav-menu">
+		<li role="presentation"><a role="menuitem" tabindex="-1" href="/">{%trans "Home"%}</a></li>
+		<li role="presentation" class="divider"></li>
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="/create"><i class="glyphicon glyphicon-plus"></i>&nbsp;{%trans "Create"%}</a></li>
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/events"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{%trans "List of my events"%}</a></li>
+	    {% if user.is_authenticated and is_admin %}
+	    <li role="presentation"><a role="menuitem" tabindex="-1" href="/admins/review"><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;{%trans "Review"%}</a></li>
+	    {% endif %}
+	</ul>
+	</div>
 	</div>
 	</body>
 	</div>

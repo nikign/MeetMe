@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-03 04:42-0600\n"
+"POT-Creation-Date: 2014-01-03 05:17-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,6 +235,12 @@ msgstr "۵۰۰! متأسفیم. برای سرور ما مشکلی پیش آمد�
 msgid "500"
 msgstr "۵۰۰"
 
+msgid "Create"
+msgstr "رویداد جدید"
+
+msgid "Edit"
+msgstr "ویرایش"
+
 #, python-format
 msgid "Your event named %s was added successfully."
 msgstr "رویداد شما با نام %s با موفقیت ثبت شد."
@@ -314,6 +320,9 @@ msgstr ""
 msgid "Join us using Google"
 msgstr "از طریق گوگل به ما بپیوندید"
 
+msgid "Review"
+msgstr "مدیریت و تایید رویداد‌ها"
+
 msgid "Sat"
 msgstr ""
 
@@ -359,9 +368,6 @@ msgstr ""
 
 msgid "View"
 msgstr "مشاهده"
-
-msgid "Edit"
-msgstr "ویرایش"
 
 msgid "Revote"
 msgstr "نظرسنجی مجدد"

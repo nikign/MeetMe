@@ -62,6 +62,7 @@ def home (request):
 		'danger': Notification.DANGER,
 		'inform': Notification.INFORM,
 		'view_name' : _('Home'),
+		'is_admin' : user.has_perm('admin'),
 	})
 
 def set_timezone(request):
@@ -98,6 +99,7 @@ def vote_event (request, event_id):
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
 		'view_name': _('Vote'),
+		'is_admin' : user.has_perm('admin'),
 	}, context_instance = RequestContext(request))
 
 @login_required
@@ -113,6 +115,7 @@ def view_event (request, event_id):
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
 		'view_name' : event.title,
+		'is_admin' : request.user.has_perm('admin'),
 	}, context_instance = RequestContext(request))
 
 @login_required
@@ -131,6 +134,7 @@ def related_events(request, msg=None):
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
 		'view_name' : _("%s's Events") % username,
+		'is_admin' : user.has_perm('admin'),
 	})
 
 @login_required
@@ -170,13 +174,15 @@ def vote (request):
 @user_passes_test(can_close)
 def admin_review (request, msg=None):
 	meetings = Meeting.get_waiting_for_admin_meetings()
+	user=request.user
 	return render(request, 'close_meeting.html' ,
 		{'meetings':meetings,
 		'msg': msg,
 		'username' : request.user.username,
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,
-		'view_name' : _('Admin Review'),})
+		'view_name' : _('Admin Review'),
+		'is_admin' : user.has_perm('admin'),})
 
 
 @login_required
@@ -212,7 +218,8 @@ def handler404(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : _('404'),})
+											'view_name' : _('404'),
+											'is_admin' : request.user.has_perm('admin'),})
 
 
 def handler403(request):
@@ -221,7 +228,8 @@ def handler403(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : _('403'),})
+											'view_name' : _('403'),
+											'is_admin' : request.user.has_perm('admin'),})
 
 
 def handler500(request):
@@ -230,7 +238,8 @@ def handler500(request):
 											'username' : request.user.username,
 											'timezone' : timezone.get_current_timezone_name(),
 											'timezones': pytz.common_timezones,
-											'view_name' : _('500'),})
+											'view_name' : _('500'),
+											'is_admin' : request.user.has_perm('admin'),})
 
 
 class CreateWizard(CookieWizardView):
@@ -242,9 +251,9 @@ class CreateWizard(CookieWizardView):
 		'timezone' : timezone.get_current_timezone_name(),
 		'timezones': pytz.common_timezones,})
 		if is_create_wizard(self):
-			context.update({'view_name' : 'Create',})
+			context.update({'view_name' : _('Create'),'is_admin':self.request.user.has_perm('admin')})
 		else:
-			context.update({'view_name' : 'Edit',})
+			context.update({'view_name' : _('Edit'),'is_admin':self.request.user.has_perm('admin')})
 
 		return context
 
