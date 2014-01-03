@@ -123,7 +123,21 @@ def topersiandate(date):
         date = date.date()
     year = (33 * (date.toordinal() - EPOCH) + 3) / 12053 + 1
     day = (date - persiandate(year, 1, 1)).days
-    # print "day" , day
+    if day < 216:
+        month = day // 31 + 1
+        day = day % 31 + 1
+    else:
+        month = (day-6) // 30 + 1
+        day = (day-6) % 30 + 1
+    return (year, u'%s' %PERSIAN_MONTHS[month-1], day)
+
+def tojalalidate(date):
+    """Returns a tuple of year, month, and day for a specified
+    datetime object."""
+    if isinstance(date, datetime.datetime):
+        date = date.date()
+    year = (33 * (date.toordinal() - EPOCH) + 3) / 12053 + 1
+    day = (date - persiandate(year, 1, 1)).days
     if day < 216:
         month = day // 31 + 1
         day = day % 31 + 1
@@ -131,9 +145,9 @@ def topersiandate(date):
         month = (day-6) // 30 + 1
         day = (day-6) % 30 + 1
     
-    # print "day" , day
-    # print "month" , month
-    return (year, u'%s' %PERSIAN_MONTHS[month-1], day)
+    return datetime.date(year, month, day)
+
+
 
 def to_literal(value, lang=None, base=False):
     lang = lang or translation.get_language()
