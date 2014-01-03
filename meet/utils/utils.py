@@ -12,6 +12,6 @@ def jdata(interval):
 	return {'date':localstart.date(), 'start':localstart.time(), 'finish':localfinish.time()}
 
 def jnow():
-	gregorian_datetime = timezone.localtime(timezone.now())
+	return timezone.localtime(timezone.now())
 	
 
